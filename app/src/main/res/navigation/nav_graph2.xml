@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph2"
+    app:startDestination="@id/step1FragmentV">
+    <fragment
+        android:id="@+id/step1FragmentV"
+        android:name="com.student.mappic.addmap.Step1Fragment"
+        android:label="fragment_step1"
+        tools:layout="@layout/fragment_step1" >
+        <action
+            android:id="@+id/action_step1FragmentV_to_step2Fragment2"
+            app:destination="@id/step2Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/step2Fragment"
+        android:name="com.student.mappic.addmap.Step2Fragment"
+        android:label="fragment_step2"
+        tools:layout="@layout/fragment_step2" >
+        <action
+            android:id="@+id/action_step2Fragment_to_step3Fragment"
+            app:destination="@id/step3Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/step3Fragment"
+        android:name="com.student.mappic.addmap.Step3Fragment"
+        android:label="fragment_step3"
+        tools:layout="@layout/fragment_step3" >
+        <action
+            android:id="@+id/action_step3Fragment_to_step4Fragment"
+            app:destination="@id/step4Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/step4Fragment"
+        android:name="com.student.mappic.addmap.Step4Fragment"
+        android:label="fragment_step4"
+        tools:layout="@layout/fragment_step4" />
+</navigation>

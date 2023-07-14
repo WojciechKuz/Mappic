@@ -1,4 +1,4 @@
-package com.student.mappic.placeholder
+package com.student.mappic.maplist.placeholder
 
 import java.util.ArrayList
 import java.util.HashMap

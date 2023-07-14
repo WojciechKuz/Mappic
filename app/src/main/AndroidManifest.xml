@@ -15,12 +15,10 @@
         <activity
             android:name=".addmap.AddMapActivity"
             android:exported="false"
-            android:label="@string/title_activity_add_map"
             android:theme="@style/Theme.Mappic" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.Mappic" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -11,4 +11,7 @@
     <string name="step4">Krok 4 z 4</string>
     <string name="step3">Krok 3 z 4</string>
     <string name="step2">Krok 2 z 4</string>
+    <string name="options">opcje</string>
+    <string name="action_settings">Ustawienia</string>
+    <string name="thumbnail">miniaturka</string>
 </resources>

@@ -23,8 +23,12 @@
     <string name="step4_name_map">Name map</string>
     <string name="ok_there" tools:ignore="Typos">Ok, I\'m there!</string><!-- zaznacza, że Ok powinno być OK, ale jest w zdaniu, dlatego wyłączone pokazywanie błędów -->
     <string name="ok">OK</string>
-    <string name="title_activity_add_map">AddMapActivity</string>
+    <!--<string name="title_activity_add_map">AddMapActivity</string>-->
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" tools:ignore="MissingTranslation">Hello blank fragment</string>
+    <string name="options">options</string>
+    <string name="thumbnail">thumbnail</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 
 </resources>

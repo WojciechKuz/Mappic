@@ -28,6 +28,11 @@ class MyMapItemRecyclerViewAdapter(
 
     /**
      * Used when new ViewHolder is created (element of list).
+     *
+     * Sets up ViewHolder and it's child elements:
+     * - moreView:
+     * Creates little menu (PopupMenu) for item from a list, when more button (3 dots) is clicked.
+     * Adds onClickListener to options in this menu. Note .show() on the end of method.
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var holder = ViewHolder(
@@ -38,7 +43,7 @@ class MyMapItemRecyclerViewAdapter(
             )
         )
         holder.moreView.setOnClickListener {
-            // TODO open popup menu
+            // open popup menu
             var popmenu = PopupMenu(it.context, it)
             popmenu.inflate(R.menu.map_options)
             popmenu.setOnMenuItemClickListener(
@@ -71,7 +76,7 @@ class MyMapItemRecyclerViewAdapter(
     override fun getItemCount(): Int = values.size
 
     /**
-     * VIEW HOLDER ?
+     * VIEW HOLDER
      * Class of single element in RecyclerView list
      *
      * Defined in fragment_map_item.xml

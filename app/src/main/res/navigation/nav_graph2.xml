@@ -3,16 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph2"
-    app:startDestination="@id/step1FragmentV">
+    app:startDestination="@id/step1Fragment">
+
     <fragment
-        android:id="@+id/step1FragmentV"
+        android:id="@+id/step1Fragment"
         android:name="com.student.mappic.addmap.Step1Fragment"
         android:label="fragment_step1"
         tools:layout="@layout/fragment_step1" >
         <action
-            android:id="@+id/action_step1FragmentV_to_step2Fragment2"
-            app:destination="@id/step2Fragment" />
+            android:id="@+id/action_step1Fragment_to_step1okFragment"
+            app:destination="@id/step1okFragment" />
     </fragment>
+
+    <action
+        android:id="@+id/reviewPhoto"
+        app:destination="@+id/step1okFragment" />
+
+    <fragment
+        android:id="@+id/step1okFragment"
+        android:name="com.student.mappic.addmap.Step1okFragment"
+        android:label="fragment_step1ok"
+        tools:layout="@layout/fragment_step1ok" />
+
+    <action
+        android:id="@+id/choosePhotoAgain"
+        app:destination="@+id/step1Fragment" />
+    <action
+        android:id="@+id/photoAccepted"
+        app:destination="@+id/step2Fragment" />
+
     <fragment
         android:id="@+id/step2Fragment"
         android:name="com.student.mappic.addmap.Step2Fragment"

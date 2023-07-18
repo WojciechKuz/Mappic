@@ -18,6 +18,7 @@
     <string name="step3">Step 3/4</string>
     <string name="step4">Step 4/4</string>
     <string name="step1_photo">Take a photo of a map or a plan</string>
+    <string name="step1ok_isok">Is this photo OK?</string>
     <string name="step2_mark1st">Mark 1st point on plan and go there</string>
     <string name="step3_mark2nd">Mark 2nd point and go there</string>
     <string name="step4_name_map">Name map</string>

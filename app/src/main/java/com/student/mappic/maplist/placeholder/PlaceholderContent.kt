@@ -11,6 +11,7 @@ import java.util.HashMap
  */
 object PlaceholderContent {
 
+    // TODO this would hold: thumbnail, map name, 2 GPS points
     /**
      * An array of sample (placeholder) items.
      */

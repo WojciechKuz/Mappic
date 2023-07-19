@@ -33,14 +33,15 @@
         android:id="@+id/step1okFragment"
         android:name="com.student.mappic.addmap.Step1okFragment"
         android:label="fragment_step1ok"
-        tools:layout="@layout/fragment_step1ok" />
+        tools:layout="@layout/fragment_step1ok" >
+        <action
+            android:id="@+id/action_step1okFragment_to_step2Fragment2"
+            app:destination="@id/step2Fragment" />
+    </fragment>
 
     <action
         android:id="@+id/choosePhotoAgain"
         app:destination="@+id/step1Fragment" />
-    <action
-        android:id="@+id/photoAccepted"
-        app:destination="@+id/step2Fragment" />
 
     <fragment
         android:id="@+id/step2Fragment"

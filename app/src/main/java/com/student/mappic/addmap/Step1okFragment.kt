@@ -46,7 +46,8 @@ class Step1okFragment : Fragment() {
      * Navigate to next screen
      */
     private fun onClickYes() {
-        findNavController().navigate(R.id.photoAccepted)
+        // TODO save photo and pass reference to it, to database or temporar value holder
+        findNavController().navigate(R.id.nav_host_fragment_2)
     }
 
     /**

@@ -14,7 +14,8 @@ import com.student.mappic.databinding.FragmentStep1Binding
 import com.student.mappic.R
 
 /**
- * A simple [Fragment] subclass as the default destination in the navigation.
+ * This is fragment where user takes a picture of a map.
+ * After clicking the button it should pass picture to Step1okFragment.
  */
 class Step1Fragment : Fragment() {
 
@@ -45,12 +46,15 @@ class Step1Fragment : Fragment() {
 
     // TODO
     private fun onClickPhoto() {
-        // TODO zrób zdjęcie
-        Snackbar.make(binding.PhotoFAB, "You clicked me!", Snackbar.LENGTH_LONG)
+        // TODO take a photo
+
+        // FIXME temporary
+        Snackbar.make(binding.PhotoFAB, "You clicked take photo!", Snackbar.LENGTH_LONG)
             .setAnchorView(R.id.PhotoFAB)
             .setAction("Action", null).show()
 
-        // nawiguj do następnego ekranu
+        // TODO send photo reference to Step1okFragment
+        // navigate to next screen
         findNavController().navigate(R.id.nav_host_fragment_2)
     }
 

@@ -10,9 +10,8 @@ import com.student.mappic.R
 import com.student.mappic.databinding.FragmentStep0Binding
 
 /**
- * A simple [Fragment] subclass.
- * Use the [Step0Fragment.newInstance] factory method to
- * create an instance of this fragment.
+ * Step0Fragment asks user if he/she wants to take new picture or choose one from gallery.
+ * There are two buttons doing just that.
  */
 class Step0Fragment : Fragment() {
 
@@ -34,6 +33,31 @@ class Step0Fragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // set onclicklisteners here
+        binding.buttonCam.setOnClickListener {
+            takePicture()
+        }
+        binding.buttonFile.setOnClickListener {
+            openFromGallery()
+        }
+    }
+
+    /**
+     *  Triggered when 'new photo' button is clicked.
+     *  Step1Fragment (taking photo screeen) is then displayed.
+     */
+    private fun takePicture() {
+        findNavController().navigate(R.id.nav_host_fragment_2)
+    }
+    /**
+     *  Triggered when 'Choose from gallery' button is clicked.
+     *  Choose picture from gallery - open system picker and
+     *  open Step1okFragment (screen asking user if it's right photo).
+     */
+    private fun openFromGallery() {
+        //TODO open system photo picker
+
+        //TODO pass photo reference to Step1okFragment
+        findNavController().navigate(R.id.reviewPhoto)
     }
 
     override fun onDestroyView() {

@@ -3,7 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph2"
-    app:startDestination="@id/step1Fragment">
+    app:startDestination="@id/step0Fragment">
+
+    <fragment
+        android:id="@+id/step0Fragment"
+        android:name="com.student.mappic.addmap.Step0Fragment"
+        android:label="fragment_step0"
+        tools:layout="@layout/fragment_step0" >
+        <action
+            android:id="@+id/action_step0Fragment_to_step1Fragment"
+            app:destination="@id/step1Fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/step1Fragment"

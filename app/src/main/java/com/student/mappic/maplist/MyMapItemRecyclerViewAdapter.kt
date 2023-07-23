@@ -42,6 +42,8 @@ class MyMapItemRecyclerViewAdapter(
                 false
             )
         )
+        holder.nameView.setOnClickListener {}
+        holder.thumbnailView.setOnClickListener {}
         holder.moreView.setOnClickListener {
             // open popup menu
             var popmenu = PopupMenu(it.context, it)
@@ -76,6 +78,12 @@ class MyMapItemRecyclerViewAdapter(
     override fun getItemCount(): Int = values.size
 
     /**
+     * Display map
+     */
+    private fun openMap() {
+        // TODO open map to view and navigate
+    }
+    /**
      * VIEW HOLDER
      * Class of single element in RecyclerView list
      *
@@ -91,7 +99,7 @@ class MyMapItemRecyclerViewAdapter(
             return super.toString() + " '" + nameView.text + "'"
         }
         fun onClickEdit() {
-            // TODO open map editing (adding map variant) activity
+            // TODO open map editing (variant of adding map) activity
         }
         fun onClickDelete() {
             // TODO delete map, maybe some 'Are u sure?' popup?

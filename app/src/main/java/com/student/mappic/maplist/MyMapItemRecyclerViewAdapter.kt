@@ -2,13 +2,11 @@ package com.student.mappic.maplist
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.PopupMenu
 import android.widget.TextView
-import com.student.mappic.R
+import com.student.mappic.MapOptionsPopup.Companion.openPopupMenu
 
 import com.student.mappic.maplist.placeholder.PlaceholderContent.PlaceholderItem
 import com.student.mappic.databinding.FragmentMapItemBinding
@@ -42,23 +40,10 @@ class MyMapItemRecyclerViewAdapter(
                 false
             )
         )
-        holder.nameView.setOnClickListener {}
-        holder.thumbnailView.setOnClickListener {}
+        holder.nameView.setOnClickListener { openMap() }
+        holder.thumbnailView.setOnClickListener { openMap() }
         holder.moreView.setOnClickListener {
-            // open popup menu
-            var popmenu = PopupMenu(it.context, it)
-            popmenu.inflate(R.menu.map_options)
-            popmenu.setOnMenuItemClickListener(
-                fun(mi: MenuItem): Boolean {
-                    when(mi.title) {
-                        "@string/edit" -> holder.onClickEdit()
-                        "@string/delete" -> holder.onClickDelete()
-                        else -> {}
-                    }
-                    return true
-                }
-            )
-            popmenu.show()
+            openPopupMenu(it)
         }
         return holder
 
@@ -83,6 +68,7 @@ class MyMapItemRecyclerViewAdapter(
     private fun openMap() {
         // TODO open map to view and navigate
     }
+
     /**
      * VIEW HOLDER
      * Class of single element in RecyclerView list
@@ -97,12 +83,6 @@ class MyMapItemRecyclerViewAdapter(
 
         override fun toString(): String {
             return super.toString() + " '" + nameView.text + "'"
-        }
-        fun onClickEdit() {
-            // TODO open map editing (variant of adding map) activity
-        }
-        fun onClickDelete() {
-            // TODO delete map, maybe some 'Are u sure?' popup?
         }
     }
 }

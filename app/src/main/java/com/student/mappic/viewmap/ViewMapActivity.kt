@@ -1,7 +1,13 @@
 package com.student.mappic.viewmap
 
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.DisplayMetrics
+import android.widget.ImageButton
+import android.widget.ImageView
+import com.student.mappic.DB.PxGpsPoint
+import com.student.mappic.MapOptionsPopup.Companion.openPopupMenu
 import com.student.mappic.R
 
 /**
@@ -11,6 +17,33 @@ class ViewMapActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_map)
+
+        findViewById<ImageButton>(R.id.backArrow).setOnClickListener {  }
+        findViewById<ImageButton>(R.id.mapOptions).setOnClickListener { openPopupMenu(it) }
     }
+    private fun backToMapList() {
+        // TODO go back to map list
+    }
+
+    /*
+    /**
+     * Not sure if this gets the size of image or ImageView
+     */
+    private fun getImgSize() {
+        var img = findViewById<ImageView>(R.id.mapView)
+        var width: Int = img.measuredWidth
+        var height: Int = img.measuredHeight
+    }*/
+
+    /**
+     * This gets size of image (as List(width, height)) for later calculations
+     */
+    private fun getDrawableSize(): List<Int> {
+        val opt = BitmapFactory.Options()
+        opt.inTargetDensity = DisplayMetrics.DENSITY_DEFAULT
+        val bmp = BitmapFactory.decodeResource(resources, R.id.mapView, opt)
+        return listOf(bmp.width, bmp.height)
+    }
+
     // TODO show map & user position
 }

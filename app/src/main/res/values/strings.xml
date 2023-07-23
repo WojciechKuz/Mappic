@@ -32,6 +32,8 @@
     <string name="thumbnail">thumbnail</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="back_arrow_descr">Back to map list</string>
+    <string name="map_options_descr">Map options</string>
 
 
 </resources>

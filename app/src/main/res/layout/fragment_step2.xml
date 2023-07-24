@@ -1,14 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".addmap.Step2Fragment">
+    android:orientation="vertical"
+    tools:context=".addmap.Step2Fragment"
+    android:id="@+id/constraint">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/markPoint1Text"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:padding="12sp"
+        android:layout_marginTop="0dp"
+        android:text="@string/step2_mark1st"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@id/imgView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-</FrameLayout>
+    <ImageView
+        android:id="@+id/imgView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/linLayout"
+        app:layout_constraintTop_toBottomOf="@+id/markPoint1Text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/black"
+        tools:src="@tools:sample/backgrounds/scenic"
+        tools:ignore="ContentDescription"
+        android:adjustViewBounds="true" />
+    <!-- If you want imageView to not include empty space around image,
+    set android:adjustViewBounds to true
+    and set width/height (choose the smaller one) to 0dp. -->
+
+    <LinearLayout
+        android:id="@+id/linLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintTop_toBottomOf="@id/imgView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/gotoPoint1Text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12sp"
+            android:text="@string/step2_type_gps1"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/gpsLatitude"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:inputType="text"
+            android:textSize="20sp"
+            android:hint="@string/latitude"
+            tools:ignore="Autofill" />
+
+        <EditText
+            android:id="@+id/gpsLongitude"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:inputType="text"
+            android:textSize="20sp"
+            android:hint="@string/longitude"
+            tools:ignore="Autofill" />
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/OkFAB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="-12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="12dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:scaleX="1.2"
+        android:scaleY="1.2"
+        android:src="@drawable/check_48px"
+
+        app:fabCustomSize="64dp"
+        app:fabSize="auto"
+        app:flow_horizontalAlign="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonReadGps"
+        app:useCompatPadding="true"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+    <Button
+        android:id="@+id/buttonReadGps"
+        style="@style/Widget.Material3.ExtendedFloatingActionButton.Primary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginTop="12dp"
+        android:drawableLeft="@drawable/location_on_48px"
+        android:text="@string/use_my_location_butt"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/OkFAB"
+        app:layout_constraintStart_toStartOf="parent"
+        app:useCompatPadding="true"
+        tools:ignore="RtlHardcoded,SpeakableTextPresentCheck" />
+
+    <!--
+    z noFAB:  android:layout_marginEnd="12dp"
+    z yesFAB: android:layout_marginStart="12dp"
+
+        android:layout_marginStart="12dp"
+        app:useCompatPadding="true"
+        app:layout_constraintStart_toStartOf="parent" -->
+</androidx.constraintlayout.widget.ConstraintLayout>

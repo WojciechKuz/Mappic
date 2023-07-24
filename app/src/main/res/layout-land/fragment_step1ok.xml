@@ -9,7 +9,7 @@
     android:id="@+id/constraint">
 
     <TextView
-        android:id="@+id/checkImageText"
+        android:id="@+id/checkImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12sp"
@@ -26,7 +26,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkImageText"
+        app:layout_constraintTop_toBottomOf="@+id/checkImage"
+        app:flow_horizontalAlign="start"
         android:background="@color/black"
         tools:src="@tools:sample/backgrounds/scenic"
         tools:ignore="ContentDescription" />
@@ -35,7 +36,7 @@
         android:id="@+id/YesFAB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="-12dp"
+        android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="12dp"
         android:layout_marginTop="12dp"
@@ -48,9 +49,9 @@
         app:fabCustomSize="64dp"
         app:fabSize="auto"
         app:flow_horizontalAlign="center"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/NoFAB"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/NoFAB"
+        app:layout_constraintTop_toBottomOf="@id/checkImage"
         app:useCompatPadding="true"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
@@ -59,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginEnd="-12dp"
+        android:layout_marginEnd="12dp"
         android:layout_marginBottom="12dp"
         android:layout_marginTop="12dp"
         android:clickable="true"
@@ -71,9 +72,9 @@
         app:fabCustomSize="64dp"
         app:fabSize="auto"
         app:flow_horizontalAlign="center"
+        app:layout_constraintTop_toBottomOf="@+id/YesFAB"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/YesFAB"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:useCompatPadding="true"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 

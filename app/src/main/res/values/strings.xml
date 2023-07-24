@@ -2,26 +2,21 @@
     <string name="app_name" translatable="false">Mappic</string>
     <string name="action_settings" tools:ignore="MissingTranslation">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label" tools:ignore="MissingTranslation">First Fragment</string>
-    <string name="second_fragment_label" tools:ignore="MissingTranslation">Second Fragment</string>
     <string name="next" tools:ignore="MissingTranslation">Next</string>
     <string name="previous" tools:ignore="MissingTranslation">Previous</string>
-
-    <string name="lorem_ipsum" tools:ignore="MissingTranslation">
-        xd
-    </string>
+    <string name="notused" tools:ignore="MissingTranslation">to be removed</string>
 
     <!-- Poniżej moje nazwy akcji -->
     <string name="map_list">Map list</string>
-    <string name="step1">Step 1/4</string>
+    <string name="step1" tools:ignore="TypographyFractions">Step 1/4</string>
     <string name="step2">Step 2/4</string>
-    <string name="step3">Step 3/4</string>
+    <string name="step3" tools:ignore="TypographyFractions">Step 3/4</string>
     <string name="step4">Step 4/4</string>
     <string name="step0_imgMethod">Take picture of map or choose one from your gallery</string>
     <string name="step1_photo">Take a photo of a map or a plan</string>
     <string name="step1ok_isok">Is this photo OK?</string>
-    <string name="step2_mark1st">Mark 1st point on plan and go there</string>
-    <string name="step3_mark2nd">Mark 2nd point and go there</string>
+    <string name="step2_mark1st">Mark 1st point on a plan</string>
+    <string name="step3_mark2nd">Mark 2nd point on a plan</string>
     <string name="step4_name_map">Name map</string>
     <string name="ok_there" tools:ignore="Typos">Ok, I\'m there!</string><!-- zaznacza, że Ok powinno być OK, ale jest w zdaniu, dlatego wyłączone pokazywanie błędów -->
     <string name="ok">OK</string>
@@ -34,6 +29,14 @@
     <string name="delete">Delete</string>
     <string name="back_arrow_descr">Back to map list</string>
     <string name="map_options_descr">Map options</string>
+    <string name="new_photo">New photo</string>
+    <string name="choose_from_gallery">Choose from gallery</string>
+    <string name="map_icon_desc">Map icon</string>
+    <string name="use_my_location_butt">Use my location</string>
+    <string name="latitude">Latitude (N/S)</string>
+    <string name="longitude">Longitude (E/W)</string>
+    <string name="step2_type_gps1">Type, or use your location as 1st point</string>
+    <string name="step3_type_gps2">Type, or use your location as 2st point</string>
 
 
 </resources>

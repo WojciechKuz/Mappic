@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="first_fragment_label">.</string>
-    <string name="second_fragment_label">.</string>
     <string name="next">następny`</string>
     <string name="previous">poprzedni`</string>
-    <string name="lorem_ipsum">.</string>
     <string name="map_list">Lista map</string>
     <string name="step1">Krok 1 z 4</string>
     <string name="step0_imgMethod">Zrób zdjęcie mapy lub wybierz z galerii</string>
@@ -26,4 +23,12 @@
     <string name="delete">usuń</string>
     <string name="back_arrow_descr">powrót do listy map</string>
     <string name="map_options_descr">opcje mapy</string>
+    <string name="new_photo">Nowe zdięcie</string>
+    <string name="choose_from_gallery">Wybierz z galerii</string>
+    <string name="map_icon_desc">Ikona mapy</string>
+    <string name="use_my_location_butt">Użyj mojej lokalizacji</string>
+    <string name="latitude">Szerokość geogr. (N/S)</string>
+    <string name="longitude">Długość geogr. (W/Z)</string>
+    <string name="step2_type_gps1">Wpisz, albo użyj swoich współrzędnych jako punkt pierwszy</string>
+    <string name="step3_type_gps2">Wpisz, albo użyj swoich współrzędnych jako drugi punkt</string>
 </resources>

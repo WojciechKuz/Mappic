@@ -36,7 +36,7 @@
     <string name="latitude">Latitude (N/S)</string>
     <string name="longitude">Longitude (E/W)</string>
     <string name="step2_type_gps1">Type, or use your location as 1st point</string>
-    <string name="step3_type_gps2">Type, or use your location as 2st point</string>
+    <string name="step3_type_gps2">Type, or use your location as 2nd point</string>
 
 
 </resources>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".SecondFragment">
 
-    <!-- TEGO FRAGMENTU _NIE_ BĘDĘ UŻYWAĆ
-    nadaje się na śmietnik -->
+     TEGO FRAGMENTU _NIE_ BĘDĘ UŻYWAĆ
+    nadaje się na śmietnik
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -35,4 +35,4 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/button_second" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>-->

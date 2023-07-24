@@ -1,4 +1,4 @@
-package com.student.mappic
+//package com.student.mappic
 /*package com.student.mappic
 
 import android.os.Bundle

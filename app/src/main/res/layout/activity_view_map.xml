@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".viewmap.ViewMapActivity">
 
+    <!-- This layout file does not require landscape version. -->
+
     <ImageView
         android:id="@+id/mapView"
         android:layout_width="0dp"

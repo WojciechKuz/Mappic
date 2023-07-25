@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".addmap.Step4Fragment" >
 
+    <!-- This layout file does not require landscape version. -->
+
     <TextView
         android:id="@+id/nameMapText"
         android:layout_width="match_parent"

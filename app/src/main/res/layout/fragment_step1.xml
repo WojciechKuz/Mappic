@@ -8,6 +8,8 @@
     tools:context=".addmap.Step1Fragment"
     android:id="@+id/constraint">
 
+    <!-- This layout file does not require landscape version. -->
+
     <TextView
         android:id="@+id/takePhotoText"
         android:layout_width="match_parent"

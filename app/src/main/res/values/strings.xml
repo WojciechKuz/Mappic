@@ -37,6 +37,8 @@
     <string name="longitude">Longitude (E/W)</string>
     <string name="step2_type_gps1">Type, or use your location as 1st point</string>
     <string name="step3_type_gps2">Type, or use your location as 2nd point</string>
+    <string name="name_map">Name your map</string>
+    <string name="hint_mapname">My map name</string>
 
 
 </resources>

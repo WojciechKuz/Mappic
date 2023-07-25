@@ -31,4 +31,6 @@
     <string name="longitude">Długość geogr. (W/Z)</string>
     <string name="step2_type_gps1">Wpisz, albo użyj swoich współrzędnych jako punkt pierwszy</string>
     <string name="step3_type_gps2">Wpisz, albo użyj swoich współrzędnych jako drugi punkt</string>
+    <string name="name_map">Nazwij swoją mapę</string>
+    <string name="hint_mapname">Moja mapa</string>
 </resources>

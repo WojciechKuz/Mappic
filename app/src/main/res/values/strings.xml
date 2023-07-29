@@ -23,8 +23,9 @@
     <!--<string name="title_activity_add_map">AddMapActivity</string>-->
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" tools:ignore="MissingTranslation">Hello blank fragment</string>
-    <string name="options">options</string>
-    <string name="thumbnail">thumbnail</string>
+    <string name="options">Options</string>
+    <string name="thumbnail">Thumbnail</string>
+    <string name="addmap">Add map</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="back_arrow_descr">Back to map list</string>

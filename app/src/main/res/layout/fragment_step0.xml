@@ -39,29 +39,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginHorizontal="24dp"
+        android:layout_marginHorizontal="16dp"
         app:layout_constraintTop_toBottomOf="@id/picture"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:flow_horizontalAlign="center" >
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/buttonCam"
-            style="@style/Widget.Material3.ExtendedFloatingActionButton.Primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginHorizontal="8dp"
             android:layout_marginBottom="12dp"
             android:text="@string/new_photo"
             android:drawableLeft="@drawable/add_a_photo_48px"
             tools:ignore="RtlHardcoded" />
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/buttonFile"
-            style="@style/Widget.Material3.ExtendedFloatingActionButton.Primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginBottom="12dp"
             android:text="@string/choose_from_gallery"
             android:drawableLeft="@drawable/add_photo_alternate_48px"
             tools:ignore="RtlHardcoded" />

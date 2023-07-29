@@ -8,8 +8,8 @@
 
     <!-- TODO Skip this layout and nest fragment directly in activity_main.xml
          Then, throw this (content_main.xml) layout away, it won't be used. -->
-    <fragment
-        android:id="@+id/nav_host_fragment_content_main"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_list"
         android:name="com.student.mappic.maplist.MapItemFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"

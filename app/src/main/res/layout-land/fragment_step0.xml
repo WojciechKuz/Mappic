@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     tools:context=".addmap.Step0Fragment"
     android:id="@+id/constraint">
 
@@ -19,6 +19,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- when in landscape mode on larger devices, both 'picture' and 'linLayout' float
+    to left instead of scaling up or 'picture' to left and 'linLayout' to right
+    TODO make elements scale up on larger devices -->
 
     <!-- map image or icon (as picture) here -->
     <ImageView
@@ -46,22 +49,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:flow_horizontalAlign="center" >
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/buttonCam"
-            style="@style/Widget.Material3.ExtendedFloatingActionButton.Primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginHorizontal="8dp"
             android:layout_marginBottom="12dp"
             android:text="@string/new_photo"
             android:drawableLeft="@drawable/add_a_photo_48px"
             tools:ignore="RtlHardcoded" />
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/buttonFile"
-            style="@style/Widget.Material3.ExtendedFloatingActionButton.Primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginBottom="12dp"
             android:text="@string/choose_from_gallery"
             android:drawableLeft="@drawable/add_photo_alternate_48px"
             tools:ignore="RtlHardcoded" />

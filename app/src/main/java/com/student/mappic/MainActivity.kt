@@ -1,20 +1,19 @@
 package com.student.mappic
 
+import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.student.mappic.addmap.AddMapActivity
 import com.student.mappic.databinding.ActivityMainBinding
+import com.student.mappic.clist
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,9 +25,21 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        // View ID names should be Activity-wide unique.
+        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
+            SnackShow(this, R.id.fab, "Clicked +. No act.")
+            Log.d(clist.MainActivity, ">>> Clicked add map. Action open AddMapActivity.")
+            // TODO open AddeMapActivity
+            openAddMapActivity()
+        }
+    }
+    private fun openAddMapActivity() {
+        /*
+        HERE is something weird.
+        Kotlin: Activity::class.java
+        Java:   Activity.class
+         */
+        startActivity(Intent(this, AddMapActivity::class.java))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -42,14 +53,19 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_settings -> {
+                SnackShow(this, R.id.fragment_list, "Clicked on settings. No act.")
+                Log.d(clist.MainActivity, ">>> Clicked settings. no action available yet.")
+                return true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
+    /*
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        val navController = findNavController(R.id.fragment_list)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
-    }
+    }*/
 }

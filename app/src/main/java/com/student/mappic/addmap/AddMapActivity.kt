@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.LifecycleOwner
@@ -20,7 +21,7 @@ class AddMapActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityAddMapBinding
-    private lateinit var cameraProviderFuture : ListenableFuture<ProcessCameraProvider>
+    private lateinit var camiX: CamiX
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -30,8 +31,9 @@ class AddMapActivity : AppCompatActivity() {
          * If Step1Fragment is visible on the screen, we need to initialize classes
          * associated with preview of the camera
          */
-        if(checkIfFragment1().first) {
-            initCamPreview()
+        val currFrag = getStep1Fragment()
+        if(isStep1FragmentOnScreen(currFrag)) {
+            camiX = CamiX(this) // bind view from camera to camView
         }
 
         binding = ActivityAddMapBinding.inflate(layoutInflater)
@@ -51,10 +53,14 @@ class AddMapActivity : AppCompatActivity() {
     }
 
     /**
-     * Checks whether Step1Fragment is visible on the screen and returns Step1Fragment.
+     * Returns Step1Fragment if it exists (Step1Fragment?).
+     * If you want to use Step1Fragment you have to check if it's not null.
      */
-    private fun checkIfFragment1(): Pair<Boolean, Step1Fragment?> {
-        val currFrag = supportFragmentManager.findFragmentByTag("Step1Fragment") as Step1Fragment?
+    private fun getStep1Fragment(): Step1Fragment? {
+        return supportFragmentManager.findFragmentByTag("Step1Fragment") as Step1Fragment?
+    }
+
+    private fun isStep1FragmentOnScreen(currFrag: Step1Fragment?): Boolean {
         /*
          * Note: this is comment for me. I'm still learning Kotlin and this comment
          * wasn't meant to educate other programmers.
@@ -63,38 +69,21 @@ class AddMapActivity : AppCompatActivity() {
          * Inside if first, we check if currFlag isn't null (also could be type check).
          * This allows Compiler to deduce, what type is used in next check (or operation),
          * so we don't need to explicitly cast to certain type in next check (or operation).
+         *
+         * Without smart cast:
+         * (currFrag as Step1Fragment).isVisible
+         *
+         * With smart cast:
+         * currFrag.isVisible
          */
         if(currFrag != null && currFrag.isVisible) {
-            return Pair(true, currFrag)
+            return true
         }
-        return Pair(false, currFrag)
+        return false
     }
 
-    /**
-     * Initialize classes associated with preview of the camera.
-     * I was unable to do this in Step1Fragment.kt because of lack of context
-     * (context (getContext()) returns 'Context?'. Could be null!)
-     */
-    private fun initCamPreview() {
-        cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
-        cameraProviderFuture.addListener(Runnable {
-            val cameraProvider = cameraProviderFuture.get()
-            bindPreview(cameraProvider)
-        }, ContextCompat.getMainExecutor(this))
-    }
 
-    private fun bindPreview(cameraProvider : ProcessCameraProvider) {
-        var preview : Preview = Preview.Builder()
-            .build()
 
-        var cameraSelector : CameraSelector = CameraSelector.Builder()
-            .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-            .build()
-
-        preview.setSurfaceProvider(previewView.getSurfaceProvider())
-
-        var camera = cameraProvider.bindToLifecycle(this as LifecycleOwner, cameraSelector, preview)
-    }
 
 }

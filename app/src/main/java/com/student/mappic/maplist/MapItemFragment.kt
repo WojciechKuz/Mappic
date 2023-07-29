@@ -11,7 +11,8 @@ import com.student.mappic.R
 import com.student.mappic.maplist.placeholder.PlaceholderContent
 
 /**
- * A fragment representing a list of Items. SO WHY THE F*** ITS NAME ISN'T MapItemListFragment ???
+ * A fragment representing a list of Items.
+ * SO WHY THE F*** ITS NAME ISN'T MapItemListFragment ???
  */
 class MapItemFragment : Fragment() {
 

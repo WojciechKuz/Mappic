@@ -47,14 +47,19 @@ class Step1okFragment : Fragment() {
      */
     private fun onClickYes() {
         // TODO save photo and pass reference to it, to database or temporar value holder
-        findNavController().navigate(R.id.nav_host_fragment_2)
+        findNavController().navigate(R.id.action_step1ok_to_step2)
     }
 
     /**
      * Navigate to previous screen
      */
     private fun onClickNo() {
-        findNavController().navigate(R.id.nav_host_fragment_2)
+        /*
+         * There are two cases. After making a photo, and after choosing it from gallery.
+         * TODO navigate depending on which case it is.
+         * The simplest way would be to bypass navigation and open previous activity in the stack.
+         */
+        findNavController().navigate(R.id.action_to_step1)
     }
 
 

@@ -1,12 +1,16 @@
 package com.student.mappic.addmap
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.navigateUp
 import com.student.mappic.R
+import com.student.mappic.clist
 import com.student.mappic.databinding.FragmentStep0Binding
 
 /**
@@ -34,9 +38,11 @@ class Step0Fragment : Fragment() {
 
         // set onclicklisteners here
         binding.buttonCam.setOnClickListener {
+            Log.d(clist.Step0Fragment, ">>> take new picture button clicked")
             takePicture()
         }
         binding.buttonFile.setOnClickListener {
+            Log.d(clist.Step0Fragment, ">>> open photo from gallery button clicked")
             openFromGallery()
         }
     }
@@ -46,7 +52,8 @@ class Step0Fragment : Fragment() {
      *  Step1Fragment (taking photo screeen) is then displayed.
      */
     private fun takePicture() {
-        findNavController().navigate(R.id.nav_host_fragment_2)
+        Log.d(clist.Step0Fragment, ">>> navController is alright!\n trying to navigate up...")
+        findNavController().navigate(R.id.action_step0_to_step1)
     }
     /**
      *  Triggered when 'Choose from gallery' button is clicked.
@@ -57,7 +64,7 @@ class Step0Fragment : Fragment() {
         //TODO open system photo picker
 
         //TODO pass photo reference to Step1okFragment
-        findNavController().navigate(R.id.reviewPhoto)
+        findNavController().navigate(R.id.action_to_step1ok)
     }
 
     override fun onDestroyView() {

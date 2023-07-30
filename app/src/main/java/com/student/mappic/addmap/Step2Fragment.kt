@@ -6,8 +6,54 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.student.mappic.R
+import android.util.Log
+import androidx.navigation.fragment.findNavController
+import com.student.mappic.clist
+import com.student.mappic.databinding.FragmentStep2Binding
 
-// TODO: Rename parameter arguments, choose names that match
+/**
+ * Step2Fragment asks user if he/she wants to take new picture or choose one from gallery.
+ * There are two buttons doing just that.
+ */
+class Step2Fragment : Fragment() {
+
+    private var _binding: FragmentStep2Binding? = null
+
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentStep2Binding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // set onclicklisteners here
+        binding.OkFAB.setOnClickListener {
+            findNavController().navigate(R.id.action_step2_to_step3)
+        }
+        binding.buttonReadGps.setOnClickListener {
+            // TODO fill text fields with GPS coordinates
+            Log.d(clist.Step3Fragment, ">>> Action not available yet.")
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+}
+
+/*
+    TODO understand what this fragment parameters are, it might be useful
+
+// nTODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -18,7 +64,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class Step2Fragment : Fragment() {
-    // TODO: Rename and change types of parameters
+    // nTODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
@@ -47,7 +93,7 @@ class Step2Fragment : Fragment() {
          * @param param2 Parameter 2.
          * @return A new instance of fragment Step2Fragment.
          */
-        // TODO: Rename and change types and number of parameters
+        // nTODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             Step2Fragment().apply {
@@ -58,3 +104,4 @@ class Step2Fragment : Fragment() {
             }
     }
 }
+*/

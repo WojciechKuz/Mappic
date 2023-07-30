@@ -55,7 +55,7 @@ class Step1Fragment : Fragment() {
 
         // TODO send photo reference to Step1okFragment
         // navigate to next screen
-        findNavController().navigate(R.id.nav_host_fragment_2)
+        findNavController().navigate(R.id.action_step1_to_step1ok)
     }
 
     override fun onDestroyView() {

@@ -83,6 +83,9 @@
                     android:textSize="20sp"
                     tools:ignore="Autofill" />
 
+                <!-- TODO additional prompt when clicked ok without typing anything or
+                      typing incorrect data -->
+
             </LinearLayout>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton

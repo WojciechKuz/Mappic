@@ -11,7 +11,7 @@
         android:label="fragment_step0"
         tools:layout="@layout/fragment_step0" >
         <action
-            android:id="@+id/action_step0Fragment_to_step1Fragment"
+            android:id="@+id/action_step0_to_step1"
             app:destination="@id/step1Fragment" />
     </fragment>
 
@@ -21,12 +21,12 @@
         android:label="fragment_step1"
         tools:layout="@layout/fragment_step1" >
         <action
-            android:id="@+id/action_step1Fragment_to_step1okFragment"
+            android:id="@+id/action_step1_to_step1ok"
             app:destination="@id/step1okFragment" />
     </fragment>
 
     <action
-        android:id="@+id/reviewPhoto"
+        android:id="@+id/action_to_step1ok"
         app:destination="@+id/step1okFragment" />
 
     <fragment
@@ -35,12 +35,12 @@
         android:label="fragment_step1ok"
         tools:layout="@layout/fragment_step1ok" >
         <action
-            android:id="@+id/action_step1okFragment_to_step2Fragment2"
+            android:id="@+id/action_step1ok_to_step2"
             app:destination="@id/step2Fragment" />
     </fragment>
 
     <action
-        android:id="@+id/choosePhotoAgain"
+        android:id="@+id/action_to_step1"
         app:destination="@+id/step1Fragment" />
 
     <fragment
@@ -49,7 +49,7 @@
         android:label="fragment_step2"
         tools:layout="@layout/fragment_step2" >
         <action
-            android:id="@+id/action_step2Fragment_to_step3Fragment"
+            android:id="@+id/action_step2_to_step3"
             app:destination="@id/step3Fragment" />
     </fragment>
     <fragment
@@ -58,7 +58,7 @@
         android:label="fragment_step3"
         tools:layout="@layout/fragment_step3" >
         <action
-            android:id="@+id/action_step3Fragment_to_step4Fragment"
+            android:id="@+id/action_step3_to_step4"
             app:destination="@id/step4Fragment" />
     </fragment>
     <fragment

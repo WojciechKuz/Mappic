@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         // View ID names should be Activity-wide unique.
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
-            SnackShow(this, R.id.fab, "Clicked +. No act.")
+            //SnackShow(this, R.id.fab, "Clicked +. No act.")
             Log.d(clist.MainActivity, ">>> Clicked add map. Action open AddMapActivity.")
             // TODO open AddeMapActivity
             openAddMapActivity()

@@ -9,8 +9,13 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:layout_height="wrap_content" >
+        <!-- WARNING !!!
+        Android Studio automatically redeclare this:
+            android:fitsSystemWindows="true"
+        inside AppBarLayout, which makes some ui elements go under system notification bar and navigation drawer (3 buttons back, home, tasks)
+        simply - UI elements out of screen. If that happens, just remove this line, and leave it ONLY in outermost hierarchy element.
+        -->
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
@@ -22,7 +27,7 @@
         android:background="#E9DCFE"
         I thought it would be nice if Toolbar used same colour as Floating Action Button (FAB).
         So i set android:background to colour picked from FAB using pipette. It's not best practice.
-        TODO set style of toolbar
+        laterTODO set style of toolbar
         -->
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -38,5 +43,12 @@
         android:layout_marginBottom="16dp"
         app:srcCompat="@android:drawable/ic_input_add"
         android:contentDescription="@string/addmap" />
+
+    <!--
+    There is an error that makes Floating action button float down behind navigation drawer (bar with system buttons for return, home, and opened apps)
+    ex. after snackbar hides itself back, or in landscape mode settings button floats behind navigation drawer.
+    TODO fix buttons floating behind navigation drawer.
+    https://stackoverflow.com/questions/35255704/floating-action-button-hidden-behind-navigation-drawer
+    -->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

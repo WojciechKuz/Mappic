@@ -10,7 +10,17 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:visibility="gone">
+        <!-- WARNING !!!
+        Android Studio automatically redeclare this:
+            android:fitsSystemWindows="true"
+        inside AppBarLayout, which makes some ui elements go under system notification bar and navigation drawer (3 buttons back, home, tasks)
+        simply - UI elements out of screen. If that happens, just remove this line, and leave it ONLY in outermost hierarchy element.
+        -->
+        <!--
+        Hidden 'which fragment is displayed' info, as it wasn't looking good,
+        and hiding wouldn't break anything (appbar is tied with navigation)
+        -->
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"

@@ -1,5 +1,10 @@
 package com.student.mappic.addmap
 
+import android.content.pm.PackageManager
+import android.os.Build
+import android.util.Log
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -8,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.google.common.util.concurrent.ListenableFuture
 import com.student.mappic.R
+import com.student.mappic.clist
 
 /**
  * CamiX is a class for accessing the camera.
@@ -26,6 +32,14 @@ class CamiX(private var addMap: AddMapActivity){
      * (context (getContext()) returns 'Context?'. Could be null!)
      */
     init {
+        Log.d(clist.CamiX, ">>> init CamiX... permissions & stuff.")
+        if (allPermissionsGranted()) {
+            setupPreview()
+        } else {
+            requestPermissions()
+        }
+    }
+    private fun setupPreview() {
         cameraProviderFuture.addListener( {
             val cameraProvider = cameraProviderFuture.get()
             bindPreview(cameraProvider)
@@ -50,11 +64,15 @@ class CamiX(private var addMap: AddMapActivity){
         var camera = cameraProvider.bindToLifecycle(addMap as LifecycleOwner, cameraSelector, preview)
     }
 
+    //fun requestPerm() {
+        //
+    //}
+
     /**
      * Take a pic
      */
     public fun takePhoto() {
-        //
+        //TODO
     }
 
     /*
@@ -63,4 +81,45 @@ class CamiX(private var addMap: AddMapActivity){
      *
      * * - wasn't meaning term "default constructor".
      */
+
+    // Permission handling classes
+    private fun requestPermissions() {
+        activityResultLauncher.launch(REQUIRED_PERMISSIONS)
+    }
+
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(addMap.baseContext, it) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private val activityResultLauncher =
+        addMap.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+                permissions ->
+            // Handle Permission granted/rejected
+            var permissionGranted = true
+            permissions.entries.forEach {
+                if (it.key in REQUIRED_PERMISSIONS && it.value == false)
+                    permissionGranted = false
+            }
+            if (!permissionGranted) {
+                Toast.makeText(addMap.baseContext,
+                    "Permission request denied",
+                    Toast.LENGTH_SHORT).show()
+            } else {
+                //startCamera()
+            }
+        }
+
+    // android.Manifest includes .permission
+    companion object {
+        private const val TAG = "Mappic"
+        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+        private val REQUIRED_PERMISSIONS =
+            mutableListOf (
+                android.Manifest.permission.CAMERA
+            ).apply {
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                    add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                }
+            }.toTypedArray()
+    }
 }

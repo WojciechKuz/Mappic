@@ -3,6 +3,7 @@ package com.student.mappic.addmap
 import android.content.res.Configuration
 import android.graphics.drawable.GradientDrawable.Orientation
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.student.mappic.databinding.FragmentStep1Binding
 import com.student.mappic.R
+import com.student.mappic.clist
 
 /**
  * This is fragment where user takes a picture of a map.
@@ -35,9 +37,11 @@ class Step1Fragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        Log.d(clist.Step1Fragment, ">>> onViewCreated()")
         if(!isPortraitMode())
             repositionFAB()
+
+        (activity as AddMapActivity).startPreview()
 
         binding.PhotoFAB.setOnClickListener {
             onClickPhoto()
@@ -67,11 +71,12 @@ class Step1Fragment : Fragment() {
      * Reposition FAB (camera button) to the right, in middle of height. Used when phone is in landscape mode.
      */
     private fun repositionFAB() {
+        Log.d(clist.Step1Fragment, ">>> repositioning FAB...")
         // WARNING! constraint is id of UI element (of type ConstraintLayout)
         var constr = ConstraintSet();
-        constr.connect(R.id.constraint, ConstraintSet.TOP, R.id.PhotoFAB, ConstraintSet.TOP)
-        constr.connect(R.id.constraint, ConstraintSet.END, R.id.PhotoFAB, ConstraintSet.END)
-        constr.connect(R.id.constraint, ConstraintSet.BOTTOM, R.id.PhotoFAB, ConstraintSet.BOTTOM)
+        constr.connect(R.id.PhotoFAB, ConstraintSet.TOP, R.id.takePhotoText, ConstraintSet.BOTTOM)
+        constr.connect(R.id.PhotoFAB, ConstraintSet.END, R.id.constraint, ConstraintSet.END)
+        constr.connect(R.id.PhotoFAB, ConstraintSet.BOTTOM, R.id.constraint, ConstraintSet.BOTTOM)
         constr.applyTo(binding.constraint)
     }
     private fun rotation(): Int {

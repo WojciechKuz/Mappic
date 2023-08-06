@@ -22,6 +22,7 @@ import com.student.mappic.clist
 class Step1Fragment : Fragment() {
 
     private var _binding: FragmentStep1Binding? = null
+    private lateinit var camiX: CamiX
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -41,11 +42,25 @@ class Step1Fragment : Fragment() {
         if(!isPortraitMode())
             repositionFAB()
 
-        (activity as AddMapActivity).startPreview()
+        //(activity as AddMapActivity).startPreview()
+        startPreview(activity as AddMapActivity)
 
         binding.PhotoFAB.setOnClickListener {
             onClickPhoto()
         }
+    }
+
+    fun startPreview(actv: AddMapActivity) {
+        /*
+         * If Step1Fragment is visible on the screen, we need to initialize classes
+         * associated with preview of the camera
+         */
+        if(actv == null) {
+            Log.e(clist.Step1Fragment, ">>> Activity is null !!!")
+        }
+        Log.d(clist.AddMapActivity, ">>> Constructing CamiX...")
+        camiX = CamiX(actv) // bind view from camera to camView
+        // keep CamiX reference to take photos
     }
 
     // TODO

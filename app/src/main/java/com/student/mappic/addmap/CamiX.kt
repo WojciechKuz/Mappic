@@ -34,10 +34,13 @@ class CamiX(private var addMap: AddMapActivity){
     init {
         Log.d(clist.CamiX, ">>> init CamiX... permissions & stuff.")
         if (allPermissionsGranted()) {
+            Log.d(clist.CamiX, ">>> permissions granted!")
             setupPreview()
         } else {
+            Log.d(clist.CamiX, ">>> requesting permissions...")
             requestPermissions()
         }
+        Log.d(clist.CamiX, ">>> what next?")
     }
     private fun setupPreview() {
         cameraProviderFuture.addListener( {
@@ -81,16 +84,6 @@ class CamiX(private var addMap: AddMapActivity){
      *
      * * - wasn't meaning term "default constructor".
      */
-
-    // Permission handling classes
-    private fun requestPermissions() {
-        activityResultLauncher.launch(REQUIRED_PERMISSIONS)
-    }
-
-    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(addMap.baseContext, it) == PackageManager.PERMISSION_GRANTED
-    }
-
     private val activityResultLauncher =
         addMap.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
                 permissions ->
@@ -108,6 +101,17 @@ class CamiX(private var addMap: AddMapActivity){
                 //startCamera()
             }
         }
+
+    // Permission handling classes
+    private fun requestPermissions() {
+        activityResultLauncher.launch(REQUIRED_PERMISSIONS)
+    }
+
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(addMap.baseContext, it) == PackageManager.PERMISSION_GRANTED
+    }
+
+
 
     // android.Manifest includes .permission
     companion object {

@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:fitsSystemWindows="true"
     tools:context=".addmap.Step1Fragment"
     android:id="@+id/constraint">
 
@@ -33,10 +35,7 @@
         android:id="@+id/PhotoFAB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="12dp"
-        android:layout_marginTop="12dp"
+        android:layout_margin="12dp"
         android:clickable="true"
         android:focusable="true"
         android:scaleX="1.2"
@@ -46,6 +45,7 @@
         app:fabCustomSize="64dp"
         app:fabSize="auto"
         app:flow_horizontalAlign="center"
+        app:flow_verticalAlign="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:fitsSystemWindows="true"
     android:orientation="horizontal"
     tools:context=".addmap.Step2Fragment"
     android:id="@+id/constraint">

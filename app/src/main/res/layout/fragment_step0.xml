@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="1"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context=".addmap.Step0Fragment">
 
@@ -17,6 +18,7 @@
         android:text="@string/step0_imgMethod"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

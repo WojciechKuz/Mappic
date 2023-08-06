@@ -1,7 +1,6 @@
 package com.student.mappic.addmap
 
 import android.content.res.Configuration
-import android.graphics.drawable.GradientDrawable.Orientation
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -23,6 +22,7 @@ class Step1Fragment : Fragment() {
 
     private var _binding: FragmentStep1Binding? = null
     private lateinit var camiX: CamiX
+    private lateinit var addMap: AddMapActivity
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -42,32 +42,29 @@ class Step1Fragment : Fragment() {
         if(!isPortraitMode())
             repositionFAB()
 
-        //(activity as AddMapActivity).startPreview()
-        startPreview(activity as AddMapActivity)
+        addMap = (activity as AddMapActivity)
+        camiX = CamiX(addMap, R.id.camView)
+
+        //addmap.step1() requests permissions for Camera, and then launches camiX.startCamera()
+        addMap.step1 { camiX.startCamera() }
 
         binding.PhotoFAB.setOnClickListener {
             onClickPhoto()
         }
     }
 
-    fun startPreview(actv: AddMapActivity) {
-        /*
-         * If Step1Fragment is visible on the screen, we need to initialize classes
-         * associated with preview of the camera
-         */
-        if(actv == null) {
-            Log.e(clist.Step1Fragment, ">>> Activity is null !!!")
-        }
-        Log.d(clist.AddMapActivity, ">>> Constructing CamiX...")
-        camiX = CamiX(actv) // bind view from camera to camView
-        // keep CamiX reference to take photos
-    }
-
-    // TODO
+    /**
+     * This should serve onClickPhoto().
+     * It should:
+     *  - take a photo,
+     *  TODO - pass photo (or its reference) to next fragment
+     */
     private fun onClickPhoto() {
-        // TODO take a photo
 
-        // FIXME temporary
+        // really, it just takes photo and saves to MediaStore
+        camiX.takePhoto()
+
+        // temporary
         Snackbar.make(binding.PhotoFAB, "You clicked take photo!", Snackbar.LENGTH_LONG)
             .setAnchorView(R.id.PhotoFAB)
             .setAction("Action", null).show()
@@ -80,6 +77,7 @@ class Step1Fragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        camiX.closeCamera()
     }
 
     /**

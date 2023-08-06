@@ -1,129 +1,133 @@
 package com.student.mappic.addmap
 
-import android.content.pm.PackageManager
+import android.content.ContentValues
 import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
-import com.google.common.util.concurrent.ListenableFuture
-import com.student.mappic.R
 import com.student.mappic.clist
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.concurrent.Executors
 
 /**
- * CamiX is a class for accessing the camera.
- * It's only usage in app is in Step1Fragment,
- * where it is used to take picture of a map by the user.
- *
- * It has weird name cuz it's cool.
+ * Class that handles camera to separate camera code from UI related code in activity.
+ * You have to handle permissions in your activity (or fragment) though.
+ * @param act activity class
+ * @param previewId id of CameraX PreviewView where camera preview will be shown
  */
-class CamiX(private var addMap: AddMapActivity){
-    private var cameraProviderFuture : ListenableFuture<ProcessCameraProvider> =
-        ProcessCameraProvider.getInstance(addMap)
+class CamiX(var act: AppCompatActivity, private val previewId: Int) {
+    private var imageCapture: ImageCapture? = null
+    private var cameraExecutor = Executors.newSingleThreadExecutor()
 
     /**
-     * Initialize classes associated with preview of the camera.
-     * I was unable to do this in Step1Fragment.kt because of lack of context
-     * (context (getContext()) returns 'Context?'. Could be null!)
+     * Init preview & allow imgCapture.
+     * You have to implicitly start preview with this method
+     * after getting permissions. ! Remember to call closeCam()
+     * in onDestroy() in your activity.
      */
-    init {
-        Log.d(clist.CamiX, ">>> init CamiX... permissions & stuff.")
-        if (allPermissionsGranted()) {
-            Log.d(clist.CamiX, ">>> permissions granted!")
-            setupPreview()
-        } else {
-            Log.d(clist.CamiX, ">>> requesting permissions...")
-            requestPermissions()
-        }
-        Log.d(clist.CamiX, ">>> what next?")
+    fun startCamera() {
+        Log.d(TAG, ">>> startCamera()")
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(act)
+
+        cameraProviderFuture.addListener({
+            // Used to bind the lifecycle of cameras to the lifecycle owner
+            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+
+            // Preview
+            val preview = Preview.Builder()
+                .build()
+                .also {
+                    var camView = act.findViewById<PreviewView>(previewId)// FINDVIEWBYID instead of viewBinding
+                    it.setSurfaceProvider(camView.surfaceProvider) // viewBinding.camPreview
+                }
+
+            // Select back camera as a default
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+            try {
+                // Unbind use cases before rebinding
+                cameraProvider.unbindAll()
+
+                // Bind use cases to camera (preview, imgCapture)
+                cameraProvider.bindToLifecycle(
+                    act, cameraSelector, preview, imageCapture)
+
+
+            } catch(exc: Exception) {
+                Log.e(TAG, "Use case binding failed", exc)
+            }
+
+        }, ContextCompat.getMainExecutor(act))
+
+        // this is code for image capture
+        imageCapture = ImageCapture.Builder().build()
     }
-    private fun setupPreview() {
-        cameraProviderFuture.addListener( {
-            val cameraProvider = cameraProviderFuture.get()
-            bindPreview(cameraProvider)
-        },
-            ContextCompat.getMainExecutor(addMap)
+
+    /**
+     * Name of this method may not suggest it, but
+     * this method takes photo.
+     * P.S. It saves images to MediaStore.
+     */
+    fun takePhoto() {
+        Log.d(TAG, ">>> takePhoto()")
+        // Get a stable reference of the modifiable image capture use case
+        val imageCapture = imageCapture ?: return
+
+        // Create time stamped name and MediaStore entry.
+        val name = SimpleDateFormat(FILENAME_FORMAT, Locale.GERMANY)
+            .format(System.currentTimeMillis())
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
+            }
+        }
+
+        // Create output options object which contains file + metadata
+        val outputOptions = ImageCapture.OutputFileOptions
+            .Builder(act.contentResolver,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                contentValues)
+            .build()
+
+        // Set up image capture listener, which is triggered after photo has
+        // been taken
+        imageCapture.takePicture(
+            outputOptions,
+            ContextCompat.getMainExecutor(act),
+            object : ImageCapture.OnImageSavedCallback {
+                override fun onError(exc: ImageCaptureException) {
+                    Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
+                }
+
+                override fun onImageSaved(output: ImageCapture.OutputFileResults){
+                    val msg = "Photo capture succeeded: ${output.savedUri}"
+                    Toast.makeText(act.baseContext, msg, Toast.LENGTH_SHORT).show()
+                    Log.d(TAG, msg)
+                }
+            }
         )
     }
 
     /**
-     * Provide preview
+     * Use it in onDestroy() in your activity.
      */
-    private fun bindPreview(cameraProvider : ProcessCameraProvider) {
-        var preview : Preview = Preview.Builder().build()
-
-        var cameraSelector : CameraSelector = CameraSelector.Builder()
-            .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-            .build()
-        var camView = addMap.findViewById<PreviewView>(R.id.camView) // WARNING: R.id.camView can be inaccessible after build!
-        // how to solve if it fails ^: In AddMapActivity public add member fun,which returns reference to camView
-        preview.setSurfaceProvider(camView.surfaceProvider)
-
-        var camera = cameraProvider.bindToLifecycle(addMap as LifecycleOwner, cameraSelector, preview)
+    fun closeCamera() {
+        cameraExecutor.shutdown()
     }
 
-    //fun requestPerm() {
-        //
-    //}
-
-    /**
-     * Take a pic
-     */
-    public fun takePhoto() {
-        //TODO
-    }
-
-    /*
-     * For me: init keyword is code executed in "primary constructor" (the default one)*.
-     * Classes can have "secondary constructors" (other ones).
-     *
-     * * - wasn't meaning term "default constructor".
-     */
-    private val activityResultLauncher =
-        addMap.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-                permissions ->
-            // Handle Permission granted/rejected
-            var permissionGranted = true
-            permissions.entries.forEach {
-                if (it.key in REQUIRED_PERMISSIONS && it.value == false)
-                    permissionGranted = false
-            }
-            if (!permissionGranted) {
-                Toast.makeText(addMap.baseContext,
-                    "Permission request denied",
-                    Toast.LENGTH_SHORT).show()
-            } else {
-                //startCamera()
-            }
-        }
-
-    // Permission handling classes
-    private fun requestPermissions() {
-        activityResultLauncher.launch(REQUIRED_PERMISSIONS)
-    }
-
-    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(addMap.baseContext, it) == PackageManager.PERMISSION_GRANTED
-    }
-
-
-
-    // android.Manifest includes .permission
     companion object {
-        private const val TAG = "Mappic"
+        private const val TAG = clist.CamiX
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
-        private val REQUIRED_PERMISSIONS =
-            mutableListOf (
-                android.Manifest.permission.CAMERA
-            ).apply {
-                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-                    add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                }
-            }.toTypedArray()
     }
 }

@@ -6,9 +6,9 @@ package com.student.mappic.DB
  *
  * This allows app to know where the user is located on map picture.
  */
-data class PxGpsPoint(
-    val Xpx: Int,
-    val Ypx: Int,
-    val Xgps: Double,
-    val Ygps: Double
+data class Point(
+    val xpx: Int,
+    val ypx: Int,
+    val xgps: Double,
+    val ygps: Double
 )

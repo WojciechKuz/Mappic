@@ -1,6 +1,7 @@
 package com.student.mappic.addmap
 
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.student.mappic.databinding.FragmentStep1Binding
@@ -39,8 +41,8 @@ class Step1Fragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(clist.Step1Fragment, ">>> onViewCreated()")
-        if(!isPortraitMode())
-            repositionFAB()
+        //if(!isPortraitMode())
+        //    repositionFAB()
 
         addMap = (activity as AddMapActivity)
         camiX = CamiX(addMap, R.id.camView)
@@ -53,25 +55,30 @@ class Step1Fragment : Fragment() {
         }
     }
 
+    private val viewModel: NewMapViewModel by activityViewModels()
     /**
      * This should serve onClickPhoto().
      * It should:
      *  - take a photo,
-     *  TODO - pass photo (or its reference) to next fragment
+     * as takePhoto argument it specifies, what method should receive output.
      */
     private fun onClickPhoto() {
 
         // really, it just takes photo and saves to MediaStore
-        camiX.takePhoto()
+        camiX.takePhoto { setMapImg(it) }
 
-        // temporary
-        Snackbar.make(binding.PhotoFAB, "You clicked take photo!", Snackbar.LENGTH_LONG)
-            .setAnchorView(R.id.PhotoFAB)
-            .setAction("Action", null).show()
-
-        // TODO send photo reference to Step1okFragment
         // navigate to next screen
         findNavController().navigate(R.id.action_step1_to_step1ok)
+    }
+
+    /**
+     * This method receives image Uri from camiX class
+     * and passes it to next fragments
+     */
+    private fun setMapImg(recvImgUri: Uri?) {
+        if(recvImgUri != null)
+            viewModel.mapImg = recvImgUri
+        // TODO send photo reference to Step1okFragment
     }
 
     override fun onDestroyView() {
@@ -80,6 +87,7 @@ class Step1Fragment : Fragment() {
         camiX.closeCamera()
     }
 
+    /*
     /**
      * Reposition FAB (camera button) to the right, in middle of height. Used when phone is in landscape mode.
      */
@@ -102,4 +110,5 @@ class Step1Fragment : Fragment() {
     private fun isPortraitMode(): Boolean {
         return rotation() != Configuration.ORIENTATION_LANDSCAPE
     }
+    */
 }

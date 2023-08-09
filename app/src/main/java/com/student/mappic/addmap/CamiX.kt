@@ -17,6 +17,7 @@ import com.student.mappic.clist
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.Executors
+import android.net.Uri
 
 /**
  * Class that handles camera to separate camera code from UI related code in activity.
@@ -75,9 +76,9 @@ class CamiX(var act: AppCompatActivity, private val previewId: Int) {
     /**
      * Name of this method may not suggest it, but
      * this method takes photo.
-     * P.S. It saves images to MediaStore.
+     * It saves images to MediaStore and passes Uri to interface provided as arg.
      */
-    fun takePhoto() {
+    fun takePhoto(receiver: PassUri) {
         Log.d(TAG, ">>> takePhoto()")
         // Get a stable reference of the modifiable image capture use case
         val imageCapture = imageCapture ?: return
@@ -114,6 +115,7 @@ class CamiX(var act: AppCompatActivity, private val previewId: Int) {
                     val msg = "Photo capture succeeded: ${output.savedUri}"
                     Toast.makeText(act.baseContext, msg, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
+                    receiver.receiveUri(output.savedUri) // sends Uri to specified interface
                 }
             }
         )

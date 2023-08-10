@@ -1,12 +1,11 @@
 package com.student.mappic.addmap
 
-import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintSet
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.student.mappic.databinding.FragmentStep1okBinding
 import com.student.mappic.R
@@ -18,6 +17,8 @@ import com.student.mappic.R
 class Step1okFragment : Fragment() {
 
     private var _binding: FragmentStep1okBinding? = null
+
+    private val viewModel: NewMapViewModel by activityViewModels()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -34,6 +35,8 @@ class Step1okFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.imgView.setImageURI(viewModel.mapImg)
+
         binding.YesFAB.setOnClickListener {
             onClickYes()
         }
@@ -46,7 +49,9 @@ class Step1okFragment : Fragment() {
      * Navigate to next screen
      */
     private fun onClickYes() {
-        // TODO save photo and pass reference to it, to database or temporar value holder
+        // wasTODO save photo and pass reference to it, to database or temporary value holder
+        // Photos are saved instantly, so there's no need to save again, just navigate to nxt fragment.
+        // The only downside is, that user needs to manually delete unused photos. Could be done later.
         findNavController().navigate(R.id.action_step1ok_to_step2)
     }
 
@@ -56,10 +61,10 @@ class Step1okFragment : Fragment() {
     private fun onClickNo() {
         /*
          * There are two cases. After making a photo, and after choosing it from gallery.
-         * TODO navigate depending on which case it is.
          * The simplest way would be to bypass navigation and open previous activity in the stack.
          */
-        findNavController().navigate(R.id.action_to_step1)
+        parentFragmentManager.popBackStackImmediate() // Navigates to previous step
+        //findNavController().navigate(R.id.action_to_step1)
     }
 
 

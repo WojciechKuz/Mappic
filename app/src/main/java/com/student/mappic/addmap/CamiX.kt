@@ -17,7 +17,6 @@ import com.student.mappic.clist
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.Executors
-import android.net.Uri
 
 /**
  * Class that handles camera to separate camera code from UI related code in activity.
@@ -47,7 +46,7 @@ class CamiX(var act: AppCompatActivity, private val previewId: Int) {
             val preview = Preview.Builder()
                 .build()
                 .also {
-                    var camView = act.findViewById<PreviewView>(previewId)// FINDVIEWBYID instead of viewBinding
+                    val camView = act.findViewById<PreviewView>(previewId)// FINDVIEWBYID instead of viewBinding
                     it.setSurfaceProvider(camView.surfaceProvider) // viewBinding.camPreview
                 }
 
@@ -108,13 +107,13 @@ class CamiX(var act: AppCompatActivity, private val previewId: Int) {
             ContextCompat.getMainExecutor(act),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onError(exc: ImageCaptureException) {
-                    Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
+                    val msg = "Photo capture failed: ${exc.message}"
+                    Toast.makeText(act.baseContext, msg, Toast.LENGTH_SHORT).show()
+                    Log.e(TAG, msg, exc)
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults){
-                    val msg = "Photo capture succeeded: ${output.savedUri}"
-                    Toast.makeText(act.baseContext, msg, Toast.LENGTH_SHORT).show()
-                    Log.d(TAG, msg)
+                    Log.d(TAG, ">>> Image saved successfully.")
                     receiver.receiveUri(output.savedUri) // sends Uri to specified interface
                 }
             }

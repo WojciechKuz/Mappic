@@ -8,10 +8,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintSet
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
 import com.student.mappic.databinding.FragmentStep1Binding
 import com.student.mappic.R
 import com.student.mappic.clist
@@ -50,35 +49,31 @@ class Step1Fragment : Fragment() {
         //addmap.step1() requests permissions for Camera, and then launches camiX.startCamera()
         addMap.step1 { camiX.startCamera() }
 
+        /**
+         * Set onclick listener for button.
+         * It's done via interface, because CameraX results aren't available immediately.
+         */
         binding.PhotoFAB.setOnClickListener {
-            onClickPhoto()
+            camiX.takePhoto { setMapImg(it) }
         }
     }
 
     private val viewModel: NewMapViewModel by activityViewModels()
-    /**
-     * This should serve onClickPhoto().
-     * It should:
-     *  - take a photo,
-     * as takePhoto argument it specifies, what method should receive output.
-     */
-    private fun onClickPhoto() {
-
-        // really, it just takes photo and saves to MediaStore
-        camiX.takePhoto { setMapImg(it) }
-
-        // navigate to next screen
-        findNavController().navigate(R.id.action_step1_to_step1ok)
-    }
 
     /**
-     * This method receives image Uri from camiX class
-     * and passes it to next fragments
+     * This method receives image Uri as result from camiX.takePhoto()
+     * and passes this photo reference to Step1okFragment.
+     * Then, navigates to this fragment.
      */
     private fun setMapImg(recvImgUri: Uri?) {
         if(recvImgUri != null)
             viewModel.mapImg = recvImgUri
-        // TODO send photo reference to Step1okFragment
+
+        val msg = "Photo capture succeeded: ${viewModel.mapImg}"
+        Toast.makeText(addMap.baseContext, msg, Toast.LENGTH_SHORT).show()
+
+        // navigate to next screen
+        findNavController().navigate(R.id.action_step1_to_step1ok)
     }
 
     override fun onDestroyView() {

@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.widget.ImageButton
-import android.widget.ImageView
-import com.student.mappic.DB.PxGpsPoint
 import com.student.mappic.MapOptionsPopup.Companion.openPopupMenu
 import com.student.mappic.R
 
@@ -18,7 +16,7 @@ class ViewMapActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_map)
 
-        findViewById<ImageButton>(R.id.backArrow).setOnClickListener {  }
+        findViewById<ImageButton>(R.id.backArrow).setOnClickListener { backToMapList() }
         findViewById<ImageButton>(R.id.mapOptions).setOnClickListener { openPopupMenu(it) }
     }
     private fun backToMapList() {

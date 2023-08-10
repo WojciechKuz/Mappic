@@ -7,13 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.student.mappic.R
 import android.util.Log
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.student.mappic.clist
 import com.student.mappic.databinding.FragmentStep2Binding
 
 /**
- * Step2Fragment asks user if he/she wants to take new picture or choose one from gallery.
- * There are two buttons doing just that.
+ * Step2Fragment asks user to pin a point on map image and provide it's real geolocation.
+ * It is Suggested to provide point geolocation through 'Use my location' button, to avoid typing.
  */
 class Step2Fragment : Fragment() {
 
@@ -22,6 +23,8 @@ class Step2Fragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private val viewModel: NewMapViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +36,8 @@ class Step2Fragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.imgView.setImageURI(viewModel.mapImg)
 
         // set onclicklisteners here
         binding.OkFAB.setOnClickListener {
@@ -81,6 +86,7 @@ class Step2Fragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        // TODO find difference between binding.inflate and inflater.inflate
         return inflater.inflate(R.layout.fragment_step2, container, false)
     }
 

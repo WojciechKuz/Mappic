@@ -85,8 +85,16 @@
                     android:textSize="20sp"
                     tools:ignore="Autofill" />
 
-                <!-- TODO additional prompt when clicked ok without typing anything or
-                      typing incorrect data -->
+                <TextView
+                    android:id="@+id/errorText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:padding="12sp"
+                    android:text="error message here"
+                    android:textColor="@color/design_default_color_error"
+                    android:visibility="invisible"
+                    tools:ignore="HardcodedText" />
 
             </LinearLayout>
 

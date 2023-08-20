@@ -41,5 +41,13 @@
     <string name="name_map">Name your map</string>
     <string name="hint_mapname">My map name</string>
 
+    <string-array name="errTypesMessages">
+        <item>unknown error</item>
+        <item>Mark point on map</item>
+        <item>Fill Location fields</item>
+        <item>Incorrect values. Correct example: 20.000 N</item>
+        <item>Points 1 and 2 are too close or identical</item>
+    </string-array>
+
 
 </resources>

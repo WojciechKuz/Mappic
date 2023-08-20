@@ -7,6 +7,8 @@ import androidx.exifinterface.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import android.util.Log
+import android.widget.TextView
+import com.student.mappic.R
 import androidx.annotation.RequiresApi
 import com.student.mappic.clist
 
@@ -61,6 +63,17 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
             }
         }
         return -1
+    }
+
+    // TODO member checking if typed coordinates are correct (and if point is marked correctly)
+
+    /**
+     * Displays error message in given TextView and of given Error type.
+     */
+    fun displayErrMsg(textView: TextView, err: ErrTypes) {
+        val array: Array<String> = addMap.resources.getStringArray(R.array.errTypesMessages)
+        textView.text = array[err.code]
+        textView.visibility = TextView.VISIBLE
     }
 
     /*

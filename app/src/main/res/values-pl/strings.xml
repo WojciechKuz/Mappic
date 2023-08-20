@@ -2,6 +2,7 @@
 <resources>
     <string name="next">następny`</string>
     <string name="previous">poprzedni`</string>
+    <string name="notused">x</string>
     <string name="map_list">Lista map</string>
     <string name="step1">Krok 1 z 4</string>
     <string name="step0_imgMethod">Zrób zdjęcie mapy lub wybierz z galerii</string>
@@ -34,4 +35,12 @@
     <string name="step3_type_gps2">Wpisz, albo użyj swoich współrzędnych jako drugi punkt</string>
     <string name="name_map">Nazwij swoją mapę</string>
     <string name="hint_mapname">Moja mapa</string>
+
+    <string-array name="errTypesMessages">
+        <item>nieznany błąd</item>
+        <item>Zaznacz punkt na planie</item>
+        <item>Wypełnij pola z lokalizacją</item>
+        <item>Nieprawidłowe wartości. Porawny przykład: 20.000 N</item>
+        <item>Punkty 1 i 2 są za blisko siebie lub są identyczne</item>
+    </string-array>
 </resources>

@@ -1,17 +1,10 @@
 package com.student.mappic.addmap
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
-import android.media.ExifInterface
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -33,7 +26,6 @@ class Step2Fragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: NewMapViewModel by activityViewModels()
-
     private lateinit var utility: AddmapSteps2and3Utility
 
     override fun onCreateView(
@@ -65,6 +57,9 @@ class Step2Fragment : Fragment() {
             // TODO fill text fields with GPS coordinates
             Log.d(clist.Step3Fragment, ">>> Action not available yet.")
         }
+
+        // FIXME temporary:
+        utility.displayErrMsg(binding.errorText, ErrTypes.INCORRECT_GPS)
     }
 
     override fun onDestroyView() {

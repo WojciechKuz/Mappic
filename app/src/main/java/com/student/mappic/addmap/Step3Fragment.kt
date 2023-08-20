@@ -25,6 +25,7 @@ class Step3Fragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: NewMapViewModel by activityViewModels()
+    private lateinit var utility: AddmapSteps2and3Utility
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +38,15 @@ class Step3Fragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        utility = AddmapSteps2and3Utility(activity as AddMapActivity, clist.Step3Fragment)
+
+        Log.d(clist.Step3Fragment, ">>> is this even executed???")
         binding.imgView.setImageURI(viewModel.mapImg)
+        // Img takes too much space when img is vertical. So I have to disable adjustViewBounds.
+        if(utility.isImgVerticalExif(viewModel.mapImg)) {
+            Log.d(clist.Step3Fragment, ">>> turning 'adjusting view bounds' off")
+            binding.imgView.adjustViewBounds = false
+        }
 
         // set onclicklisteners here
         binding.OkFAB.setOnClickListener {

@@ -34,6 +34,8 @@ class Step2Fragment : Fragment() {
 
     private val viewModel: NewMapViewModel by activityViewModels()
 
+    private lateinit var utility: AddmapSteps2and3Utility
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,11 +47,13 @@ class Step2Fragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        utility = AddmapSteps2and3Utility(activity as AddMapActivity, clist.Step2Fragment)
+
         Log.d(clist.Step2Fragment, ">>> is this even executed???")
         binding.imgView.setImageURI(viewModel.mapImg)
         // Img takes too much space when img is vertical. So I have to disable adjustViewBounds.
-        if(isImgVerticalExif(viewModel.mapImg)) {
-            Log.d(clist.Step2Fragment, ">>> turning adjusting view bounds off")
+        if(utility.isImgVerticalExif(viewModel.mapImg)) {
+            Log.d(clist.Step2Fragment, ">>> turning 'adjusting view bounds' off")
             binding.imgView.adjustViewBounds = false
         }
 
@@ -66,55 +70,6 @@ class Step2Fragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    /**
-     * Decodes from given Uri size of image, and if it's height is greater than width it returns true.
-     */
-    private fun isImgVertical(uri: Uri): Boolean {
-        val options = BitmapFactory.Options()
-        options.inJustDecodeBounds = true
-        val addMap = (activity as AddMapActivity)
-        val istream = addMap.contentResolver.openInputStream(uri)
-            ?: throw Exception("Input stream 'istream' is null!") // do it when istream is null
-        Log.d(clist.Step2Fragment, ">>> Decoding size of image")
-        BitmapFactory.decodeStream(istream, null, options)
-        istream.close()
-        Log.d(clist.Step2Fragment, ">>> Size of image: h: ${options.outHeight}, w: ${options.outWidth}")
-        return (options.outHeight > options.outWidth)
-    }
-
-    private fun isImgVerticalExif(uri: Uri): Boolean {
-        val addMap = (activity as AddMapActivity)
-        val istream = addMap.contentResolver.openInputStream(uri)
-            ?: throw Exception("Input stream 'istream' is null!") // do it when istream is null
-        Log.d(clist.Step2Fragment, ">>> Decoding size of image")
-        val exif = ExifInterface(istream)
-        val height: Int = exif.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, -1)
-        val width: Int = exif.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, -1)
-        val orientation: Int = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1)
-        istream.close()
-        Log.d(clist.Step2Fragment, ">>> Size of image: h: ${height}, w: ${width}, o: ${orientation}") // o 6=vert, 1,3=horiz
-        return (height > width)
-    }
-
-    // It's really nice solution, though it may take lot of resources to decode whole image instead of only the size.
-    @RequiresApi(Build.VERSION_CODES.P)
-    private fun isImgVertical29(uri: Uri): Boolean {
-        val addMap = (activity as AddMapActivity)
-        /*
-        var size: Size
-        val listener =
-            OnHeaderDecodedListener { decoder, info, source -> size = info.size}
-        val source = ImageDecoder.createSource(addMap.contentResolver, uri)
-        val bitmap: Bitmap = ImageDecoder.decodeBitmap(source, listener)
-        if (size == null)
-            Log.e(clist.Step2Fragment, "")
-        return (size.height > size.width)
-        */
-        val source = ImageDecoder.createSource(addMap.contentResolver, uri)
-        val bitmap: Bitmap = ImageDecoder.decodeBitmap(source)
-        return (bitmap.height > bitmap.width)
     }
 }
 

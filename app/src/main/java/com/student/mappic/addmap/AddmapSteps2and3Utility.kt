@@ -7,6 +7,7 @@ import androidx.exifinterface.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import android.util.Log
+import android.widget.EditText
 import android.widget.TextView
 import com.student.mappic.R
 import androidx.annotation.RequiresApi
@@ -65,10 +66,41 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         return -1
     }
 
-    // TODO member fun checking if typed coordinates are correct (and if point is marked correctly)
+    fun fillGpsCoordinates() {
+        if(getPermissions()) {
+            // TODO fill text fields with GPS coordinates
+        }
+    }
+    private fun getPermissions(): Boolean {
+        var retVal = false
+        addMap.grantGpsPerm {
+            Log.d(TAG, ">>> Permissions Granted!")
+            retVal = true
+        }
+        return retVal
+    }
+
+    /**
+     * Should verify, what user typed (coordinates and marked point).
+     * @return tells if should navigate to next fragment in addmap
+     */
+    fun verifyUserInput(): Boolean {
+        // TODO checking if typed coordinates are correct (and if point is marked correctly).
+        //  Probably requires separate verifying class - use Step2and3 and create more complex things there.
+
+        return true // FIXME Temporary
+    }
+
+    /**
+     * save GPS coordinates and marker position on the image of a map.
+     */
+    fun saveUserInput() {
+        // TODO save GPS Coordinates
+    }
 
     /**
      * Displays error message in given TextView and of given Error type.
+     * WILL BECOME PRIVATE!
      */
     fun displayErrMsg(textView: TextView, err: ErrTypes) {
         val array: Array<String> = addMap.resources.getStringArray(R.array.errTypesMessages)

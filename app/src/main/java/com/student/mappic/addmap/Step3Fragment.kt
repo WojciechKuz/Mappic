@@ -50,10 +50,13 @@ class Step3Fragment : Fragment() {
 
         // set onclicklisteners here
         binding.OkFAB.setOnClickListener {
-            findNavController().navigate(R.id.action_step3_to_step4)
+            if(utility.verifyUserInput()) {
+                utility.saveUserInput()
+                findNavController().navigate(R.id.action_step3_to_step4)
+            }
         }
         binding.buttonReadGps.setOnClickListener {
-            // TODO fill text fields with GPS coordinates
+            utility.fillGpsCoordinates()
             Log.d(clist.Step3Fragment, ">>> Action not available yet.")
         }
     }

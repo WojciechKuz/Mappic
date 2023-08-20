@@ -26,11 +26,13 @@ class Step0Fragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: NewMapViewModel by activityViewModels()
+    private lateinit var pickPhoto: PickPhoto
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        pickPhoto = PickPhoto(activity as AddMapActivity)
         _binding = FragmentStep0Binding.inflate(inflater, container, false)
         return binding.root
     }
@@ -64,7 +66,7 @@ class Step0Fragment : Fragment() {
      */
     private fun openFromGallery() {
         // opens system photo picker
-        val pickPhoto = PickPhoto(activity as AddMapActivity)
+
         pickPhoto.pickPhoto( { photoPicked(it) }, { /* Do nothing. */} )
     }
 

@@ -1,6 +1,5 @@
 package com.student.mappic.addmap
 
-import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -47,7 +46,7 @@ class Step1Fragment : Fragment() {
         camiX = CamiX(addMap, R.id.camView)
 
         //addmap.step1() requests permissions for Camera, and then launches camiX.startCamera()
-        addMap.step1 { camiX.startCamera() }
+        addMap.grantCamPerm { camiX.startCamera() }
 
         /**
          * Set onclick listener for button.

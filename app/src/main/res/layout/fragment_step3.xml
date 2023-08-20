@@ -18,23 +18,10 @@
         android:layout_marginTop="0dp"
         android:text="@string/step3_mark2nd"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@id/imgView"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/imgView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/linLayout"
-        app:layout_constraintTop_toBottomOf="@+id/markPoint2Text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:background="@color/black"
-        tools:src="@tools:sample/backgrounds/scenic"
-        tools:ignore="ContentDescription"
-        android:adjustViewBounds="true" />
     <!-- If you want imageView to not include empty space around image,
     set android:adjustViewBounds to true
     and set width/height (choose the smaller one) to 0dp. -->
@@ -42,12 +29,24 @@
     <LinearLayout
         android:id="@+id/linLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintVertical_weight="1"
 
-        app:layout_constraintTop_toBottomOf="@id/imgView"
+        app:layout_constraintTop_toBottomOf="@id/markPoint2Text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/OkFAB"
         android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imgView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6"
+            android:background="@color/black"
+            android:scaleType="centerInside"
+            tools:src="@drawable/map_h"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/gotoPoint2Text"

@@ -1,5 +1,7 @@
 package com.student.mappic
 
+import com.student.mappic.addmap.PickPhoto
+
 open class clist() {
     /**
      * List of classes for faster Log.d(tag, msg) lines creation.
@@ -21,13 +23,14 @@ open class clist() {
 
         // addmap group
         const val AddMapActivity: String = "AddMapActivity"
-        const val CamiXOld: String = "CamiXOld"
         const val CamiX: String = "CamiX"
+        const val PickPhoto: String = "PickPhoto"
         const val Step0Fragment: String = "Step0Fragment"
         const val Step1Fragment: String = "Step1Fragment"
         const val Step1okFragment: String = "Step1okFragment"
         const val Step2Fragment: String = "Step2Fragment"
         const val Step3Fragment: String = "Step3Fragment"
+        // AddmapSteps2and3Utility uses one of two above.
         const val Step4Fragment: String = "Step4Fragment"
     }
 }

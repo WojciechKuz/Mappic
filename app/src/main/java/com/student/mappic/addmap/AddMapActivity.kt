@@ -85,7 +85,7 @@ class AddMapActivity : AppCompatActivity() {
     }
 
     /**
-     * Starts Camera (via CamGranted interface that is set in step1() ).
+     * Starts Camera (via CamGranted interface that is set in [Step1Fragment] ).
      */
     private fun startCam() {
         if(camGranted != null) {
@@ -118,67 +118,4 @@ class AddMapActivity : AppCompatActivity() {
                 }
             }.toTypedArray()
     }
-
-    /*
-    // notFIXME fix Step1Fragm. being null (probably too early created?) or MOVE IT to Step1Fragment
-    public fun startPreview() {
-        /*
-         * If Step1Fragment is visible on the screen, we need to initialize classes
-         * associated with preview of the camera
-         */
-        Log.d(clist.AddMapActivity, ">>> Starting preview...")
-        val currFrag = getStep1Fragment()
-        if(isStep1FragmentOnScreen(currFrag)) {
-            Log.d(clist.AddMapActivity, ">>> Constructing CamiXOld...")
-            camiXOld = CamiXOld(this) // bind view from camera to camView
-            // keep CamiXOld reference to take photos
-        }
-        else {
-            Log.wtf(clist.AddMapActivity, ">>> What??? Step1Fragment not on screen?")
-            if(currFrag == null) {
-                Log.e(clist.AddMapActivity, ">>> Oh no, currFrag is null!")
-            }
-            else {
-                if(currFrag.isVisible)
-                    Log.d(clist.AddMapActivity, ">>> At least it's visible...")
-            }
-        }
-    }
-
-    // This method from the internet to know, which fragment is currently displayed doesn't work. >:(
-    /**
-     * Returns Step1Fragment if it exists (Step1Fragment?).
-     * If you want to use Step1Fragment you have to check if it's not null.
-     */
-    private fun getStep1Fragment(): Step1Fragment? {
-        return supportFragmentManager.findFragmentByTag(clist.Step1Fragment/*"Step1Fragment"*/) as Step1Fragment?
-    }
-
-    private fun isStep1FragmentOnScreen(currFrag: Step1Fragment?): Boolean {
-        /*
-         * Note: this is comment for me. I'm still learning Kotlin and this comment
-         * wasn't meant to educate other programmers.
-         *
-         * Here is fun Kotlin thing: Under this comment you can see what's called 'Smart Cast'
-         * Inside if first, we check if currFlag isn't null (also could be type check).
-         * This allows Compiler to deduce, what type is used in next check (or operation),
-         * so we don't need to explicitly cast to certain type in next check (or operation).
-         *
-         * Without smart cast:
-         * (currFrag as Step1Fragment).isVisible
-         *
-         * With smart cast:
-         * currFrag.isVisible
-         */
-        if(currFrag != null && currFrag.isVisible) {
-            Log.d(clist.AddMapActivity, "Step1Fragment is on the screen")
-            return true
-        }
-        Log.d(clist.AddMapActivity, "Step1Fragment is NOT on the screen")
-        return false
-    }
-    */
-
-    //
-
 }

@@ -5,8 +5,8 @@ import android.net.Uri
 /**
  * Allows to pass photo Uri.
  *
- * When requesting takePhoto() or pickPhoto() results aren't available immediately and
- * are not available through return statement. Instead this interface is used.
+ * When requesting takePhoto() or pickPhoto() results aren't available immediately, so
+ * this interface is used.
  */
 fun interface PassUri {
     /**

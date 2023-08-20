@@ -17,7 +17,7 @@ import com.student.mappic.clist
 
 /**
  * This is fragment where user takes a picture of a map.
- * After clicking the button it should pass picture to Step1okFragment.
+ * After clicking the button it passes picture to [Step1okFragment].
  */
 class Step1Fragment : Fragment() {
 
@@ -62,7 +62,7 @@ class Step1Fragment : Fragment() {
 
     /**
      * This method receives image Uri as result from camiX.takePhoto()
-     * and passes this photo reference to Step1okFragment.
+     * and passes this photo reference to [Step1okFragment] through ViewModel.
      * Then, navigates to this fragment.
      */
     private fun setMapImg(recvImgUri: Uri?) {
@@ -81,29 +81,4 @@ class Step1Fragment : Fragment() {
         _binding = null
         camiX.closeCamera()
     }
-
-    /*
-    /**
-     * Reposition FAB (camera button) to the right, in middle of height. Used when phone is in landscape mode.
-     */
-    private fun repositionFAB() {
-        Log.d(clist.Step1Fragment, ">>> repositioning FAB...")
-        // WARNING! constraint is id of UI element (of type ConstraintLayout)
-        var constr = ConstraintSet();
-        constr.connect(R.id.PhotoFAB, ConstraintSet.TOP, R.id.takePhotoText, ConstraintSet.BOTTOM)
-        constr.connect(R.id.PhotoFAB, ConstraintSet.END, R.id.constraint, ConstraintSet.END)
-        constr.connect(R.id.PhotoFAB, ConstraintSet.BOTTOM, R.id.constraint, ConstraintSet.BOTTOM)
-        constr.applyTo(binding.constraint)
-    }
-    private fun rotation(): Int {
-        return resources.configuration.orientation
-    }
-
-    /**
-     * Returns true, when phone is vertical (in portrait mode) or any other than landscape mode.
-     */
-    private fun isPortraitMode(): Boolean {
-        return rotation() != Configuration.ORIENTATION_LANDSCAPE
-    }
-    */
 }

@@ -60,7 +60,7 @@ class Step0Fragment : Fragment() {
     /**
      *  Triggered when 'Choose from gallery' button is clicked.
      *  Choose picture from gallery - open system picker.
-     *  After photo is picked [photoPicked] is triggered.
+     *  After photo is picked, [photoPicked] is triggered.
      */
     private fun openFromGallery() {
         // opens system photo picker
@@ -69,7 +69,8 @@ class Step0Fragment : Fragment() {
     }
 
     /**
-     * After photo has been picked, it's saved to viewModel (passed to next steps), then
+     * After photo has been picked,
+     * it's saved to [NewMapViewModel] (viewModel for passing data to next steps), then
      * [Step2Fragment] is opened.
      */
     private fun photoPicked(photo: Uri?) {

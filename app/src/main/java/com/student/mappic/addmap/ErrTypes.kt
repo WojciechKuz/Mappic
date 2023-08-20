@@ -1,7 +1,7 @@
 package com.student.mappic.addmap
 
 /**
- * This are error types user can make in Add Map step 2 and 3.
+ * This are error types user can make in Add Map [Step2Fragment] and [Step3Fragment].
  */
 enum class ErrTypes(val code: Int) {
     UNKNOWN(0),

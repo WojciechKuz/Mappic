@@ -13,7 +13,7 @@ import androidx.annotation.RequiresApi
 import com.student.mappic.clist
 
 /**
- * Fragments step2 and step3 are nearly identical.
+ * Fragments [Step2Fragment] and [Step3Fragment] are nearly identical.
  * It serves methods used by both.
  *
  * This class was created to prevent code duplication.
@@ -65,7 +65,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         return -1
     }
 
-    // TODO member checking if typed coordinates are correct (and if point is marked correctly)
+    // TODO member fun checking if typed coordinates are correct (and if point is marked correctly)
 
     /**
      * Displays error message in given TextView and of given Error type.
@@ -75,45 +75,4 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         textView.text = array[err.code]
         textView.visibility = TextView.VISIBLE
     }
-
-    /*
-    /**
-     * Decodes from given Uri size of image, and if it's height is greater than width it returns true.
-     * DO NOT USE IT
-     */
-    fun isImgVertical(uri: Uri): Boolean {
-        val options = BitmapFactory.Options()
-        options.inJustDecodeBounds = true
-        val istream = addMap.contentResolver.openInputStream(uri)
-            ?: throw Exception("Input stream 'istream' is null!") // do it when istream is null
-        Log.d(clist.Step2Fragment, ">>> Decoding size of image")
-        BitmapFactory.decodeStream(istream, null, options)
-        istream.close()
-        Log.d(clist.Step2Fragment, ">>> Size of image: h: ${options.outHeight}, w: ${options.outWidth}")
-        return (options.outHeight > options.outWidth)
-    }
-    */
-
-    /*
-    // It's really nice solution, though it may take lot of resources to decode whole image instead of only the size.
-    /**
-     * DO NOT USE IT
-     */
-    @RequiresApi(Build.VERSION_CODES.P)
-    fun isImgVertical29(uri: Uri): Boolean {
-        /*
-        var size: Size
-        val listener =
-            OnHeaderDecodedListener { decoder, info, source -> size = info.size}
-        val source = ImageDecoder.createSource(addMap.contentResolver, uri)
-        val bitmap: Bitmap = ImageDecoder.decodeBitmap(source, listener)
-        if (size == null)
-            Log.e(clist.Step2Fragment, "")
-        return (size.height > size.width)
-        */
-        val source = ImageDecoder.createSource(addMap.contentResolver, uri)
-        val bitmap: Bitmap = ImageDecoder.decodeBitmap(source)
-        return (bitmap.height > bitmap.width)
-    }
-    */
 }

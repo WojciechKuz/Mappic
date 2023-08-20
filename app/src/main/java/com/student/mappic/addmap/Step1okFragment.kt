@@ -11,7 +11,7 @@ import com.student.mappic.databinding.FragmentStep1okBinding
 import com.student.mappic.R
 
 /**
- * A simple [Fragment], lets you review photo, before you continue creating map.
+ * This lets you review photo, before you continue creating map.
  * If you're not satisfied with photo you made, you can make another one!
  */
 class Step1okFragment : Fragment() {
@@ -56,15 +56,11 @@ class Step1okFragment : Fragment() {
     }
 
     /**
-     * Navigate to previous screen
+     * This simply opens previous fragment/activity in the stack.
+     * Navigate to [Step1Fragment].
      */
     private fun onClickNo() {
-        /*
-         * There are two cases. After making a photo, and after choosing it from gallery.
-         * The simplest way would be to bypass navigation and open previous activity in the stack.
-         */
         parentFragmentManager.popBackStackImmediate() // Navigates to previous step
-        //findNavController().navigate(R.id.action_to_step1)
     }
 
 

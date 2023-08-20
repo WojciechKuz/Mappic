@@ -42,8 +42,9 @@ class Step4Fragment : Fragment() {
             // TODO display red captions 'Map with this name already exists'
             return;
         }
+        viewModel.name = binding.mapNameField.text.toString()
 
-        // TODO save to DB
+        // TODO save viewModel data to DB
 
         // TODO goto MapList activity
 
@@ -58,6 +59,6 @@ class Step4Fragment : Fragment() {
         val typedName = binding.mapNameField.text
         // TODO check if name exists
 
-        return true // FIXME temporary
+        return false // FIXME temporary
     }
 }

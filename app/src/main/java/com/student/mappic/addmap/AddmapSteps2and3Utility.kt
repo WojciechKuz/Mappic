@@ -90,6 +90,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
     fun verifyUserInput(): Boolean {
         // TODO checking if typed coordinates are correct (and if point is marked correctly).
         //  Probably requires separate verifying class - use Step2and3 and create more complex things there.
+        //  Additional info - in ViewModel GPS 2xFloat and PXposition 2xInt are stored together as ../DB/Point
 
         return true // FIXME Temporary
     }

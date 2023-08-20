@@ -10,9 +10,12 @@
         android:name="com.student.mappic.addmap.Step0Fragment"
         android:label="fragment_step0"
         tools:layout="@layout/fragment_step0" >
-        <action
+        <!-- Make a photo --><action
             android:id="@+id/action_step0_to_step1"
             app:destination="@id/step1Fragment" />
+        <!-- Photo picked from gallery --><action
+            android:id="@+id/action_step0_to_step2"
+            app:destination="@+id/step2Fragment" />
     </fragment>
 
     <fragment
@@ -25,10 +28,6 @@
             app:destination="@id/step1okFragment" />
     </fragment>
 
-    <action
-        android:id="@+id/action_to_step1ok"
-        app:destination="@+id/step1okFragment" />
-
     <fragment
         android:id="@+id/step1okFragment"
         android:name="com.student.mappic.addmap.Step1okFragment"
@@ -39,10 +38,6 @@
             app:destination="@id/step2Fragment" />
     </fragment>
 
-    <action
-        android:id="@+id/action_to_step1"
-        app:destination="@+id/step1Fragment" />
-
     <fragment
         android:id="@+id/step2Fragment"
         android:name="com.student.mappic.addmap.Step2Fragment"
@@ -52,6 +47,7 @@
             android:id="@+id/action_step2_to_step3"
             app:destination="@id/step3Fragment" />
     </fragment>
+
     <fragment
         android:id="@+id/step3Fragment"
         android:name="com.student.mappic.addmap.Step3Fragment"
@@ -61,6 +57,7 @@
             android:id="@+id/action_step3_to_step4"
             app:destination="@id/step4Fragment" />
     </fragment>
+
     <fragment
         android:id="@+id/step4Fragment"
         android:name="com.student.mappic.addmap.Step4Fragment"

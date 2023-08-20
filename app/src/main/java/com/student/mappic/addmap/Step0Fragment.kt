@@ -1,14 +1,14 @@
 package com.student.mappic.addmap
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.navigateUp
 import com.student.mappic.R
 import com.student.mappic.clist
 import com.student.mappic.databinding.FragmentStep0Binding
@@ -25,6 +25,8 @@ class Step0Fragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private val viewModel: NewMapViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,7 +38,6 @@ class Step0Fragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // set onclicklisteners here
         binding.buttonCam.setOnClickListener {
             Log.d(clist.Step0Fragment, ">>> take new picture button clicked")
             takePicture()
@@ -48,23 +49,38 @@ class Step0Fragment : Fragment() {
     }
 
     /**
-     *  Triggered when 'new photo' button is clicked.
-     *  Step1Fragment (taking photo screeen) is then displayed.
+     *  Triggered when 'New photo' button is clicked.
+     *  [Step1Fragment] (taking photo screeen) is then displayed.
      */
     private fun takePicture() {
         Log.d(clist.Step0Fragment, ">>> navController is alright!\n trying to navigate up...")
         findNavController().navigate(R.id.action_step0_to_step1)
     }
+
     /**
      *  Triggered when 'Choose from gallery' button is clicked.
-     *  Choose picture from gallery - open system picker and
-     *  open Step1okFragment (screen asking user if it's right photo).
+     *  Choose picture from gallery - open system picker.
+     *  After photo is picked [photoPicked] is triggered.
      */
     private fun openFromGallery() {
-        //TODO open system photo picker
+        // opens system photo picker
+        val pickPhoto = PickPhoto(activity as AddMapActivity)
+        pickPhoto.pickPhoto( { photoPicked(it) }, { /* Do nothing. */} )
+    }
 
-        //TODO pass photo reference to Step1okFragment
-        findNavController().navigate(R.id.action_to_step1ok)
+    /**
+     * After photo has been picked, it's saved to viewModel (passed to next steps), then
+     * [Step2Fragment] is opened.
+     */
+    private fun photoPicked(photo: Uri?) {
+        if (photo != null) {
+            viewModel.mapImg = photo
+            findNavController().navigate(R.id.action_step0_to_step2)
+        }
+        else  {
+            // What a Terrible Failure! This error can't happen logically
+            Log.wtf(clist.Step0Fragment, ">>> uri passed by interface is null! How did this even happen?")
+        }
     }
 
     override fun onDestroyView() {

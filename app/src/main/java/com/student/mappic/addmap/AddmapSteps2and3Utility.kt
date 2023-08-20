@@ -66,6 +66,9 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         return -1
     }
 
+    /**
+     * Fill text fields with GPS coordinates automatically
+     */
     fun fillGpsCoordinates() {
         if(getPermissions()) {
             // TODO fill text fields with GPS coordinates

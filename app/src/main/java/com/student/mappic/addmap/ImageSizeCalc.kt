@@ -42,14 +42,14 @@ class ImageSizeCalc(val original: Size, val view: Size) {
             fit()
         }
         val emptySp = Size(
-            (view.width - imgInView.width) / 2,
-            (view.height - imgInView.height) / 2
+            (view.width - imgInView!!.width) / 2, // !! = not null asserted. - I'm sure it's non-null here. It's the purpose of this operator.
+            (view.height - imgInView!!.height) / 2 // About !!: https://discuss.kotlinlang.org/t/purpose-of-double-exclamation-operator-null-check/8735
         )
         val pointOnImgInImgview = Point(
             pointInView.x - emptySp.width, // x
             pointInView.y - emptySp.height // y
         )
-        return pointOnImgInView
+        return pointOnImgInImgview
     }
 
     /**
@@ -62,9 +62,9 @@ class ImageSizeCalc(val original: Size, val view: Size) {
         if(imgInView == null) {
             fit()
         }
-        if(pointInImgInView.x < 0 || pointInImgInView.x > imgInView.width - 1)
+        if(pointInImgInView.x < 0 || pointInImgInView.x > imgInView!!.width - 1)
             return false
-        if(pointInImgInView.y < 0 || pointInImgInView.y > imgInView.height - 1)
+        if(pointInImgInView.y < 0 || pointInImgInView.y > imgInView!!.height - 1)
             return false
         return true
     }

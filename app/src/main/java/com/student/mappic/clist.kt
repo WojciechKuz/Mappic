@@ -1,5 +1,6 @@
 package com.student.mappic
 
+import com.student.mappic.addmap.PermissionManager
 import com.student.mappic.addmap.PickPhoto
 
 open class clist() {
@@ -24,6 +25,7 @@ open class clist() {
         // addmap group
         const val AddMapActivity: String = "AddMapActivity"
         const val CamiX: String = "CamiX"
+        const val PermissionManager: String = "PermissionManager"
         const val PickPhoto: String = "PickPhoto"
         const val Step0Fragment: String = "Step0Fragment"
         const val Step1Fragment: String = "Step1Fragment"

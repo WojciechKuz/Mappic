@@ -76,7 +76,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
     }
     private fun getPermissions(): Boolean {
         var retVal = false
-        addMap.grantGpsPerm {
+        addMap.permManager.grantGpsPerm {
             Log.d(TAG, ">>> Permissions Granted!")
             retVal = true
         }

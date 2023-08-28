@@ -14,6 +14,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.student.mappic.R
 import com.student.mappic.databinding.ActivityAddMapBinding
 import android.util.Log
+import android.view.MotionEvent
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -46,4 +47,17 @@ class AddMapActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
+
+    /*
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        // here my code
+        if (event != null) {
+            Log.d(clist.AddMapActivity, ">>> Addmap wykrył klik w " + "x: " + event.x + "; y: " + event.y)
+        }
+        else {
+            Log.e(clist.AddMapActivity, ">>> Eeee, Addmap MotionEvent jest null")
+        }
+        return super.onTouchEvent(event)
+    }
+    */
 }

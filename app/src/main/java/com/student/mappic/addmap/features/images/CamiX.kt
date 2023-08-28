@@ -1,4 +1,4 @@
-package com.student.mappic.addmap
+package com.student.mappic.addmap.features.images
 
 import android.content.ContentValues
 import android.os.Build

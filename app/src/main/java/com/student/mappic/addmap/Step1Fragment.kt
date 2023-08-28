@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.student.mappic.databinding.FragmentStep1Binding
 import com.student.mappic.R
+import com.student.mappic.addmap.features.images.CamiX
 import com.student.mappic.clist
 
 /**

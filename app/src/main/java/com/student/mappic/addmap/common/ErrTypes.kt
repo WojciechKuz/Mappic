@@ -1,4 +1,4 @@
-package com.student.mappic.addmap
+package com.student.mappic.addmap.common
 
 /**
  * This are error types user can make in Add Map [Step2Fragment] and [Step3Fragment].

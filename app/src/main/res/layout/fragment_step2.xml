@@ -40,7 +40,7 @@
             android:layout_weight="6">
 
             <!-- Overloaded view! -->
-            <com.student.mappic.addmap.MyView
+            <com.student.mappic.addmap.common.myview.MyView
                 android:id="@+id/touchDetector"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

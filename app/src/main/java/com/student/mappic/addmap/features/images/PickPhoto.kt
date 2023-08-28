@@ -1,9 +1,10 @@
-package com.student.mappic.addmap
+package com.student.mappic.addmap.features.images
 
 import android.net.Uri
 import android.util.Log
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import com.student.mappic.addmap.AddMapActivity
 import com.student.mappic.clist
 
 /**

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.student.mappic.R
+import com.student.mappic.addmap.features.images.PickPhoto
 import com.student.mappic.clist
 import com.student.mappic.databinding.FragmentStep0Binding
 

@@ -1,18 +1,13 @@
-package com.student.mappic.addmap
+package com.student.mappic.addmap.common
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
 import androidx.exifinterface.media.ExifInterface
 import android.net.Uri
-import android.os.Build
 import android.util.Log
-import android.widget.EditText
 import android.widget.TextView
 import com.student.mappic.R
-import androidx.annotation.RequiresApi
-import com.student.mappic.clist
+import com.student.mappic.addmap.AddMapActivity
 
+// for JavaDoc to properly show links to [Step2Fragment] documentation whole name with packages must be specified. same for step3
 /**
  * Fragments [Step2Fragment] and [Step3Fragment] are nearly identical.
  * It serves methods used by both.

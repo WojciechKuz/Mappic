@@ -1,4 +1,4 @@
-package com.student.mappic.addmap
+package com.student.mappic.addmap.common.myview
 
 import android.view.MotionEvent
 

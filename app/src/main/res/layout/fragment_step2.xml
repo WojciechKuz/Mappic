@@ -34,15 +34,34 @@
         app:layout_constraintBottom_toTopOf="@id/OkFAB"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/imgView"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="6"
-            android:background="@color/black"
-            android:scaleType="centerInside"
-            tools:src="@drawable/map_h"
-            tools:ignore="ContentDescription" />
+            android:layout_weight="6">
+
+            <!-- Overloaded view! -->
+            <com.student.mappic.addmap.MyView
+                android:id="@+id/touchDetector"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0"/>
+            <!--
+            android:alpha=0 == fully transparent
+            android:alpha=1 == fully visible
+            -->
+            <ImageView
+                android:id="@+id/imgView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/black"
+                android:scaleType="centerInside"
+                tools:src="@drawable/map_h"
+                tools:ignore="ContentDescription" />
+            <!--<android.opengl.GLSurfaceView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.3" />-->
+        </FrameLayout>
         <!-- If you want imageView to not include empty space around image,
         set android:adjustViewBounds to true
         and set width/height (choose the smaller one) to 0dp.

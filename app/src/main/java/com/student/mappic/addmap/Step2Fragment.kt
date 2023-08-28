@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -18,7 +17,7 @@ import com.student.mappic.databinding.FragmentStep2Binding
  * Step2Fragment asks user to pin a point on map image and provide it's real geolocation.
  * It is Suggested to provide point geolocation through 'Use my location' button, to avoid typing.
  */
-class Step2Fragment : Fragment(), OnTouchListener {
+class Step2Fragment : Fragment() {
 
     private var _binding: FragmentStep2Binding? = null
 
@@ -62,22 +61,17 @@ class Step2Fragment : Fragment(), OnTouchListener {
             Log.d(clist.Step3Fragment, ">>> Action not available yet.")
         }
         // OpenGL probably not needed. Just need to display icon/graphic and get point, where user touched
+        binding.touchDetector?.setPassMotionEvent { whereClicked(it) }
 
         // FIXME temporary:
         utility.displayErrMsg(binding.errorText, ErrTypes.INCORRECT_GPS)
     }
 
-    // This does not work. Override onTouchEvent in Activity or any other View
-    override fun onTouch(v: View?, motEv: MotionEvent?): Boolean {
-        Log.d(clist.Step2Fragment, "> touch")
-        if(motEv != null) {
-            binding.gpsLatitude.setText("x: " + motEv.x + "; y: " + motEv.y)
-            if(motEv.action == MotionEvent.ACTION_UP) {
-                Log.d(clist.Step2Fragment, ">>> Podniesiono palec w " + "x: " + motEv.x + "; y: " + motEv.y)
-            }
+    // TODO rename
+    private fun whereClicked(event: MotionEvent?) {
+        if(event != null) {
+            Log.d(clist.Step2Fragment, ">>> Kliknięto w " + "x: " + event.x + "; y: " + event.y)
         }
-        v?.performClick();
-        return true;
     }
 
     override fun onDestroyView() {

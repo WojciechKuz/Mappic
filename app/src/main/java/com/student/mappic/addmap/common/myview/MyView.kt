@@ -9,6 +9,17 @@ import android.view.View
 import com.student.mappic.clist
 
 class MyView(context: Context): View(context) {
+
+    /**
+     * Interface for passing MotionEvent to Activity/Fragment.
+     *
+     * Remember to set it:
+     *     myView.passMotEv = { /* some code here */ }
+     * And unset it later:
+     *     myView.passMotEv = null
+     */
+    var passMotEv: PassMotionEvent? = null // public
+
     init {
         Log.d(clist.MyView, ">>> default init, 1 arg")
     }
@@ -23,21 +34,11 @@ class MyView(context: Context): View(context) {
         Log.d(clist.MyView, ">>> init, 4 args (never used)")
     }
     */
-
-    /**
-     * Interface for passing MotionEvent to Activity/Fragment.
-     *
-     * Remember to set it:
-     *     myView.passMotEv = { /* some code here */ }
-     * And unset it later:
-     *     myView.passMotEv = null
-     */
-    private lateinit var passMotEv: PassMotionEvent // public
     fun setPassMotionEvent(passMotEv: PassMotionEvent) {
         this.passMotEv = passMotEv
+        Log.d(clist.MyView, ">>> passMotionEvent is set")
     }
 
-    @Suppress("SENSELESS_COMPARISON")
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         // here my code
@@ -53,7 +54,9 @@ class MyView(context: Context): View(context) {
         return super.performClick()
     }
     private fun passMotionEvent(event: MotionEvent) {
-        passMotEv.receiveMotionEvent(event)
-        Log.d(clist.MyView, ">>> Wysłano MotionEvent")
+        if(passMotEv != null) {
+            passMotEv!!.receiveMotionEvent(event)
+            Log.d(clist.MyView, ">>> Wysłano MotionEvent")
+        }
     }
 }

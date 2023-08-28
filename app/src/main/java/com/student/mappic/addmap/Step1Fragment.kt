@@ -46,7 +46,7 @@ class Step1Fragment : Fragment() {
         camiX = CamiX(addMap, R.id.camView)
 
         //addmap.step1() requests permissions for Camera, and then launches camiX.startCamera()
-        addMap.grantCamPerm { camiX.startCamera() }
+        addMap.permManager.grantCamPerm { camiX.startCamera() }
 
         /**
          * Set onclick listener for button.

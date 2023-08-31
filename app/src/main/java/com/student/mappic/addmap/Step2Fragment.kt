@@ -63,7 +63,7 @@ class Step2Fragment : Fragment() {
         }
 
         // OpenGL probably not needed. Just need to display icon/graphic and get point, where user touched
-        binding.touchDetector?.setPassMotionEvent { whereClicked(it) }
+        binding.touchDetector?.setPassMotionEvent { utility.whereClicked(it) }
 
         // FIXME temporary:
         utility.displayErrMsg(binding.errorText, ErrTypes.INCORRECT_GPS)

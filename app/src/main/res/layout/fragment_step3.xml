@@ -38,15 +38,35 @@
         app:layout_constraintBottom_toTopOf="@id/OkFAB"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/imgView"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="6"
-            android:background="@color/black"
-            android:scaleType="centerInside"
-            tools:src="@drawable/map_h"
-            tools:ignore="ContentDescription" />
+            android:layout_weight="6">
+
+            <!-- Overloaded view! -->
+            <com.student.mappic.addmap.common.myviews.MyView
+                android:id="@+id/touchDetector"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0"/>
+            <!--
+            android:alpha=0 == fully transparent
+            android:alpha=1 == fully visible
+            -->
+            <ImageView
+                android:id="@+id/imgView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/black"
+                android:scaleType="centerInside"
+                tools:src="@drawable/map_h"
+                tools:ignore="ContentDescription" />
+
+            <com.student.mappic.addmap.common.myviews.AddMapGLSurfaceView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.4" />
+        </FrameLayout>
 
         <TextView
             android:id="@+id/gotoPoint2Text"

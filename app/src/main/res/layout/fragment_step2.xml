@@ -40,11 +40,12 @@
             android:layout_weight="6">
 
             <!-- Overloaded view! -->
-            <com.student.mappic.addmap.common.myview.MyView
+            <com.student.mappic.addmap.common.myviews.MyView
                 android:id="@+id/touchDetector"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:alpha="0"/>
+
             <!--
             android:alpha=0 == fully transparent
             android:alpha=1 == fully visible
@@ -57,10 +58,10 @@
                 android:scaleType="centerInside"
                 tools:src="@drawable/map_h"
                 tools:ignore="ContentDescription" />
-            <!--<android.opengl.GLSurfaceView
+            <com.student.mappic.addmap.common.myviews.AddMapGLSurfaceView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:alpha="0.3" />-->
+                android:alpha="0.4" />
         </FrameLayout>
         <!-- If you want imageView to not include empty space around image,
         set android:adjustViewBounds to true

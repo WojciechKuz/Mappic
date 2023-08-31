@@ -3,6 +3,7 @@ package com.student.mappic.addmap.common
 import androidx.exifinterface.media.ExifInterface
 import android.net.Uri
 import android.util.Log
+import android.view.MotionEvent
 import android.widget.TextView
 import com.student.mappic.R
 import com.student.mappic.addmap.AddMapActivity
@@ -15,6 +16,17 @@ import com.student.mappic.addmap.AddMapActivity
  * This class was created to prevent code duplication.
  */
 class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
+
+    /**
+     * Triggered by onTouch in MyView, handle onClick (aka do sth.)
+     */
+    // TODO rename
+    fun whereClicked(event: MotionEvent?) {
+        if(event != null) {
+            Log.d(TAG, ">>> Kliknięto w " + "x: " + event.x + "; y: " + event.y)
+        }
+    }
+
     /**
      * Decodes from given Uri size of image and orientation. Returns true when image is vertical.
      */

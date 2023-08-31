@@ -60,6 +60,8 @@ class Step3Fragment : Fragment() {
             utility.fillGpsCoordinates()
             Log.d(clist.Step3Fragment, ">>> Action not available yet.")
         }
+
+        binding.touchDetector?.setPassMotionEvent { utility.whereClicked(it) }
     }
 
     override fun onDestroyView() {

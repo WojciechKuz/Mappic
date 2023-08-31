@@ -8,6 +8,10 @@ import android.view.MotionEvent
 import android.view.View
 import com.student.mappic.clist
 
+/**
+ * This view is used to provide onClick data such as x, y positions.
+ * Used in [Step2Fragment] and [Step3Fragment].
+ */
 class MyView(context: Context): View(context) {
 
     /**

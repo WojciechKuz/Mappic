@@ -1,5 +1,8 @@
 package com.student.mappic
 
+import com.student.mappic.addmap.common.myviews.AddMapGLRenderer
+import com.student.mappic.addmap.common.myviews.AddMapGLSurfaceView
+
 open class clist() {
     /**
      * List of classes for faster Log.d(tag, msg) lines creation.
@@ -24,6 +27,8 @@ open class clist() {
         const val CamiX: String = "CamiX"
         const val PermissionManager: String = "PermissionManager"
         const val MyView: String = "MyView"
+        const val AddMapGLSurfaceView = "AddMapGLSurfaceView"
+        const val AddMapGLRenderer = "AddMapGLRenderer"
         const val PickPhoto: String = "PickPhoto"
         const val Step0Fragment: String = "Step0Fragment"
         const val Step1Fragment: String = "Step1Fragment"

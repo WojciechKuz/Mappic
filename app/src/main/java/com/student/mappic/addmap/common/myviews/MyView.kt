@@ -1,4 +1,4 @@
-package com.student.mappic.addmap.common.myview
+package com.student.mappic.addmap.common.myviews
 
 import android.annotation.SuppressLint
 import android.content.Context

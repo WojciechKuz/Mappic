@@ -68,4 +68,20 @@ class ImageSizeCalc(val original: Size, val view: Size) {
             return false
         return true
     }
+
+    /**
+     * @returns screen proportion as width/height
+     */
+    fun imgProportions(): Double {
+        if(imgInView == null) {
+            fit()
+        }
+        return (imgInView!!.width * 1.0) / (imgInView!!.height * 1.0)
+    }
+    companion object {
+        val PROP16TO9: Double = 16.0/9.0
+        val PROP4TO3: Double  =  4.0/3.0
+        val PROP9TO16: Double = 9.0/16.0
+        val PROP3TO4: Double  = 3.0/4.0
+    }
 }

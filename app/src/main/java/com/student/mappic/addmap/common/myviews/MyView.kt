@@ -38,6 +38,11 @@ class MyView(context: Context): View(context) {
         Log.d(clist.MyView, ">>> init, 4 args (never used)")
     }
     */
+
+    /**
+     * Set what should be called after onTouch() is performed.
+     * MotionEvent (that includes coordinates of click) is provided to called method.
+     */
     fun setPassMotionEvent(passMotEv: PassMotionEvent) {
         this.passMotEv = passMotEv
         Log.d(clist.MyView, ">>> passMotionEvent is set")

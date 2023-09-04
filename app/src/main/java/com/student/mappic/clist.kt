@@ -1,8 +1,5 @@
 package com.student.mappic
 
-import com.student.mappic.addmap.common.myviews.AddMapGLRenderer
-import com.student.mappic.addmap.common.myviews.AddMapGLSurfaceView
-
 open class clist() {
     /**
      * List of classes for faster Log.d(tag, msg) lines creation.

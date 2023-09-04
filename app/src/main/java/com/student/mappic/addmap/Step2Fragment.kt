@@ -1,5 +1,6 @@
 package com.student.mappic.addmap
 
+import android.graphics.PixelFormat
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater

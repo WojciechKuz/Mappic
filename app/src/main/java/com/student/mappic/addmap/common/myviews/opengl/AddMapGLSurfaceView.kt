@@ -1,6 +1,7 @@
-package com.student.mappic.addmap.common.myviews
+package com.student.mappic.addmap.common.myviews.opengl
 
 import android.content.Context
+import android.graphics.PixelFormat
 import android.opengl.GLSurfaceView
 import android.util.AttributeSet
 import android.util.Log
@@ -16,7 +17,15 @@ class AddMapGLSurfaceView(context: Context): GLSurfaceView(context) {
 
     init {
         Log.d(clist.MyView, ">>> default init, 1 arg")
+
         setEGLContextClientVersion(2) // OpenGL ES 2.0 context
+
+        // this creates transparent background
+        setZOrderOnTop(true)
+        setEGLConfigChooser(8, 8, 8, 8, 16, 0)
+        holder?.setFormat(PixelFormat.RGBA_8888)
+
+        // set our fellow renderer
         renderer = AddMapGLRenderer()
         setRenderer(renderer)
 

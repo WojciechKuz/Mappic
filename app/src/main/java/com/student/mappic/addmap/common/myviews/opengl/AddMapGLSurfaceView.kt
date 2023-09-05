@@ -30,9 +30,13 @@ class AddMapGLSurfaceView(context: Context): GLSurfaceView(context) {
         setRenderer(renderer)
 
         // prevents the GLSurfaceView frame from being redrawn until you call requestRender()
-        renderMode = RENDERMODE_WHEN_DIRTY // call requestRender() to refresh view
+        //renderMode = RENDERMODE_WHEN_DIRTY // call requestRender() to refresh view
+
+        //requestRender()
     }
     constructor(context: Context, attrs: AttributeSet): this(context) {
         Log.d(clist.MyView, ">>> init, 2 args")
     }
+
+    // renderMode can be set from outside (i think, if not true, create method)
 }

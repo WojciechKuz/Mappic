@@ -20,14 +20,6 @@ import java.nio.FloatBuffer
     [-1,-1, 0] -------- -------- -------- [ 1,-1, 0]  y=-1
 */
 
-// number of coordinates per vertex in this array
-const val COORDS_PER_VERTEX = 3
-var triangleCoords = floatArrayOf(     // in counterclockwise order:
-    0.0f, 0.622008459f, 0.0f,      // top
-    -0.5f, -0.311004243f, 0.0f,    // bottom left
-    0.5f, -0.311004243f, 0.0f      // bottom right
-)
-
 class Triangle {
 
     private var mProgram: Int
@@ -70,28 +62,41 @@ class Triangle {
             // creates OpenGL ES program executables
             GLES20.glLinkProgram(it)
         }
+        createVertexBuffer(triangleCoords)
     }
 
+    fun customVertices(coords: FloatArray): Triangle {
+        createVertexBuffer(coords)
+        return this
+    }
+    fun customColor(R: Float, G: Float, B: Float, a: Float): Triangle {
+        color = floatArrayOf(R, G, B, a)
+        return this
+    }
     // Set color with red, green, blue and alpha (opacity) values
-    val color = floatArrayOf(0.63671875f, 0.76953125f, 0.22265625f, 1.0f) // range [0f, 1f] for R,G,B,a
+    var color = floatArrayOf(0.63671875f, 0.76953125f, 0.22265625f, 1.0f) // range [0f, 1f] for R,G,B,a
 
-    private var vertexBuffer: FloatBuffer =
+    private lateinit var vertexBuffer: FloatBuffer
+    private fun createVertexBuffer(coords: FloatArray) {
+        vertexBuffer =
         // (number of coordinate values * 4 bytes per float)
-        ByteBuffer.allocateDirect(triangleCoords.size * 4).run {
+        ByteBuffer.allocateDirect(coords.size * 4).run {
             // use the device hardware's native byte order
             order(ByteOrder.nativeOrder())
 
             // create a floating point buffer from the ByteBuffer
             asFloatBuffer().apply {
                 // add the coordinates to the FloatBuffer
-                put(triangleCoords)
+                put(coords)
                 // set the buffer to read the first coordinate
                 position(0)
             }
         }
+    }
 
-    // Android developers tutorial says thios should be in renderer, but then uses it as if it's Triangle member.
-    // Anyways, this compiles GLSL shader program
+    /**
+     * this compiles GLSL shader program
+     */
     fun loadShader(type: Int, shaderCode: String): Int {
 
         // create a vertex shader type (GLES20.GL_VERTEX_SHADER)
@@ -110,7 +115,9 @@ class Triangle {
     private val vertexCount: Int = triangleCoords.size / COORDS_PER_VERTEX
     private val vertexStride: Int = COORDS_PER_VERTEX * 4 // 4 bytes per vertex
 
-    // Actual drawing
+    /**
+     * Actual drawing to the screen
+     */
     fun draw(mvpMatrix: FloatArray) {
         // Add program to OpenGL ES environment
         GLES20.glUseProgram(mProgram)
@@ -151,6 +158,15 @@ class Triangle {
             // Disable vertex array
             GLES20.glDisableVertexAttribArray(positionHandle)
         }
+    }
+    companion object {
+        // number of coordinates per vertex in this array
+        const val COORDS_PER_VERTEX = 3
+        var triangleCoords = floatArrayOf(     // in counterclockwise order:
+            0.0f, -0.622008459f, 0.0f,      // top
+            -0.5f, 0.311004243f, 0.0f,    // bottom left
+            0.5f, 0.311004243f, 0.0f      // bottom right
+        )
     }
 
 }

@@ -1,10 +1,9 @@
 package com.student.mappic.addmap.common.myviews.opengl
 
 import android.graphics.Point
+import android.graphics.PointF
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView.Renderer
-import android.opengl.Matrix
-import android.os.SystemClock
 import android.util.Log
 import android.util.Size
 import com.student.mappic.clist
@@ -15,17 +14,23 @@ import javax.microedition.khronos.opengles.GL10
  * Renderer for AddMApGLSurfaceView.
  */
 class AddMapGLRenderer: Renderer {
-    private lateinit var tri :Triangle
+    private lateinit var tri: Triangle
+    private lateinit var tri2: Triangle
+    //private lateinit var tri3: Triangle
+    //private lateinit var tri4: Triangle
+    private lateinit var circl: Array<Triangle>
+    //private lateinit var cir: JCircle
 
     override fun onSurfaceCreated(unused: GL10?, config: EGLConfig?) {
         // construct shapes, this needs to be lateinit, cause OpenGL ES stuff needs to be initialized first
         tri = Triangle()
+        tri2 = Triangle().customVertices(floatArrayOf(
+            0.0f+0.3f, -0.622008459f, 0.0f,      // top
+            -0.5f+0.3f, 0.311004243f, 0.0f,    // bottom left
+            0.5f+0.3f, 0.311004243f, 0.0f      // bottom right
+        )).customColor(0.63671875f, 0.73f, 0.22265625f, 0.6f)
+        circl = CircleMaker(0.3f, PointF(0.5f, 0.2f)).circleCoords(12)
     }
-
-    private val vPMatrix = FloatArray(16)
-    private val projectionMatrix = FloatArray(16)
-    private val rotationMatrix = FloatArray(16)
-    private val viewMatrix = FloatArray(16)
 
     override fun onSurfaceChanged(unused: GL10?, width: Int, height: Int) {
         Log.d(clist.AddMapGLRenderer, ">>> Surface change - w: ${width}, h: ${height}.")
@@ -39,39 +44,24 @@ class AddMapGLRenderer: Renderer {
         // react to size changes of surface
 
         val ratio: Float = width.toFloat() / height.toFloat()
-
-        // this projection matrix is applied to object coordinates
-        // in the onDrawFrame() method
-        Matrix.frustumM(projectionMatrix, 0, -ratio, ratio, -1f, 1f, 3f, 7f)
+        MVPCreator.calculateProjectionMx(ratio)
     }
 
     override fun onDrawFrame(unused: GL10?) {
         // Redraw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
 
-        val scratch = FloatArray(16)
 
-        // Set the camera position (View matrix)
-        Matrix.setLookAtM(viewMatrix, 0, 0f, 0f, 3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
-
-        // Calculate the projection and view transformation
-        Matrix.multiplyMM(vPMatrix, 0, projectionMatrix, 0, viewMatrix, 0)
-
-        // Create a rotation transformation for the triangle
-        val time = SystemClock.uptimeMillis() % 4000L
-        val angle = 0.090f * time.toInt()
-        Matrix.setRotateM(rotationMatrix, 0, angle, 0f, 0f, -1.0f)
-
-        // Combine the rotation matrix with the projection and camera view
-        // Note that the vPMatrix factor *must be first* in order
-        // for the matrix multiplication product to be correct.
-        Matrix.multiplyMM(scratch, 0, vPMatrix, 0, rotationMatrix, 0)
-
+        val scratch = MVPCreator.allMatrix()
 
         // Draw shape
-        tri.draw(scratch)
+        //tri.draw(scratch)
+        tri2.draw(scratch)
+        //circl.forEach { it.draw(scratch) } // check if this matrix is correct
+        //cir.draw(unused)
 
         // TODO ---- DRAW YOUR OWN SHAPE ----
+        // TODO ---- PARAMETRIZE DRAWING (ROTATION, POSITION, APPEARANCE(POINT/USER)) ----
 
     }
 
@@ -88,6 +78,15 @@ class AddMapGLRenderer: Renderer {
     }
     fun clearDisplay() {
         // TODO clear
+    }
+
+    companion object {
+        val IDENTITY = floatArrayOf(
+            1f,0f,0f,0f,
+            0f,1f,0f,0f,
+            0f,0f,1f,0f,
+            0f,0f,0f,1f
+        )
     }
 
 }

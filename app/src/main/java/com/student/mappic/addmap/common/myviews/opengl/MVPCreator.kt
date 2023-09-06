@@ -45,6 +45,9 @@ class MVPCreator {
 
             calculateRotationMx()
 
+            // TODO TRY: calculate move (Translation) Matrix, and multiply it with rotation matrix:
+            //  multipl(outMatrix, translMatrix, rotationMatrix)
+
             // Combine the rotation matrix with the projection and camera view
             // Note that the vPMatrix factor *must be first* in order
             // for the matrix multiplication product to be correct.

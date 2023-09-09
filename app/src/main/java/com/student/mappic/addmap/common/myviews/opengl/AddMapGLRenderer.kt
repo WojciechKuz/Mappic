@@ -51,8 +51,8 @@ class AddMapGLRenderer: Renderer {
         // Redraw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
 
-
-        val scratch = MVPCreator.allMatrix()
+        val mainTriangle = ObjProperties(1.57f,0.2f,-0.7f)
+        val scratch = MVPCreator.applyAllMatrices(mainTriangle)
 
         // Draw shape
         //tri.draw(scratch)

@@ -24,13 +24,19 @@ class MVPCreator {
             val time0 = SystemClock.uptimeMillis() % 1000L
             Matrix.setLookAtM(viewMatrix, 0, 0f, 0f, 3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f) // Matrix for moving camera
         }
-        private fun calculateRotationMx() {
+        private fun calculateRotationMx(rotation: Float) {
             // Create a rotation transformation for the triangle
-            val time = SystemClock.uptimeMillis() % 4000L
-            val angle = 0.090f * time.toInt()
-            Matrix.setRotateM(rotationMatrix, 0, 0f, 0f, 0f, -1.0f) // Matrix for Triangle rotation
+            //val time = SystemClock.uptimeMillis() % 4000L
+            //val angle = 0.090f * time.toInt()
+            Matrix.setRotateM(rotationMatrix, 0, rotation, 0f, 0f, -1.0f) // Matrix for Triangle rotation. Angle is in radians.
         }
-        fun allMatrix(): FloatArray {
+        var x = 0
+
+        /**
+         * Apply all matrices to matrix describing
+         * object's position on screen, rotation, camera position & direction, perspective
+         */
+        fun applyAllMatrices(objProps: ObjProperties): FloatArray {
 
             val scratch = FloatArray(16)
 
@@ -43,7 +49,11 @@ class MVPCreator {
             // Calculate the projection and view transformation
             Matrix.multiplyMM(vPMatrix, 0, projectionMatrix, 0, viewMatrix, 0)
 
-            calculateRotationMx()
+            calculateRotationMx(objProps.a)
+            if(x==2) debugPrintMx(rotationMatrix, "rotationMx before calcMoveMx")
+            calculateMoveMx(objProps.x, objProps.y, 0f)
+            if(x==2) debugPrintMx(rotationMatrix, "rotationMx after calcMoveMx")
+            x = (x % 2048) + 2
 
             // TODO TRY: calculate move (Translation) Matrix, and multiply it with rotation matrix:
             //  multipl(outMatrix, translMatrix, rotationMatrix)
@@ -54,5 +64,42 @@ class MVPCreator {
             Matrix.multiplyMM(scratch, 0, vPMatrix, 0, rotationMatrix, 0)
             return scratch
         }
+
+        /**
+         * This method adds Translation (move object), applied to object after rotating it, to rotation matrix.
+         * After calling this method rotationMatrix is result of rotation and translation matrices multiplication.
+         * Mov_Mx * Rot_Mx = RotAndMov_Mx
+         * Simplifying this expression - it's just adding move values to last column of matrix.
+         */
+        private fun calculateMoveMx(movex: Float, movey: Float, movez: Float) {
+            if(x==4) Log.d(TAG, rotationMatrix[3+4*0].toString())
+            ReferenceFloat(rotationMatrix[3+4*0]).addOpMx(movex) // [0][3]
+            if(x==4) Log.d(TAG, rotationMatrix[3+4*0].toString())
+            ReferenceFloat(rotationMatrix[3+4*1]).addOpMx(movey) // [1][3]
+            ReferenceFloat(rotationMatrix[3+4*2]).addOpMx(movez) // [2][3]
+            if(rotationMatrix[3+4*3] != 1f) {
+                Log.w("MVPCreator", ">>> Place [3][3] in matrix is not 1!")
+                rotationMatrix[3+4*3] = 1f
+            }
+        }
+        private class ReferenceFloat(var field: Float) { // It's for creating reference to basic type in addOpMx args. Probably not nicest solution nor best practice.
+            fun addOpMx(addVal: Float) {
+                //Log.d(TAG, ">>> RefFloat before adding:")
+                if (field != 0f)
+                    Log.e(TAG, ">>> This place in matrix is nonzero (${field}) before operation!")
+                field += addVal
+            }
+        }
+        fun debugPrintMx(matrix: FloatArray, name: String) {
+            val rmx = rotationMatrix
+            var outp = ""
+            for (i in 0..15) {
+                outp += ( if(i % 4 == 0) "\n" else "" ) + " ${rmx[i]}"
+            }
+            Log.d("MVPCreator", ">>> Matrix ${name}:\n"
+                + outp + "\n"
+            )
+        }
+        val TAG = "MVPCreator"
     }
 }

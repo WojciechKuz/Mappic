@@ -18,7 +18,7 @@ class MVPCreator {
      * Apply all matrices to matrix describing
      * object's position on screen, rotation, camera position & direction, perspective
      */
-    fun applyAllMatrices(objProps: ObjProperties): FloatArray {
+    fun applyAllMatrices(objProps: ObjPosition): FloatArray {
 
         val finalMatrix = FloatArray(16)
 
@@ -45,16 +45,17 @@ class MVPCreator {
 
         debugix = (debugix % 2048) + 2
 
-        // TODO TRY: calculate move (Translation) Matrix, and multiply it with rotation matrix:
-        //  multipl(outMatrix, translMatrix, rotationMatrix)
-
         // Combine the rotation (CHANGED TO TRS) matrix with the projection and camera view
         // Note that the vPMatrix factor *must be first* in order
         // for the matrix multiplication product to be correct.
-        Matrix.multiplyMM(finalMatrix, 0, VPMatrix, 0, /*rotationMatrix*/ TRSMatrix, 0)
+        Matrix.multiplyMM(finalMatrix, 0, VPMatrix, 0, TRSMatrix, 0)
         return finalMatrix
     }
 
+    /**
+     * Calculate translation ( math translation, not language :D )
+     * @param movez not used, but keep for future
+     */
     private fun calculateMoveMx(movex: Float, movey: Float, movez: Float) {
         Matrix.setIdentityM(translationMatrix, 0)
         Matrix.translateM(translationMatrix, 0, movex, movey, movez)

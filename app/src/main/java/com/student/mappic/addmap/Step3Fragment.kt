@@ -61,7 +61,7 @@ class Step3Fragment : Fragment() {
             Log.d(clist.Step3Fragment, ">>> Action not available yet.")
         }
 
-        binding.touchDetector?.setPassMotionEvent { utility.whereClicked(it) }
+        binding.touchDetector?.setPassMotionEvent { utility.myViewClicked(it) }
     }
 
     override fun onDestroyView() {

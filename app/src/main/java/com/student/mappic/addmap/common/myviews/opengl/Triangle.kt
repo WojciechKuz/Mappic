@@ -22,29 +22,43 @@ import java.nio.FloatBuffer
 
 class Triangle {
 
+    private val fragmentShaderCode = ShaderCode.TriangleShaderCode.fragmentShaderCode
+    private val vertexShaderCode = ShaderCode.TriangleShaderCode.vertexShaderCode
     private var mProgram: Int
 
-    private val fragmentShaderCode =
-        "precision mediump float;" +
-                "uniform vec4 vColor;" +
-                "void main() {" +
-                "  gl_FragColor = vColor;" +
-                "}"
+    // default values
+    var color = floatArrayOf(0.63671875f, 0.76953125f, 0.22265625f, 1.0f) // range [0f, 1f] for R,G,B,a
 
-    private val vertexShaderCode =
-    // This matrix member variable provides a hook to manipulate
-        // the coordinates of the objects that use this vertex shader
-        "uniform mat4 uMVPMatrix;" +
-                "attribute vec4 vPosition;" +
-                "void main() {" +
-                // the matrix must be included as a modifier of gl_Position
-                // Note that the uMVPMatrix factor *must be first* in order
-                // for the matrix multiplication product to be correct.
-                "  gl_Position = uMVPMatrix * vPosition;" +
-                "}"
+    // default values
+    var triangleCoords = floatArrayOf(     // in counterclockwise order:
+        0.0f, -0.622008459f, 0.0f,      // top
+        -0.5f, 0.311004243f, 0.0f,    // bottom left
+        0.5f, 0.311004243f, 0.0f      // bottom right
+    )
+    private lateinit var trianglePosition: ObjPosition
 
-    // Use to access and set the view transformation
-    private var vPMatrixHandle: Int = 0
+    /*
+    // Not needed anymore, cause there are customColor() and customVertices() methods.
+    constructor(triProp: ObjPosition, triCoords: FloatArray, color: FloatArray) : this(triProp) {
+        triangleCoords = triCoords
+        createVertexBuffer(triangleCoords) // init is executed first, so overwrite
+        this.color = color
+    }
+    */
+
+    // those methods return Triangle to create chains like this: Triangle().setVertices(...).setColor(...).setPosition(...)
+    fun setVertices(coords: FloatArray): Triangle {
+        createVertexBuffer(coords)
+        return this
+    }
+    fun setColor(R: Float, G: Float, B: Float, a: Float): Triangle {
+        color = floatArrayOf(R, G, B, a)
+        return this
+    }
+    fun setPosition(triPos: ObjPosition): Triangle {
+        trianglePosition = triPos
+        return this
+    }
 
     init {
         val vertexShader: Int = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode)
@@ -64,17 +78,6 @@ class Triangle {
         }
         createVertexBuffer(triangleCoords)
     }
-
-    fun customVertices(coords: FloatArray): Triangle {
-        createVertexBuffer(coords)
-        return this
-    }
-    fun customColor(R: Float, G: Float, B: Float, a: Float): Triangle {
-        color = floatArrayOf(R, G, B, a)
-        return this
-    }
-    // Set color with red, green, blue and alpha (opacity) values
-    var color = floatArrayOf(0.63671875f, 0.76953125f, 0.22265625f, 1.0f) // range [0f, 1f] for R,G,B,a
 
     private lateinit var vertexBuffer: FloatBuffer
     private fun createVertexBuffer(coords: FloatArray) {
@@ -111,14 +114,28 @@ class Triangle {
 
     private var positionHandle: Int = 0
     private var mColorHandle: Int = 0
-
     private val vertexCount: Int = triangleCoords.size / COORDS_PER_VERTEX
     private val vertexStride: Int = COORDS_PER_VERTEX * 4 // 4 bytes per vertex
+    private var vPMatrixHandle: Int = 0 // Use to access and set the view transformation
 
     /**
-     * Actual drawing to the screen
+     * If you set trianglePosition earlier, then you can use draw() without specifying Matrix.
+     * Can be used without setting trianglePos, then it uses default position (angle: 0deg, x: 0.0, y: 0.0)
+     * Calls draw(FloatArray)
+     * Draws Triangle.
      */
-    fun draw(mvpMatrix: FloatArray) {
+    fun draw() {
+        if(this::trianglePosition.isInitialized) {
+            draw(MVPCreator().applyAllMatrices(trianglePosition))
+        }
+    }
+
+    /**
+     * Actual drawing to the screen.
+     * @param mvpMatrix matrix specifying position and view transformations.
+     * Draws Triangle.
+     */
+    private fun draw(mvpMatrix: FloatArray) {
         // Add program to OpenGL ES environment
         GLES20.glUseProgram(mProgram)
 
@@ -162,11 +179,6 @@ class Triangle {
     companion object {
         // number of coordinates per vertex in this array
         const val COORDS_PER_VERTEX = 3
-        var triangleCoords = floatArrayOf(     // in counterclockwise order:
-            0.0f, -0.622008459f, 0.0f,      // top
-            -0.5f, 0.311004243f, 0.0f,    // bottom left
-            0.5f, 0.311004243f, 0.0f      // bottom right
-        )
     }
 
 }

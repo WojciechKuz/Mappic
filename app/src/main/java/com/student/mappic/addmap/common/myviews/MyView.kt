@@ -12,7 +12,7 @@ import com.student.mappic.clist
  * This view is used to provide onClick data such as x, y positions.
  * Used in [Step2Fragment] and [Step3Fragment].
  */
-class MyView(context: Context): View(context) {
+class MyView(context: Context, attrs: AttributeSet): View(context, attrs) {
 
     /**
      * Interface for passing MotionEvent to Activity/Fragment.
@@ -25,16 +25,14 @@ class MyView(context: Context): View(context) {
     var passMotEv: PassMotionEvent? = null // public
 
     init {
-        Log.d(clist.MyView, ">>> default init, 1 arg")
+        Log.d(clist.MyView, ">>> default init, 2 arg")
+        Log.d(clist.MyView, ">>> MyView is initialized !")
     }
-    constructor(context: Context, attrs: AttributeSet?): this(context) {
-        Log.d(clist.MyView, ">>> init, 2 args")
-    }
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int): this(context) {
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int): this(context, attrs) {
         Log.d(clist.MyView, ">>> init, 3 args")
     }
     /*
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int): this(context) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int): this(context, attrs) {
         Log.d(clist.MyView, ">>> init, 4 args (never used)")
     }
     */

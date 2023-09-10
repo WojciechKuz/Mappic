@@ -16,20 +16,20 @@ import javax.microedition.khronos.opengles.GL10
 class AddMapGLRenderer: Renderer {
     private lateinit var tri: Triangle
     private lateinit var tri2: Triangle
-    //private lateinit var tri3: Triangle
-    //private lateinit var tri4: Triangle
     private lateinit var circl: Array<Triangle>
     //private lateinit var cir: JCircle
 
     override fun onSurfaceCreated(unused: GL10?, config: EGLConfig?) {
         // construct shapes, this needs to be lateinit, cause OpenGL ES stuff needs to be initialized first
+
+        // call shapes constructors here, but they can be drawn or not somewhere else.
         tri = Triangle()
-        tri2 = Triangle().customVertices(floatArrayOf(
-            0.0f+0.3f, -0.622008459f, 0.0f,      // top
-            -0.5f+0.3f, 0.311004243f, 0.0f,    // bottom left
-            0.5f+0.3f, 0.311004243f, 0.0f      // bottom right
-        )).customColor(0.63671875f, 0.73f, 0.22265625f, 0.6f)
-        circl = CircleMaker(0.3f, PointF(0.5f, 0.2f)).circleCoords(12)
+        tri2 = Triangle().setVertices(floatArrayOf(
+            0.0f, -0.622008459f, 0.0f,    // top
+            -0.5f, 0.311004243f, 0.0f,    // bottom left
+            0.5f, 0.311004243f, 0.0f      // bottom right
+        )).setColor(0.63671875f, 0.73f, 0.22265625f, 0.6f)
+        //circl = CircleMaker(0.3f, PointF(0.5f, 0.2f)).circleCoords(12)
     }
 
     override fun onSurfaceChanged(unused: GL10?, width: Int, height: Int) {
@@ -47,16 +47,17 @@ class AddMapGLRenderer: Renderer {
         MVPCreator.calculateProjectionMx(ratio)
     }
 
+    //
     override fun onDrawFrame(unused: GL10?) {
         // Redraw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
 
-        val mainTriangle = ObjProperties(90f,0.2f,-0.1f)
-        val scratch = MVPCreator().applyAllMatrices(mainTriangle)
+        val mainTriangle = ObjPosition(90f,0.2f,-0.1f)
+        tri2.setPosition(mainTriangle).draw()
 
         // Draw shape
         //tri.draw(scratch)
-        tri2.draw(scratch)
+        //tri2.draw(scratch)
         //circl.forEach { it.draw(scratch) } // check if this matrix is correct
         //cir.draw(unused)
 
@@ -70,14 +71,15 @@ class AddMapGLRenderer: Renderer {
     }
 
     // My drawing methods
-    fun displayPoint(p: Point) {
-        // TODO display point
+    fun displayPoint(p: PointF) {
+        Log.d(clist.AddMapGLSurfaceView, ">>> Zaznacz punkt 2")
+        tri.setPosition(ObjPosition(-45f, -0.4f, 0.5f)).setColor(0.9f, 0.3f, 0.4f, 0.8f).draw()
     }
-    fun displayUser(p: Point, rotation: Double) {
+    fun displayUser(p: PointF, rotation: Float) {
         // TODO display user
     }
     fun clearDisplay() {
-        // TODO clear
+        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f) // clear background. render is requested in SurfaceView
     }
 
     companion object {

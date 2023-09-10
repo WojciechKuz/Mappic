@@ -6,4 +6,4 @@ package com.student.mappic.addmap.common.myviews.opengl
  * @property x horizontal position
  * @property y vertical position
  */
-class ObjProperties(val a: Float, val x: Float, val y: Float)
+class ObjPosition(val a: Float, val x: Float, val y: Float)

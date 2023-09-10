@@ -28,6 +28,10 @@ class CircleMaker(
         step = (2 * Math.PI).toFloat() / (verticCount * 1f)
         return Array(verticCount) { polygonMaker(it) }
     }
+
+    /**
+     * Creates triangles that will be part of Circle.
+     */
     private fun polygonMaker(i: Int): Triangle {
         Log.d("CircleMaker", ">>> ${i} triangle")
         val verticList = ArrayList<Float>(9)
@@ -47,7 +51,7 @@ class CircleMaker(
         verticList.add(transl.y)
         verticList.add(0f)
 
-        return Triangle().customVertices(verticList.toFloatArray())
+        return Triangle().setVertices(verticList.toFloatArray())
     }
 
     /**

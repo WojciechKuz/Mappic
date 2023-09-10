@@ -1,12 +1,15 @@
 package com.student.mappic.addmap.common
 
+import android.graphics.PointF
 import androidx.exifinterface.media.ExifInterface
 import android.net.Uri
 import android.util.Log
+import android.util.Size
 import android.view.MotionEvent
 import android.widget.TextView
 import com.student.mappic.R
 import com.student.mappic.addmap.AddMapActivity
+import com.student.mappic.clist
 
 // for JavaDoc to properly show links to [Step2Fragment] documentation whole name with packages must be specified. same for step3
 /**
@@ -17,28 +20,36 @@ import com.student.mappic.addmap.AddMapActivity
  */
 class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
 
+    val step2and3 = Step2and3(addMap)
     /**
-     * Triggered by onTouch in MyView, handle onClick (aka do sth.)
+     * Triggered by onTouch in MyView, handle onClick:
+     * mark Point in given position.
      */
-    // TODO rename
-    fun whereClicked(event: MotionEvent?) {
+    fun myViewClicked(event: MotionEvent?) {
         if(event != null) {
-            Log.d(TAG, ">>> Kliknięto w " + "x: " + event.x + "; y: " + event.y)
+            Log.d(clist.Step2Fragment, ">>> Kliknięto w " + "x: " + event.x + "; y: " + event.y)
+            step2and3.getOpenGLView().pointMarker(toOpenGLCoordinates(PointF(event.x, event.y)))
         }
+        else Log.w(clist.Step2Fragment, ">>> Nie otrzymano informacji o pozycji kliknięcia!")
+    }
+    private fun toOpenGLCoordinates(pixelCoordinates: PointF): PointF {
+        val viewSize = Size(step2and3.getImageView().width, step2and3.getImageView().height)
+        // TODO check if in image bounds
+        //val exif = utility.getExifData(viewModel.mapImg)
+        //val imageSize = Size(exif.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, -1), exif.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, -1))
+        return PointF(pixelCoordinates.x/viewSize.height, pixelCoordinates.y/viewSize.height)
     }
 
     /**
      * Decodes from given Uri size of image and orientation. Returns true when image is vertical.
      */
     fun isImgVerticalExif(uri: Uri): Boolean {
-        val istream = addMap.contentResolver.openInputStream(uri)
-            ?: throw Exception("Input stream 'istream' is null!") // do it when istream is null
-        Log.d(TAG, ">>> Decoding size of image")
-        val exif = ExifInterface(istream)
+        val exif = getExifData(uri)
+
         val height: Int = exif.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, -1)
         val width: Int = exif.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, -1)
         val orientation: Int = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1)
-        istream.close()
+
         Log.d(TAG, ">>> Size of image: h: ${height}, w: ${width}, o: ${orientation}") // o 6=vert, 1,3=horiz
         val vertOrient = intArrayOf(90, 270)
         vertOrient.forEach {
@@ -53,11 +64,23 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
             Log.d(TAG, ">>> Rotation - image is horizontal.")
         return false
     }
+    fun getExifData(uri: Uri): ExifInterface {
+        val istream = addMap.contentResolver.openInputStream(uri)
+            ?: throw Exception("Input stream 'istream' is null!") // do it when istream is null
+        Log.d(TAG, ">>> Decoding size of image")
+        val exif = ExifInterface(istream)
+        if(exif.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, -1) == -1)
+            Log.e(TAG, ">>> Width tag in image exif data not found. cannot display it correctly.")
+        if(exif.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, -1) == -1)
+            Log.e(TAG, ">>> Height tag in image exif data not found. cannot display it correctly.")
+        istream.close()
+        return exif
+    }
 
     /**
      * Decodes ExifInterface orientation codes into human-readable degrees which tell how much is image rotated clockwise.
      */
-    fun checkOrientation(orientation: Int): Int {
+    private fun checkOrientation(orientation: Int): Int {
         val orientationList = mapOf(
             ExifInterface.ORIENTATION_NORMAL to 0,
             ExifInterface.ORIENTATION_ROTATE_90 to 90,
@@ -111,11 +134,12 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
     }
 
     /**
-     * Displays error message in given TextView and of given Error type.
-     * WILL BECOME PRIVATE!
+     * Displays error message in errorText TextView and of given Error type.
+     * TODO WILL BECOME PRIVATE!
      */
-    fun displayErrMsg(textView: TextView, err: ErrTypes) {
+    fun displayErrMsg(err: ErrTypes) {
         val array: Array<String> = addMap.resources.getStringArray(R.array.errTypesMessages)
+        val textView = step2and3.errMessage()
         textView.text = array[err.code]
         textView.visibility = TextView.VISIBLE
     }

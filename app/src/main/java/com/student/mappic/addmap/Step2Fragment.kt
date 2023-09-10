@@ -1,10 +1,8 @@
 package com.student.mappic.addmap
 
-import android.graphics.PixelFormat
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -13,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.student.mappic.R
 import com.student.mappic.addmap.common.AddmapSteps2and3Utility
 import com.student.mappic.addmap.common.ErrTypes
+import com.student.mappic.addmap.common.Step2and3
 import com.student.mappic.clist
 import com.student.mappic.databinding.FragmentStep2Binding
 
@@ -63,18 +62,17 @@ class Step2Fragment : Fragment() {
             Log.d(clist.Step3Fragment, ">>> Action not available yet.")
         }
 
-        // OpenGL probably not needed. Just need to display icon/graphic and get point, where user touched
-        binding.touchDetector?.setPassMotionEvent { utility.whereClicked(it) }
+        binding.touchDetector?.setPassMotionEvent { utility.myViewClicked(it) }
+
+        /* FIXME causes NullPointerException
+        val glv = Step2and3(activity as AddMapActivity).getOpenGLView()
+        if(glv == null) {
+            Log.e(clist.Step2Fragment, ">>> OpenGLView glv is NULL !!!")
+        }
+        */
 
         // FIXME temporary:
-        utility.displayErrMsg(binding.errorText, ErrTypes.INCORRECT_GPS)
-    }
-
-    // TODO rename
-    private fun whereClicked(event: MotionEvent?) {
-        if(event != null) {
-            Log.d(clist.Step2Fragment, ">>> Kliknięto w " + "x: " + event.x + "; y: " + event.y)
-        }
+        utility.displayErrMsg(ErrTypes.INCORRECT_GPS)
     }
 
     override fun onDestroyView() {

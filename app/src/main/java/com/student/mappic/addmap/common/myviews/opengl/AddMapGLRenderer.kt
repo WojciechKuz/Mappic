@@ -71,6 +71,7 @@ class AddMapGLRenderer: Renderer {
     }
 
     // My drawing methods
+    // FIXME
     fun displayPoint(p: PointF) {
         Log.d(clist.AddMapGLSurfaceView, ">>> Zaznacz punkt 2")
         tri.setPosition(ObjPosition(-45f, -0.4f, 0.5f)).setColor(0.9f, 0.3f, 0.4f, 0.8f).draw()

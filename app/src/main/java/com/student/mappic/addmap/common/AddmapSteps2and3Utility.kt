@@ -9,7 +9,6 @@ import android.view.MotionEvent
 import android.widget.TextView
 import com.student.mappic.R
 import com.student.mappic.addmap.AddMapActivity
-import com.student.mappic.clist
 
 // for JavaDoc to properly show links to [Step2Fragment] documentation whole name with packages must be specified. same for step3
 /**

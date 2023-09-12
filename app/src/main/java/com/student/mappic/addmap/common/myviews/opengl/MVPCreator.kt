@@ -4,6 +4,11 @@ import android.opengl.Matrix
 import android.os.SystemClock
 import android.util.Log
 
+/**
+ * This calculates Matrix which tells OpenGL, where and how objects should be displayed.
+ * This includes: translation, rotation, scale, projection, and view
+ * Here is tutorial about transformation matrices: [opengl-tutorial.org - matrices](http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/)
+ */
 class MVPCreator {
     // http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/
 
@@ -72,23 +77,6 @@ class MVPCreator {
         */
         Matrix.setRotateM(rotationMatrix, 0, rotation, 0f, 0f, -1.0f) // Matrix for Triangle rotation. Angle is in degrees.
     }
-
-    /*
-    /**
-     * This method adds Translation (move object), applied to object after rotating it, to rotation matrix.
-     * After calling this method rotationMatrix is result of rotation and translation matrices multiplication.
-     * Mov_Mx * Rot_Mx = RotAndMov_Mx
-     * Simplifying this expression - it's just adding move values to last column of matrix.
-     */
-    private fun calculateMoveMxOLD(movex: Float, movey: Float, movez: Float) {
-        rotationMatrix[3+4*0] += movex // [0][3]
-        rotationMatrix[3+4*1] += movey // [1][3]
-        rotationMatrix[3+4*2] += movez // [2][3]
-        if(rotationMatrix[3+4*3] != 1f) {
-            Log.w(TAG, ">>> Place [3][3] in matrix is not 1!")
-            rotationMatrix[3+4*3] = 1f
-        }
-    }*/
 
     /**
      * print matrix in logs as Log.d()

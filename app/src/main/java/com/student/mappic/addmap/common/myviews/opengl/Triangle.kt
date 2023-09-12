@@ -1,6 +1,7 @@
 package com.student.mappic.addmap.common.myviews.opengl
 
 import android.opengl.GLES20
+import android.util.Log
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
@@ -35,16 +36,7 @@ class Triangle {
         -0.5f, 0.311004243f, 0.0f,    // bottom left
         0.5f, 0.311004243f, 0.0f      // bottom right
     )
-    private lateinit var trianglePosition: ObjPosition
-
-    /*
-    // Not needed anymore, cause there are customColor() and customVertices() methods.
-    constructor(triProp: ObjPosition, triCoords: FloatArray, color: FloatArray) : this(triProp) {
-        triangleCoords = triCoords
-        createVertexBuffer(triangleCoords) // init is executed first, so overwrite
-        this.color = color
-    }
-    */
+    private var trianglePosition = ObjPosition(0f, 0f, 0f)
 
     // those methods return Triangle to create chains like this: Triangle().setVertices(...).setColor(...).setPosition(...)
     fun setVertices(coords: FloatArray): Triangle {
@@ -125,9 +117,8 @@ class Triangle {
      * Draws Triangle.
      */
     fun draw() {
-        if(this::trianglePosition.isInitialized) {
-            draw(MVPCreator().applyAllMatrices(trianglePosition))
-        }
+        //Log.d("draw", "draw alphacolor ${color.get(3)}")
+        draw(MVPCreator().applyAllMatrices(trianglePosition))
     }
 
     /**

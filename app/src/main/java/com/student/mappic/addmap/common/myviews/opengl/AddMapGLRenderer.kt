@@ -1,6 +1,5 @@
 package com.student.mappic.addmap.common.myviews.opengl
 
-import android.graphics.Point
 import android.graphics.PointF
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView.Renderer
@@ -23,6 +22,17 @@ class AddMapGLRenderer: Renderer {
 
     override fun onSurfaceCreated(unused: GL10?, config: EGLConfig?) {
         // call shapes constructors here, but they can be drawn or not somewhere else.
+        Log.d(clist.AddMapGLRenderer, ">>> tri init")
+        tri = Triangle()
+        Log.d(clist.AddMapGLRenderer, ">>> tri2 init")
+        tri2 = Triangle()
+
+        circl = CircleMaker(0.09375f).createCircleCoords(48)
+        circl.forEach {
+            //it.setColor(0.3f, 0.24f, 0.83f, 0.7f) // blue
+            it.setColor(0.9f, 0.3f, 0.4f, 0.8f)
+            drawnObjects.add(it)
+        }
         alwaysDisplayed()
     }
 
@@ -36,8 +46,8 @@ class AddMapGLRenderer: Renderer {
         val prop = proportion(Size(width, height)) // you can compare it with statics from ImgSizeCalc like PROP16TO9
         // scale width by prop
         // react to size changes of surface
-        tri = Triangle()
-        drawnObjects.add(tri)
+
+        //drawnObjects.add(tri)
 
         val ratio: Float = width.toFloat() / height.toFloat()
         MVPCreator.calculateProjectionMx(ratio)
@@ -51,6 +61,7 @@ class AddMapGLRenderer: Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
 
         // draw all listed triangles
+        Log.d(clist.AddMapGLRenderer, ">>> There is ${drawnObjects.size} triangles on drawing list.")
         drawnObjects.forEach { it.draw() }
 
         // Draw shape
@@ -58,10 +69,6 @@ class AddMapGLRenderer: Renderer {
         //tri2.draw(scratch)
         //circl.forEach { it.draw(scratch) } // check if this matrix is correct
         //cir.draw(unused)
-
-        // TODO ---- DRAW YOUR OWN SHAPE ----
-        // TODO ---- PARAMETRIZE DRAWING (ROTATION, POSITION, APPEARANCE(POINT/USER)) ----
-
     }
 
     private fun proportion(img: Size): Double {
@@ -72,8 +79,8 @@ class AddMapGLRenderer: Renderer {
      * Add elements to the sceen that should be in every frame. Call after cleaning display.
      */
     private fun alwaysDisplayed() {
-        val mainTriangle = ObjPosition(90f,0.99f,-0.99f)
-        tri2 = Triangle().setVertices(floatArrayOf(
+        val mainTriangle = ObjPosition(90f,0.90f,-0.90f)
+        tri2.setVertices(floatArrayOf(
             0.0f, -0.0f, 0.0f,    // top
             -0.07f, 0.1f, 0.0f,    // bottom left
             0.07f, 0.1f, 0.0f      // bottom right
@@ -81,18 +88,6 @@ class AddMapGLRenderer: Renderer {
         drawnObjects.add(tri2)
         //circl = CircleMaker(0.3f, PointF(0.5f, 0.2f)).circleCoords(12)
     }
-    /*
-    private fun alwaysDisplayed() {
-        val mainTriangle = ObjPosition(90f,0.2f,-0.1f)
-        tri2 = Triangle().setVertices(floatArrayOf(
-            0.0f, -0.622008459f, 0.0f,    // top
-            -0.5f, 0.311004243f, 0.0f,    // bottom left
-            0.5f, 0.311004243f, 0.0f      // bottom right
-        )).setColor(0.63671875f, 0.73f, 0.22265625f, 0.6f).setPosition(mainTriangle)
-        drawnObjects.add(tri2)
-        //circl = CircleMaker(0.3f, PointF(0.5f, 0.2f)).circleCoords(12)
-    }
-    */
 
     // My drawing methods
     /**
@@ -111,6 +106,16 @@ class AddMapGLRenderer: Renderer {
             ) // 0.09375 == 3/32; 0.1875 == 3/16 - using such numbers is computer friendly :)
         )
         drawnObjects.add(tri)
+        circl.forEach { it.setPosition(ObjPosition(0f, p.x, p.y + 0.1875f)) }
+        val tri3 = Triangle().setVertices(
+            floatArrayOf(
+                0f, 0f, 0f,
+                -0.1f, 0f, 0f,
+                0f, -0.1f, 0f
+            )
+        ).setColor(0.9f, 0.9f, 0.1f, 0.8f).setPosition(ObjPosition(40f, -0.6f, -0.6f))
+        drawnObjects.add(tri3)
+
     }
     fun displayUser(p: PointF, rotation: Float) {
         // TODO display user
@@ -120,13 +125,13 @@ class AddMapGLRenderer: Renderer {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f) // clear background. render is requested in SurfaceView
     }
 
-    companion object {
+    /*companion object {
         val IDENTITY = floatArrayOf(
             1f,0f,0f,0f,
             0f,1f,0f,0f,
             0f,0f,1f,0f,
             0f,0f,0f,1f
         )
-    }
+    }*/
 
 }

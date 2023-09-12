@@ -33,10 +33,9 @@ class AddMapGLSurfaceView(context: Context, attrs: AttributeSet): GLSurfaceView(
         Log.d(clist.AddMapGLSurfaceView, ">>> Renderer is set.")
 
         // prevents the GLSurfaceView frame from being redrawn until you call requestRender()
-        // FIXME RENDERMODE
         renderMode = RENDERMODE_WHEN_DIRTY // call requestRender() to refresh view
 
-        requestRender() // "can be used from any thread"
+        requestRender() // documentation: "can be used from any thread"
     }
 
     /**

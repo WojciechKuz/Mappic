@@ -1,7 +1,6 @@
 package com.student.mappic.addmap.common.myviews.opengl
 
 import android.graphics.PointF
-import android.util.Log
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -11,8 +10,7 @@ import kotlin.math.sin
  * @param transl - translation. Move circle by transl.x and transl.y
  */
 class CircleMaker(
-    private val radius: Float = 0f,
-    private val transl: PointF
+    private val radius: Float = 0f
 ) {
     private var verticCount: Int = 0
     private var step: Float = 0f
@@ -23,7 +21,7 @@ class CircleMaker(
      * @param verticCount - number of vertices on the circle. More vertices, means more circular circle.
      * @return array of triangles (polygons) to be drawn to draw circle.
      */
-    fun circleCoords(verticCount: Int): Array<Triangle> {
+    fun createCircleCoords(verticCount: Int): Array<Triangle> {
         this.verticCount = verticCount
         step = (2 * Math.PI).toFloat() / (verticCount * 1f)
         return Array(verticCount) { polygonMaker(it) }
@@ -33,25 +31,22 @@ class CircleMaker(
      * Creates triangles that will be part of Circle.
      */
     private fun polygonMaker(i: Int): Triangle {
-        Log.d("CircleMaker", ">>> ${i} triangle")
-        val verticList = ArrayList<Float>(9)
+        //Log.d("CircleMaker", ">>> ${i} triangle")
 
         val point1 = pointOnCircle(i)
         val point2 = pointOnCircle((i+1) % verticCount) // when i = (size - 1) this must be 0, thus modulo operator is used
-        // third point is 'transl'
+        // third point is '0, 0'
+        //Log.d("CircleMaker", ">>> Point1: [${point1.x}, ${point1.y}]")
+        //Log.d("CircleMaker", ">>> Point2: [${point2.x}, ${point2.y}]")
 
         // 3 coordinates in vertex, 3 vertices
-        verticList.add(point1.x)
-        verticList.add(point1.y)
-        verticList.add(0f)
-        verticList.add(point2.x)
-        verticList.add(point2.y)
-        verticList.add(0f)
-        verticList.add(transl.x)
-        verticList.add(transl.y)
-        verticList.add(0f)
+        val vertics = floatArrayOf(
+            point1.x, point1.y, 0f,
+            point2.x, point2.y, 0f,
+            0f, 0f, 0f
+        )
 
-        return Triangle().setVertices(verticList.toFloatArray())
+        return Triangle().setVertices(vertics)
     }
 
     /**
@@ -59,8 +54,9 @@ class CircleMaker(
      */
     private fun pointOnCircle(i: Int): PointF {
         return PointF(
-            cos(i * step) * radius + transl.x, // x
-            sin(i * step) * radius + transl.y  // y
+            cos(i * step) * radius + 0f, // x
+            sin(i * step) * radius + 0f  // y
+            // 0f here was supposed to be translation, but I removed it, as it can be set later.
         )
     }
     companion object {}

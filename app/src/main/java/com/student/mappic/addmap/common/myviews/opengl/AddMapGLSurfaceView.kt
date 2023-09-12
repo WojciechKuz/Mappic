@@ -43,10 +43,8 @@ class AddMapGLSurfaceView(context: Context, attrs: AttributeSet): GLSurfaceView(
      * Render point marker in given position
      */
     fun pointMarker(p: PointF) {
-        Log.d(clist.AddMapGLSurfaceView, ">>> Zaznacz punkt")
-
-        renderer.displayPoint(p) // FIXME call to OpenGL ES API with no current context (logged once per thread)
-
+        Log.d(clist.AddMapGLSurfaceView, ">>> punkt [${p.x}, ${p.y}]")
+        renderer.displayPoint(p)
         requestRender()
     }
     /**

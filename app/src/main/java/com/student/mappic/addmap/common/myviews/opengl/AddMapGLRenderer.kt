@@ -14,22 +14,16 @@ import javax.microedition.khronos.opengles.GL10
  * Renderer for AddMApGLSurfaceView.
  */
 class AddMapGLRenderer: Renderer {
+
+    // shapes need to be lateinit, cause OpenGL ES stuff needs to be initialized first
     private lateinit var tri: Triangle
     private lateinit var tri2: Triangle
     private lateinit var circl: Array<Triangle>
-    //private lateinit var cir: JCircle
+    private var drawnObjects: ArrayList<Triangle> = ArrayList()
 
     override fun onSurfaceCreated(unused: GL10?, config: EGLConfig?) {
-        // construct shapes, this needs to be lateinit, cause OpenGL ES stuff needs to be initialized first
-
         // call shapes constructors here, but they can be drawn or not somewhere else.
-        tri = Triangle()
-        tri2 = Triangle().setVertices(floatArrayOf(
-            0.0f, -0.622008459f, 0.0f,    // top
-            -0.5f, 0.311004243f, 0.0f,    // bottom left
-            0.5f, 0.311004243f, 0.0f      // bottom right
-        )).setColor(0.63671875f, 0.73f, 0.22265625f, 0.6f)
-        //circl = CircleMaker(0.3f, PointF(0.5f, 0.2f)).circleCoords(12)
+        alwaysDisplayed()
     }
 
     override fun onSurfaceChanged(unused: GL10?, width: Int, height: Int) {
@@ -42,18 +36,22 @@ class AddMapGLRenderer: Renderer {
         val prop = proportion(Size(width, height)) // you can compare it with statics from ImgSizeCalc like PROP16TO9
         // scale width by prop
         // react to size changes of surface
+        tri = Triangle()
+        drawnObjects.add(tri)
 
         val ratio: Float = width.toFloat() / height.toFloat()
         MVPCreator.calculateProjectionMx(ratio)
     }
 
-    //
+    /**
+     * Draws all triangles from the list [drawnObjects]
+     */
     override fun onDrawFrame(unused: GL10?) {
         // Redraw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
 
-        val mainTriangle = ObjPosition(90f,0.2f,-0.1f)
-        tri2.setPosition(mainTriangle).draw()
+        // draw all listed triangles
+        drawnObjects.forEach { it.draw() }
 
         // Draw shape
         //tri.draw(scratch)
@@ -70,16 +68,55 @@ class AddMapGLRenderer: Renderer {
         return (img.width * 1.0) / (img.height * 1.0)
     }
 
+    /**
+     * Add elements to the sceen that should be in every frame. Call after cleaning display.
+     */
+    private fun alwaysDisplayed() {
+        val mainTriangle = ObjPosition(90f,0.99f,-0.99f)
+        tri2 = Triangle().setVertices(floatArrayOf(
+            0.0f, -0.0f, 0.0f,    // top
+            -0.07f, 0.1f, 0.0f,    // bottom left
+            0.07f, 0.1f, 0.0f      // bottom right
+        )).setColor(0.63671875f, 0.73f, 0.22265625f, 0.6f).setPosition(mainTriangle)
+        drawnObjects.add(tri2)
+        //circl = CircleMaker(0.3f, PointF(0.5f, 0.2f)).circleCoords(12)
+    }
+    /*
+    private fun alwaysDisplayed() {
+        val mainTriangle = ObjPosition(90f,0.2f,-0.1f)
+        tri2 = Triangle().setVertices(floatArrayOf(
+            0.0f, -0.622008459f, 0.0f,    // top
+            -0.5f, 0.311004243f, 0.0f,    // bottom left
+            0.5f, 0.311004243f, 0.0f      // bottom right
+        )).setColor(0.63671875f, 0.73f, 0.22265625f, 0.6f).setPosition(mainTriangle)
+        drawnObjects.add(tri2)
+        //circl = CircleMaker(0.3f, PointF(0.5f, 0.2f)).circleCoords(12)
+    }
+    */
+
     // My drawing methods
-    // FIXME
+    /**
+     * Marks where user has clicked with point.
+     * Changes objects listed on [drawnObjects] so when requestRender() -> onDrawFrame() is called,
+     * it contains modified and newly created Triangles.
+     */
     fun displayPoint(p: PointF) {
-        Log.d(clist.AddMapGLSurfaceView, ">>> Zaznacz punkt 2")
-        tri.setPosition(ObjPosition(-45f, -0.4f, 0.5f)).setColor(0.9f, 0.3f, 0.4f, 0.8f).draw()
+        drawnObjects.clear()
+        alwaysDisplayed()
+        tri.setPosition(ObjPosition(0f, p.x, p.y)).setColor(0.9f, 0.3f, 0.4f, 0.8f).setVertices(
+            floatArrayOf(
+                0f, 0f, 0f,
+                -0.09375f, 0.1875f, 0f,
+                0.09375f, 0.1875f, 0f
+            ) // 0.09375 == 3/32; 0.1875 == 3/16 - using such numbers is computer friendly :)
+        )
+        drawnObjects.add(tri)
     }
     fun displayUser(p: PointF, rotation: Float) {
         // TODO display user
     }
     fun clearDisplay() {
+        drawnObjects.clear()
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f) // clear background. render is requested in SurfaceView
     }
 

@@ -97,7 +97,9 @@ class AddMapGLRenderer: Renderer {
      */
     fun displayPoint(p: PointF) {
         drawnObjects.clear()
-        alwaysDisplayed()
+        alwaysDisplayed() // tri2, 1
+
+        // tri, 1
         tri.setPosition(ObjPosition(0f, p.x, p.y)).setColor(0.9f, 0.3f, 0.4f, 0.8f).setVertices(
             floatArrayOf(
                 0f, 0f, 0f,
@@ -106,7 +108,14 @@ class AddMapGLRenderer: Renderer {
             ) // 0.09375 == 3/32; 0.1875 == 3/16 - using such numbers is computer friendly :)
         )
         drawnObjects.add(tri)
-        circl.forEach { it.setPosition(ObjPosition(0f, p.x, p.y + 0.1875f)) }
+
+        // circl, 48
+        circl.forEach {
+            it.setPosition(ObjPosition(0f, p.x, p.y + 0.1875f))
+            drawnObjects.add(it)
+        }
+
+        // try non-member tri3, 1
         val tri3 = Triangle().setVertices(
             floatArrayOf(
                 0f, 0f, 0f,

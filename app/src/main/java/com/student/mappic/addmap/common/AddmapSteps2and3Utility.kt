@@ -27,22 +27,12 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
     fun myViewClicked(event: MotionEvent?) {
         if(event != null) {
             //Log.d(clist.Step2Fragment, ">>> Kliknięto w " + "x: " + event.x + "; y: " + event.y)
-            step2and3.getOpenGLView().pointMarker(toOpenGLCoordinates(PointF(event.x, event.y)))
+            val viewSize = Size(step2and3.getImageView().width, step2and3.getImageView().height)
+            step2and3.getOpenGLView().pointMarker(
+                ImageSizeCalc.toOpenGLCoordinates(viewSize, PointF(event.x, event.y))
+            )
         }
         //else Log.w(clist.Step2Fragment, ">>> Nie otrzymano informacji o pozycji kliknięcia!")
-    }
-
-    /**
-     * Translate from pixel coordinate system to OpenGL coordinate system
-     * gl_x := ( ((2*px_x) - width) / height )
-     * gl_y := -( ((2*px_y) / height) - 1 )     // !!! minus!
-     */
-    private fun toOpenGLCoordinates(pixelCoordinates: PointF): PointF {
-        val viewSize = Size(step2and3.getImageView().width, step2and3.getImageView().height)
-        // TODO check if in image bounds
-        //val exif = utility.getExifData(viewModel.mapImg)
-        //val imageSize = Size(exif.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, -1), exif.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, -1))
-        return PointF((2f*pixelCoordinates.x - 1f*viewSize.width)/ viewSize.height, -2f*pixelCoordinates.y/viewSize.height + 1f)
     }
 
     /**

@@ -64,13 +64,6 @@ class Step2Fragment : Fragment() {
 
         binding.touchDetector?.setPassMotionEvent { utility.myViewClicked(it) }
 
-        /* FIXME causes NullPointerException
-        val glv = Step2and3(activity as AddMapActivity).getOpenGLView()
-        if(glv == null) {
-            Log.e(clist.Step2Fragment, ">>> OpenGLView glv is NULL !!!")
-        }
-        */
-
         // FIXME temporary:
         utility.displayErrMsg(ErrTypes.INCORRECT_GPS)
     }

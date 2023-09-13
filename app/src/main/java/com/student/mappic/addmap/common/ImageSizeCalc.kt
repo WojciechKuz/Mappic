@@ -2,6 +2,7 @@ package com.student.mappic.addmap.common
 
 import android.util.Size
 import android.graphics.Point
+import android.graphics.PointF
 
 /**
  * This class solves this problem:
@@ -83,5 +84,20 @@ class ImageSizeCalc(val original: Size, val view: Size) {
         val PROP4TO3: Double  =  4.0/3.0
         val PROP9TO16: Double = 9.0/16.0
         val PROP3TO4: Double  = 3.0/4.0
+
+        /**
+         * Translate from pixel coordinate system to OpenGL coordinate system
+         * gl_x := ( ((2*px_x) - width) / height )
+         * gl_y := -( ((2*px_y) / height) - 1 )     // !!! minus!
+         * @param viewSize in pixels
+         * @param pixelCoordinates pixel coordinates
+         * @return OpenGL coordinates, values in about [-1, 1] range depending on screen proportions
+         */
+        fun toOpenGLCoordinates(viewSize: Size, pixelCoordinates: PointF): PointF {
+            // TODO check if in image bounds
+            //val exif = utility.getExifData(viewModel.mapImg)
+            //val imageSize = Size(exif.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, -1), exif.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, -1))
+            return PointF((2f*pixelCoordinates.x - 1f*viewSize.width)/ viewSize.height, -2f*pixelCoordinates.y/viewSize.height + 1f)
+        }
     }
 }

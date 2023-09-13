@@ -1,4 +1,4 @@
-package com.student.mappic.addmap.common.myviews.opengl
+package com.student.mappic.opengl
 
 import android.opengl.GLES20
 import android.util.Log

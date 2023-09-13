@@ -1,4 +1,4 @@
-package com.student.mappic.addmap.common.myviews.opengl
+package com.student.mappic.opengl
 
 /**
  * Holds properties of objects drawn to screen.

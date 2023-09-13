@@ -62,7 +62,7 @@
                 tools:src="@drawable/map_h"
                 tools:ignore="ContentDescription" />
 
-            <com.student.mappic.addmap.common.myviews.opengl.AddMapGLSurfaceView
+            <com.student.mappic.opengl.MapGLSurfaceView
                 android:id="@+id/openGLView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

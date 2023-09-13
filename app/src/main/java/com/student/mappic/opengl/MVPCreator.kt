@@ -1,4 +1,4 @@
-package com.student.mappic.addmap.common.myviews.opengl
+package com.student.mappic.opengl
 
 import android.opengl.Matrix
 import android.os.SystemClock
@@ -87,7 +87,8 @@ class MVPCreator {
         for (i in 0..15) {
             outp += ( if(i % 4 == 0) "\n" else "" ) + " ${mx[i]}"
         }
-        Log.d(TAG, ">>> Matrix ${name}:\n"
+        Log.d(
+            TAG, ">>> Matrix ${name}:\n"
                 + outp + "\n"
         )
     }
@@ -101,13 +102,14 @@ class MVPCreator {
 
         fun calculateProjectionMx(ratio: Float) {
             // this projection matrix is then applied to object coordinates
-            Matrix.frustumM(MVPCreator.projectionMatrix, 0, -ratio, ratio, -1f, 1f, 3f, 7f) // Matrix for camera view calculations
+            Matrix.frustumM(projectionMatrix, 0, -ratio, ratio, -1f, 1f, 3f, 7f) // Matrix for camera view calculations
             calculated = true
         }
         private fun calculateviewMx() {
             // Set the camera position (View matrix)
             val time0 = SystemClock.uptimeMillis() % 1000L
-            Matrix.setLookAtM(viewMatrix, 0,
+            Matrix.setLookAtM(
+                viewMatrix, 0,
                 0f, 0f, 3f,        // where camera should be placed
                 0f, 0f, 0f,  // center of view (camera looks at it directly)
                 0f, 1.0f, 0.0f      // where's camera upper side

@@ -6,7 +6,7 @@ import android.widget.TextView
 import com.student.mappic.R
 import com.student.mappic.addmap.AddMapActivity
 import com.student.mappic.addmap.common.myviews.MyView
-import com.student.mappic.addmap.common.myviews.opengl.AddMapGLSurfaceView
+import com.student.mappic.opengl.MapGLSurfaceView
 
 /**
  * Methods in this class shorten getting UI elements in code. Works for [Step2Fragment] and [Step3Fragment]
@@ -32,8 +32,8 @@ class Step2and3(val addMap: AddMapActivity) {
     fun getImageView(): ImageView {
         return addMap.findViewById<ImageView>(R.id.imgView)
     }
-    fun getOpenGLView(): AddMapGLSurfaceView {
-        return addMap.findViewById<AddMapGLSurfaceView>(R.id.openGLView)
+    fun getOpenGLView(): MapGLSurfaceView {
+        return addMap.findViewById<MapGLSurfaceView>(R.id.openGLView)
     }
     fun getTouchDetector(): MyView {
         return addMap.findViewById<MyView>(R.id.touchDetector)

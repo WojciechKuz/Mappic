@@ -1,4 +1,4 @@
-package com.student.mappic.addmap.common.myviews.opengl
+package com.student.mappic.opengl
 
 import android.content.Context
 import android.graphics.PixelFormat
@@ -9,16 +9,16 @@ import android.util.Log
 import com.student.mappic.clist
 
 /**
- * This class (will be renamed) is used for rendering in AddMap step 2, 3 and (TODO) used in ViewMap.
- * View for point marked by user, rendered by [AddMapGLRenderer] using OpenGL.
+ * This class is used for rendering in AddMap step 2, 3 and is used in ViewMap.
+ * View for point marked by user, rendered by [MapGLRenderer] using OpenGL.
  * Used in [Step2Fragment] and [Step3Fragment].
  */
-class AddMapGLSurfaceView(context: Context, attrs: AttributeSet): GLSurfaceView(context, attrs) {
+class MapGLSurfaceView(context: Context, attrs: AttributeSet): GLSurfaceView(context, attrs) {
 
-    val renderer: AddMapGLRenderer // displayPoint, displayUser, clearDisplay
+    val renderer: MapGLRenderer // displayPoint, displayUser, clearDisplay
 
     init {
-        Log.d(clist.MyView, ">>> default init, 2 arg")
+        Log.d(clist.MapGLSurfaceView, ">>> default init, 2 arg")
 
         setEGLContextClientVersion(2) // OpenGL ES 2.0 context
 
@@ -28,9 +28,9 @@ class AddMapGLSurfaceView(context: Context, attrs: AttributeSet): GLSurfaceView(
         holder?.setFormat(PixelFormat.RGBA_8888)
 
         // set our fellow renderer
-        renderer = AddMapGLRenderer()
+        renderer = MapGLRenderer()
         setRenderer(renderer)
-        Log.d(clist.AddMapGLSurfaceView, ">>> Renderer is set.")
+        Log.d(clist.MapGLSurfaceView, ">>> Renderer is set.")
 
         // prevents the GLSurfaceView frame from being redrawn until you call requestRender()
         renderMode = RENDERMODE_WHEN_DIRTY // call requestRender() to refresh view
@@ -42,7 +42,7 @@ class AddMapGLSurfaceView(context: Context, attrs: AttributeSet): GLSurfaceView(
      * Render point marker in given position
      */
     fun pointMarker(p: PointF) {
-        Log.d(clist.AddMapGLSurfaceView, ">>> punkt [${p.x}, ${p.y}]")
+        //Log.d(clist.MapGLSurfaceView, ">>> punkt [${p.x}, ${p.y}]")
         renderer.displayPoint(p)
         requestRender()
     }

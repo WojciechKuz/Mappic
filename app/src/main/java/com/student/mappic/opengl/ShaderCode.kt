@@ -1,4 +1,4 @@
-package com.student.mappic.addmap.common.myviews.opengl
+package com.student.mappic.opengl
 
 class ShaderCode {
     // This code was in Triangle.kt, but this code is not foldable and is ugly, so i moved it away.

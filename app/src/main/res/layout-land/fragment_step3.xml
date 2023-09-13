@@ -32,7 +32,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:orientation="horizontal">
 
-        <ImageView
+        <!--<ImageView
             android:id="@+id/imgView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -40,7 +40,38 @@
             android:adjustViewBounds="true"
             android:background="@color/black"
             tools:ignore="ContentDescription"
-            tools:src="@drawable/map_w" />
+            tools:src="@drawable/map_w" />-->
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="6">
+
+            <!-- Overloaded view! -->
+            <com.student.mappic.addmap.common.myviews.MyView
+                android:id="@+id/touchDetector"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0"/>
+            <!--
+            android:alpha=0 == fully transparent
+            android:alpha=1 == fully visible
+            -->
+            <ImageView
+                android:id="@+id/imgView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/black"
+                android:scaleType="centerInside"
+                tools:src="@drawable/map_h"
+                tools:ignore="ContentDescription" />
+
+            <com.student.mappic.opengl.MapGLSurfaceView
+                android:id="@+id/openGLView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.4" />
+        </FrameLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"

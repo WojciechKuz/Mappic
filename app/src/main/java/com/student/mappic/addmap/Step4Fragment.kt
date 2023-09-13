@@ -5,8 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import com.student.mappic.R
+import com.student.mappic.addmap.common.ErrTypes
 import com.student.mappic.databinding.FragmentStep4Binding
 
 /**
@@ -57,8 +59,15 @@ class Step4Fragment : Fragment() {
      */
     private fun checkIfNameExists(): Boolean {
         val typedName = binding.mapNameField.text
-        // TODO check if name exists
+        // TODO check if name exists, if yes call displayErrMsg()
 
         return false // FIXME temporary
+    }
+
+    fun displayErrMsg(err: ErrTypes) {
+        val array: Array<String> = (activity as AddMapActivity).resources.getStringArray(R.array.errTypesMessages)
+        val textView = binding.errText
+        textView.text = array[err.code]
+        textView.visibility = TextView.VISIBLE
     }
 }

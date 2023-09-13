@@ -38,6 +38,31 @@
         android:hint="@string/hint_mapname"
         tools:ignore="Autofill" />
 
+    <TextView
+        android:id="@+id/errText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12sp"
+        android:layout_marginTop="8sp"
+        android:text="error message here"
+        android:textColor="@color/design_default_color_error"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mapNameField"
+        tools:ignore="HardcodedText" />
+    <!--
+    <TextView
+            android:id="@+id/errorText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12sp"
+            android:text="error message here"
+            android:textColor="@color/design_default_color_error"
+            android:visibility="invisible"
+            tools:ignore="HardcodedText" />
+    -->
+
     <Button
         android:id="@+id/OkFAB"
         android:layout_width="wrap_content"

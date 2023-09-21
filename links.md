@@ -10,7 +10,7 @@ JavaFx links:<br/>
 OpenGL and graphics links:<br/>
 [good - Levels of programming graphics](https://stackoverflow.com/questions/235826/learning-about-low-level-graphics-programming)<br/>
 [some old forum question, might be deprecated](https://community.khronos.org/t/rendering-2d-image-to-the-screen/72261)<br/>
-[good - draw image with OpenGL](https://stackoverflow.com/questions/30488155/opengl-fastest-way-to-draw-2d-image)
+[good - draw image with OpenGL](https://stackoverflow.com/questions/30488155/opengl-fastest-way-to-draw-2d-image)<br/>
 
 Computer music:<br/>
 [Mozilla web docs - web audio api](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)<br/>

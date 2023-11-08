@@ -10,6 +10,7 @@ import com.student.mappic.clist
 
 /**
  * This view is used to provide onClick data such as x, y positions.
+ * You can put it over a view, from which you want to capture onClick position (x, y).
  * Used in [Step2Fragment] and [Step3Fragment].
  */
 class MyView(context: Context, attrs: AttributeSet): View(context, attrs) {
@@ -31,11 +32,6 @@ class MyView(context: Context, attrs: AttributeSet): View(context, attrs) {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int): this(context, attrs) {
         Log.d(clist.MyView, ">>> init, 3 args")
     }
-    /*
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int): this(context, attrs) {
-        Log.d(clist.MyView, ">>> init, 4 args (never used)")
-    }
-    */
 
     /**
      * Set what should be called after onTouch() is performed.

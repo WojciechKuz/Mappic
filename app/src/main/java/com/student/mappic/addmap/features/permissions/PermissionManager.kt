@@ -6,14 +6,14 @@ import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.student.mappic.addmap.AddMapActivity
 import com.student.mappic.clist
 
 /**
  * Manager for handling permissions. My app uses camera, gps and write_storage.
  */
-class PermissionManager(private val addMap: AddMapActivity) {
+class PermissionManager(private val actv: AppCompatActivity) {
 
     // *Granted
     private lateinit var allGranted: PermissionsGranted
@@ -58,15 +58,15 @@ class PermissionManager(private val addMap: AddMapActivity) {
     // *permissionsGranted
     private fun allPermissionsGranted() = ALL_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
-            addMap.baseContext, it) == PackageManager.PERMISSION_GRANTED
+            actv.baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
     private fun camPermissionsGranted() = CAM_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
-            addMap.baseContext, it) == PackageManager.PERMISSION_GRANTED
+            actv.baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
     private fun gpsPermissionsGranted() = GPS_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
-            addMap.baseContext, it) == PackageManager.PERMISSION_GRANTED
+            actv.baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
 
     // request*Permissions
@@ -87,7 +87,7 @@ class PermissionManager(private val addMap: AddMapActivity) {
 
     // make it priv val, instead of interface it should call method here that would then call interface 👍
     private var activityResultLauncher =
-        addMap.registerForActivityResult(
+        actv.registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions())
         { permissions ->
             // Handle Permission granted/rejected
@@ -98,13 +98,13 @@ class PermissionManager(private val addMap: AddMapActivity) {
                     permissionGranted = false
             }
             if (!permissionGranted) {
-                Toast.makeText(addMap.baseContext,"Permission request denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(actv.baseContext,"Permission request denied", Toast.LENGTH_SHORT).show()
             } else {
                 startAny()
             }
         }
     private var camLauncher =
-        addMap.registerForActivityResult(
+        actv.registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions())
         { permissions ->
             // Handle Permission granted/rejected
@@ -115,13 +115,13 @@ class PermissionManager(private val addMap: AddMapActivity) {
                     permissionGranted = false
             }
             if (!permissionGranted) {
-                Toast.makeText(addMap.baseContext,"Permission request denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(actv.baseContext,"Permission request denied", Toast.LENGTH_SHORT).show()
             } else {
                 startCam()
             }
         }
     private var gpsLauncher =
-        addMap.registerForActivityResult(
+        actv.registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions())
         { permissions ->
             // Handle Permission granted/rejected
@@ -132,7 +132,7 @@ class PermissionManager(private val addMap: AddMapActivity) {
                     permissionGranted = false
             }
             if (!permissionGranted) {
-                Toast.makeText(addMap.baseContext,"Permission request denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(actv.baseContext,"Permission request denied", Toast.LENGTH_SHORT).show()
             } else {
                 startGps()
             }
@@ -183,7 +183,7 @@ class PermissionManager(private val addMap: AddMapActivity) {
                     add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 }
             }.toTypedArray()
-        private val GPS_PERMISSIONS =
+        val GPS_PERMISSIONS =
             mutableListOf (
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION

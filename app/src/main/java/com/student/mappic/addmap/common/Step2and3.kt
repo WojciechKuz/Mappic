@@ -14,10 +14,10 @@ import com.student.mappic.opengl.MapGLSurfaceView
 class Step2and3(val addMap: AddMapActivity) {
 
     // redundant
-    fun latitudeNS(ns: EditText?): EditText? {
+    fun latitudeNS(): EditText? {
         return addMap.findViewById<EditText>(R.id.gpsLatitude)
     }
-    fun longitudeEW(ew: EditText?): EditText? {
+    fun longitudeEW(): EditText? {
         return addMap.findViewById<EditText>(R.id.gpsLongitude)
     }
     fun getMarkerPosition() {

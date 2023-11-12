@@ -23,7 +23,7 @@ open class clist() {
         const val AddMapActivity: String = "AddMapActivity"
         const val CamiX: String = "CamiX"
         const val PermissionManager: String = "PermissionManager"
-        const val LocationManager: String = "LocationManager"
+        const val LocationProvider: String = "LocationProvider"
         const val MyView: String = "MyView"
         const val MapGLSurfaceView = "MapGLSurfaceView"
         const val MapGLRenderer = "MapGLRenderer"

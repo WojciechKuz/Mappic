@@ -1,6 +1,7 @@
 package com.student.mappic.addmap.common
 
 import android.graphics.PointF
+import android.location.Location
 import androidx.exifinterface.media.ExifInterface
 import android.net.Uri
 import android.util.Log
@@ -9,6 +10,8 @@ import android.view.MotionEvent
 import android.widget.TextView
 import com.student.mappic.R
 import com.student.mappic.addmap.AddMapActivity
+import com.student.mappic.addmap.location.LocationProvider
+import com.student.mappic.addmap.location.PassLocation
 
 // for JavaDoc to properly show links to [Step2Fragment] documentation whole name with packages must be specified. same for step3
 /**
@@ -19,7 +22,14 @@ import com.student.mappic.addmap.AddMapActivity
  */
 class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
 
-    val step2and3 = Step2and3(addMap)
+    private val step2and3 = Step2and3(addMap)
+    private val locationProvider = LocationProvider(addMap)
+
+    init {
+        locationProvider.activityOnCreate() // here ???
+        // this utility is initialized in fragment's onViewCreated and for sure is after activity's onCreate(), so it should be ok
+    }
+
     /**
      * Triggered by onTouch in MyView, handle onClick:
      * mark Point in given position.
@@ -92,14 +102,45 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         return -1
     }
 
+    private lateinit var passLoc: PassLocation
+    //private lateinit var fillLocation: TextSignal
     /**
      * Fill text fields with GPS coordinates automatically
      */
-    fun fillGpsCoordinates() {
+    fun getCoordinates() {
+        /*
+        // This permission check can be skipped because location providing methods contain check.
         if(getPermissions()) {
-            // TODO fill text fields with GPS coordinates
+        }
+        */
+        locationProvider.getUserLocation { this.fillGPSCoordinates(it) }
+    }
+
+    var x = 0
+    private fun fillGPSCoordinates(loc: Location) {
+
+        // learn about Location class
+
+        // save it with south as north negative value, and west as east negative value, but for user display E/W N/S
+        loc.latitude // between -90.0 and 90.0 inclusive NS
+        loc.longitude // between -180.0 and 180.0 inclusive EW
+
+        val editableNS = step2and3.latitudeNS()
+        val editableEW = step2and3.longitudeEW()
+        if (editableNS != null) {
+            if(loc.latitude >= 0)
+                editableNS.setText("${loc.latitude} N")
+            else
+                editableNS.setText("${-loc.latitude} S")
+        }
+        if (editableEW != null) {
+            if(loc.longitude >= 0)
+                editableEW.setText("${loc.longitude} E")
+            else
+                editableEW.setText("${-loc.longitude} W")
         }
     }
+
     private fun getPermissions(): Boolean {
         var retVal = false
         addMap.permManager.grantGpsPerm {
@@ -126,6 +167,8 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
      */
     fun saveUserInput() {
         // TODO save GPS Coordinates
+        // also add call to verifyUserInput()
+        Log.d(TAG, "this doesn't do anything yet")
     }
 
     /**

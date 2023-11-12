@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import com.student.mappic.R
 import com.student.mappic.addmap.common.AddmapSteps2and3Utility
 import com.student.mappic.addmap.common.ErrTypes
-import com.student.mappic.addmap.common.Step2and3
 import com.student.mappic.clist
 import com.student.mappic.databinding.FragmentStep2Binding
 
@@ -58,8 +57,7 @@ class Step2Fragment : Fragment() {
             }
         }
         binding.buttonReadGps.setOnClickListener {
-            utility.fillGpsCoordinates()
-            Log.d(clist.Step3Fragment, ">>> Action not available yet.")
+            utility.getCoordinates()
         }
 
         binding.touchDetector?.setPassMotionEvent { utility.myViewClicked(it) }

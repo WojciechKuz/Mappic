@@ -57,8 +57,7 @@ class Step3Fragment : Fragment() {
             }
         }
         binding.buttonReadGps.setOnClickListener {
-            utility.fillGpsCoordinates()
-            Log.d(clist.Step3Fragment, ">>> Action not available yet.")
+            utility.getCoordinates()
         }
 
         binding.touchDetector?.setPassMotionEvent { utility.myViewClicked(it) }

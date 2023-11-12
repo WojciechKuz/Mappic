@@ -1,4 +1,4 @@
-package com.student.mappic.addmap.location
+package com.student.mappic.addmap.common
 
 interface Signal {
     fun startAction()

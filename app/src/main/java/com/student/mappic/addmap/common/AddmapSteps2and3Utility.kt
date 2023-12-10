@@ -1,17 +1,23 @@
 package com.student.mappic.addmap.common
 
+import android.graphics.Point
 import android.graphics.PointF
 import android.location.Location
 import androidx.exifinterface.media.ExifInterface
 import android.net.Uri
+import android.text.Editable
 import android.util.Log
 import android.util.Size
 import android.view.MotionEvent
 import android.widget.TextView
 import com.student.mappic.R
 import com.student.mappic.addmap.AddMapActivity
+import com.student.mappic.addmap.NewMapViewModel
 import com.student.mappic.addmap.location.LocationProvider
 import com.student.mappic.addmap.location.PassLocation
+import kotlin.math.abs
+import kotlin.math.pow
+import kotlin.math.round
 
 // for JavaDoc to properly show links to [Step2Fragment] documentation whole name with packages must be specified. same for step3
 /**
@@ -19,11 +25,18 @@ import com.student.mappic.addmap.location.PassLocation
  * It serves methods used by both.
  *
  * This class was created to prevent code duplication.
+ * Some other helper methods are in [Step2and3]
  */
 class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
 
-    private val step2and3 = Step2and3(addMap)
+    private val step2and3 = Step2and3(addMap, TAG)
     private val locationProvider = LocationProvider(addMap)
+    /** NOTE: these are 'in View' coordinates'.
+     *  It has to be recalculated to 'image in View' coordinates.
+     *  Use ImgSizeCalc to calculate right coordinates. */
+    private var viewCoords: Point? = null
+    private var gpsNS: Double? = null
+    private var gpsEW: Double? = null
 
     init {
         locationProvider.activityOnCreate() // here ???
@@ -41,82 +54,26 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
             step2and3.getOpenGLView().pointMarker(
                 ImageSizeCalc.toOpenGLCoordinates(viewSize, PointF(event.x, event.y))
             )
+
+            // NOTE: these are coords relative to ImgView, read viewCoords documentation!
+            viewCoords = Point(round(event.x).toInt(), round(event.y).toInt())
         }
         //else Log.w(clist.Step2Fragment, ">>> Nie otrzymano informacji o pozycji kliknięcia!")
     }
 
-    /**
-     * Decodes from given Uri size of image and orientation. Returns true when image is vertical.
-     */
-    fun isImgVerticalExif(uri: Uri): Boolean {
-        val exif = getExifData(uri)
-
-        val height: Int = exif.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, -1)
-        val width: Int = exif.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, -1)
-        val orientation: Int = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1)
-
-        Log.d(TAG, ">>> Size of image: h: ${height}, w: ${width}, o: ${orientation}") // o 6=vert, 1,3=horiz
-        val vertOrient = intArrayOf(90, 270)
-        vertOrient.forEach {
-            if(it == checkOrientation(orientation)) {
-                Log.d(TAG, ">>> Rotation - image is vertical.")
-                return true
-            }
-        }
-        if(checkOrientation(orientation) == -1)
-            Log.e(TAG, ">>> Rotation tag in image exif data not found. cannot display it correctly.")
-        else
-            Log.d(TAG, ">>> Rotation - image is horizontal.")
-        return false
-    }
-    fun getExifData(uri: Uri): ExifInterface {
-        val istream = addMap.contentResolver.openInputStream(uri)
-            ?: throw Exception("Input stream 'istream' is null!") // do it when istream is null
-        Log.d(TAG, ">>> Decoding size of image")
-        val exif = ExifInterface(istream)
-        if(exif.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, -1) == -1)
-            Log.e(TAG, ">>> Width tag in image exif data not found. cannot display it correctly.")
-        if(exif.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, -1) == -1)
-            Log.e(TAG, ">>> Height tag in image exif data not found. cannot display it correctly.")
-        istream.close()
-        return exif
-    }
-
-    /**
-     * Decodes ExifInterface orientation codes into human-readable degrees which tell how much is image rotated clockwise.
-     */
-    private fun checkOrientation(orientation: Int): Int {
-        val orientationList = mapOf(
-            ExifInterface.ORIENTATION_NORMAL to 0,
-            ExifInterface.ORIENTATION_ROTATE_90 to 90,
-            ExifInterface.ORIENTATION_ROTATE_180 to 180,
-            ExifInterface.ORIENTATION_ROTATE_270 to 270
-        )
-        // FIXME noticed Log.d("Image rotated...") executes 3 times
-        for(orient: Map.Entry<Int, Int> in orientationList) {
-            if(orientation == orient.key) {
-                Log.d(TAG, ">>> Image rotated by ${orient.value} deg clockwise.")
-                return orient.value
-            }
-        }
-        return -1
-    }
-
     private lateinit var passLoc: PassLocation
     //private lateinit var fillLocation: TextSignal
+
     /**
      * Fill text fields with GPS coordinates automatically
      */
     fun getCoordinates() {
-        /*
-        // This permission check can be skipped because location providing methods contain check.
-        if(getPermissions()) {
-        }
-        */
         locationProvider.getUserLocation { this.fillGPSCoordinates(it) }
     }
 
-    var x = 0
+    /**
+     * Fills GPS coordinate text fields in app's UI. used in functional interface.
+     */
     private fun fillGPSCoordinates(loc: Location) {
 
         // learn about Location class
@@ -141,6 +98,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         }
     }
 
+    // TODO remove it
     private fun getPermissions(): Boolean {
         var retVal = false
         addMap.permManager.grantGpsPerm {
@@ -151,29 +109,166 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
     }
 
     /**
-     * Should verify, what user typed (coordinates and marked point).
-     * @return tells if should navigate to next fragment in addmap
+     * Decodes from given Uri size of image and orientation. Returns true when image is vertical.
      */
-    fun verifyUserInput(): Boolean {
-        // TODO checking if typed coordinates are correct (and if point is marked correctly).
-        //  Probably requires separate verifying class - use Step2and3 and create more complex things there.
-        //  Additional info - in ViewModel GPS 2xFloat and PXposition 2xInt are stored together as ../DB/Point
+    fun isImgVerticalExif(uri: Uri): Boolean {
+        val exif = step2and3.getExifData(uri)
 
-        return true // FIXME Temporary
+        val height: Int = exif.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, -1)
+        val width: Int = exif.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, -1)
+        val orientation: Int = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1)
+
+        Log.d(TAG, ">>> Size of image: h: ${height}, w: ${width}, o: ${orientation}") // o 6=vert, 1,3=horiz
+        val vertOrient = intArrayOf(90, 270)
+        vertOrient.forEach {
+            if(it == step2and3.checkOrientation(orientation)) {
+                Log.d(TAG, ">>> Rotation - image is vertical.")
+                return true
+            }
+        }
+        if(step2and3.checkOrientation(orientation) == -1)
+            Log.e(TAG, ">>> Rotation tag in image exif data not found. cannot display it correctly.")
+        else
+            Log.d(TAG, ">>> Rotation - image is horizontal.")
+        return false
     }
 
+    // TODO test getGpsValues()
+    /**
+     * Gets GPS values from UI, and checks if they are correct.
+     * Sets gpsNS and gpsEW members even if values are incorrect!!!
+     * @return true if values are correct,
+     *      false otherwise and sets error message in UI to let user know, what's wrong.
+     */
+    private fun getGpsValues(): Boolean {
+        val errorValue = -128509.125
+        /** returns letter symbolising direction - N, E, W, S. For '20.000 N' gets N. */
+        fun getDirection(txtEd: Editable): String {
+            val L = txtEd.length
+            return txtEd.subSequence(L - 2, L - 1).toString()
+        }
+        /** returns direction value. For '20.000 N' gets 20.000 as floating point number. */
+        fun getValue(txtEd: Editable): Double {
+            return try {
+                txtEd.subSequence(0, txtEd.length - 2).toString().toDouble()
+            } catch (e: NumberFormatException) {
+                errorValue
+            }
+        }
+
+        // read text values from UI
+        val editableNS = step2and3.latitudeNS()!!.editableText
+        val editableEW = step2and3.longitudeEW()!!.editableText
+
+        // if empty check
+        if(editableNS.isEmpty() || editableEW.isEmpty()) {
+            displayErrMsg(ErrTypes.NOT_FILLED_GPS)
+            return false
+        }
+
+        // get numeric value for NS coordinates
+        if (getDirection(editableNS) == "N") {
+            gpsNS = getValue(editableNS)
+        } else if (getDirection(editableNS) == "S") {
+            gpsNS = -getValue(editableNS)
+        } else {
+            displayErrMsg(ErrTypes.INCORRECT_GPS)
+            return false
+        }
+
+        // get numeric value for EW coordinates
+        if (getDirection(editableEW) == "E") {
+            gpsEW = getValue(editableEW)
+        } else if (getDirection(editableEW) == "W") {
+            gpsEW = -getValue(editableEW)
+        } else {
+            displayErrMsg(ErrTypes.INCORRECT_GPS)
+            return false
+        }
+
+        // check for error in letters
+        if(gpsNS == errorValue || gpsEW == errorValue) {
+            displayErrMsg(ErrTypes.INCORRECT_GPS)
+            return false
+        }
+
+        // coordinate value check
+        if (gpsNS!! > 90.0 || gpsNS!! < -90.0) {
+            displayErrMsg(ErrTypes.INCORRECT_GPS)
+            return false
+        }
+        if (gpsEW!! > 180.0 || gpsEW!! < -180.0) {
+            displayErrMsg(ErrTypes.INCORRECT_GPS)
+            return false
+        }
+
+        // if no check returned false, then coordinates are well formed
+        return true
+    }
+
+    // TODO test saveUserInput(), especially ImageSizeCalc
     /**
      * save GPS coordinates and marker position on the image of a map.
+     * If it returns true save succeeded and we can navigate to next step.
+     * If it returns false, there are some errors and they are displayed to user
      */
-    fun saveUserInput() {
-        // TODO save GPS Coordinates
-        // also add call to verifyUserInput()
-        Log.d(TAG, "this doesn't do anything yet")
+    fun saveUserInput(viewModel: NewMapViewModel, step: Int): Boolean {
+
+        if (!getGpsValues()) // also verifies user input: NOT_FILLED_GPS, INCORRECT_GPS
+            return false
+
+        // init helper class for coordinate recalculation
+        val ISCalc = ImageSizeCalc(step2and3.origImgSizeGet(viewModel), step2and3.viewSizeGet())
+
+        // Not checking gpsNS and gpsEW here because it's already been checked.
+        if(viewCoords != null) {
+            if (!ISCalc.isPointInBounds(viewCoords!!)) {
+                displayErrMsg(ErrTypes.POINT_OUT_OF_BOUNDS)
+                return false
+            }
+            val imgInViewCoords = ISCalc.pointInImg(viewCoords!!) // recalculates to imageInView coordinates
+
+            // save gpsNS, gpsEW, pxCoords to viewModel
+            val p = com.student.mappic.DB.Point(imgInViewCoords.x, imgInViewCoords.y, gpsEW!!, gpsNS!!)
+
+            if (step == 2) {
+                viewModel.p1 = p
+                return true
+            }
+            if (step == 3) {
+                /**
+                 * Difference greater than 10m.
+                 */
+                fun diffGr10m(): Boolean {
+                    /* 1 deg is about 111 km, so 0.00001 deg is 1.11 meter.
+                        I think points should be at least 10m apart from each other:
+                         0.00001deg --- 1.11m | / 111 * 100 round()
+                        0.000009deg --- 1m    | * 10
+                         0.00009deg --- 10m
+                    */
+                    val a_sq = (viewModel.p1.ygps - gpsNS!!).pow(2) // abs(v).pow(2) is same as v.pow(2)
+                    val b_sq = (viewModel.p1.xgps - gpsEW!!).pow(2) // absolute value is redundant because square of negative value is positive
+                    val d_sq = 0.00009.pow(2) // 9e-5 is 10 meters as geo_degrees
+                    return a_sq + b_sq > d_sq
+                }
+                if(diffGr10m()) {
+                    viewModel.p2 = p
+                    return true
+                }
+                displayErrMsg(ErrTypes.SAME_POINT)
+                return false
+            }
+        } else {
+            displayErrMsg(ErrTypes.POINT_NOT_MARKED)
+            return false
+        }
+        // if code reaches here, this means some kind of error, that is not handled
+        displayErrMsg(ErrTypes.UNKNOWN)
+        return false
     }
 
     /**
      * Displays error message in errorText TextView and of given Error type.
-     * TODO WILL BECOME PRIVATE!
      */
     fun displayErrMsg(err: ErrTypes) {
         val array: Array<String> = addMap.resources.getStringArray(R.array.errTypesMessages)

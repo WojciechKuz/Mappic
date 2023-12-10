@@ -1,5 +1,5 @@
 package com.student.mappic.addmap.common
 
-interface Signal {
+fun interface Signal {
     fun startAction()
 }

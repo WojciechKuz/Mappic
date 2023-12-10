@@ -47,7 +47,8 @@
         <item>Fill Location fields</item>
         <item>Incorrect values. Correct example: 20.000 N</item>
         <item>Points 1 and 2 are too close or identical</item>
+        <item>Test error message</item>
+        <item>Point is marked outside image</item>
+        <item>Map with this name already exists</item>
     </string-array>
-
-
 </resources>

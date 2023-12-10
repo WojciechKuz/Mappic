@@ -51,8 +51,7 @@ class Step2Fragment : Fragment() {
 
         // set onclicklisteners here
         binding.OkFAB.setOnClickListener {
-            if(utility.verifyUserInput()) {
-                utility.saveUserInput()
+            if(utility.saveUserInput(viewModel, 2)) {
                 findNavController().navigate(R.id.action_step2_to_step3)
             }
         }
@@ -62,8 +61,8 @@ class Step2Fragment : Fragment() {
 
         binding.touchDetector?.setPassMotionEvent { utility.myViewClicked(it) }
 
-        // FIXME temporary:
-        utility.displayErrMsg(ErrTypes.INCORRECT_GPS)
+        // okfixedFIXME temporary:
+        //utility.displayErrMsg(ErrTypes.TEST_ERR_MESSAGE)
     }
 
     override fun onDestroyView() {

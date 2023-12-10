@@ -51,8 +51,7 @@ class Step3Fragment : Fragment() {
 
         // set onclicklisteners here
         binding.OkFAB.setOnClickListener {
-            if(utility.verifyUserInput()) {
-                utility.saveUserInput()
+            if(utility.saveUserInput(viewModel, 3)) {
                 findNavController().navigate(R.id.action_step3_to_step4)
             }
         }

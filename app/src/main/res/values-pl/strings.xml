@@ -42,5 +42,8 @@
         <item>Wypełnij pola z lokalizacją</item>
         <item>Nieprawidłowe wartości. Porawny przykład: 20.000 N</item>
         <item>Punkty 1 i 2 są za blisko siebie lub są identyczne</item>
+        <item>Testowa wiadomość o błędzie</item>
+        <item>Zaznaczono punkt poza obrazkiem</item>
+        <item>Mapa z taką nazwą już istnieje</item>
     </string-array>
 </resources>

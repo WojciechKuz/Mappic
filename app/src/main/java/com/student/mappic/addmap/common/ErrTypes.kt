@@ -1,7 +1,7 @@
 package com.student.mappic.addmap.common
 
 /**
- * This are error types user can make in Add Map [Step2Fragment] and [Step3Fragment].
+ * This are error types user can make in Add Map [Step2Fragment], [Step3Fragment] and [Step4Fragment].
  */
 enum class ErrTypes(val code: Int) {
     UNKNOWN(0),
@@ -10,7 +10,13 @@ enum class ErrTypes(val code: Int) {
     /** When user didn't filled GPS data. */
     NOT_FILLED_GPS(2),
     /** When user typed incorrect value in GPS fields. */
-    INCORRECT_GPS(3),
-    /** When user marked second point same as first or difference is too small. */
-    SAME_POINT(4);
+    INCORRECT_GPS(3), // There could be more types of this error. incorrect value, value out of bounds, incorrect direction(NEWS)
+    /** When user marked second point same as first or difference is too small. (less than 10m) */
+    SAME_POINT(4),
+    /** This is only for testing purposes */
+    TEST_ERR_MESSAGE(5),
+    /** Point marked outside image */
+    POINT_OUT_OF_BOUNDS(6),
+    /** Map with this name already exists. */
+    NAME_EXISTS(7);
 }

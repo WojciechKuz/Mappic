@@ -9,6 +9,8 @@ package com.student.mappic.DB
 data class Point(
     val xpx: Int,
     val ypx: Int,
+    /** xgps is East-West */
     val xgps: Double,
+    /** ygps is North-South */
     val ygps: Double
 )

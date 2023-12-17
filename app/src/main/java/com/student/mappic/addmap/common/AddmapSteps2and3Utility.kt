@@ -236,22 +236,8 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
                 return true
             }
             if (step == 3) {
-                /**
-                 * Difference greater than 10m.
-                 */
-                fun diffGr10m(): Boolean {
-                    /* 1 deg is about 111 km, so 0.00001 deg is 1.11 meter.
-                        I think points should be at least 10m apart from each other:
-                         0.00001deg --- 1.11m | / 111 * 100 round()
-                        0.000009deg --- 1m    | * 10
-                         0.00009deg --- 10m
-                    */
-                    val a_sq = (viewModel.p1.ygps - gpsNS!!).pow(2) // abs(v).pow(2) is same as v.pow(2)
-                    val b_sq = (viewModel.p1.xgps - gpsEW!!).pow(2) // absolute value is redundant because square of negative value is positive
-                    val d_sq = 0.00009.pow(2) // 9e-5 is 10 meters as geo_degrees
-                    return a_sq + b_sq > d_sq
-                }
-                if(diffGr10m()) {
+                // If difference is greater than 10m.
+                if(PositionCalc.geoPosToDist(viewModel.p1, p) > 10) {
                     viewModel.p2 = p
                     return true
                 }

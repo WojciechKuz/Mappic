@@ -1,6 +1,6 @@
 package com.student.mappic.addmap.common
 
-import com.student.mappic.DB.Point
+import com.student.mappic.DB.MPoint
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos
@@ -42,7 +42,7 @@ class PositionCalc {
          *
          * This method uses [Spherical Earth projected to a plane](https://en.wikipedia.org/wiki/Geographical_distance#Flat-surface_formulae) formula.
          */
-        fun geoPosToDist(a: Point, b: Point): Double {
+        fun geoPosToDist(a: MPoint, b: MPoint): Double {
             val degDistNS = abs(b.ygps - a.ygps)
             val degDistEW = abs(b.xgps - a.xgps)
             val meanLatit = meanLatitude(a.ygps, b.ygps)

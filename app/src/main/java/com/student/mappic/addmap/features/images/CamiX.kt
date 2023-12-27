@@ -89,7 +89,7 @@ class CamiX(var act: AppCompatActivity, private val previewId: Int) {
             put(MediaStore.MediaColumns.DISPLAY_NAME, name)
             put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
             if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
+                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-DBImage")
             }
         }
 
@@ -113,7 +113,7 @@ class CamiX(var act: AppCompatActivity, private val previewId: Int) {
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults){
-                    Log.d(TAG, ">>> Image saved successfully.")
+                    Log.d(TAG, ">>> DBImage saved successfully.")
                     receiver.receiveUri(output.savedUri) // sends Uri to specified interface
                 }
             }

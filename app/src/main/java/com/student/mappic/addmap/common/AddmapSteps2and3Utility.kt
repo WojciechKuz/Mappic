@@ -15,8 +15,6 @@ import com.student.mappic.addmap.AddMapActivity
 import com.student.mappic.addmap.NewMapViewModel
 import com.student.mappic.addmap.location.LocationProvider
 import com.student.mappic.addmap.location.PassLocation
-import kotlin.math.abs
-import kotlin.math.pow
 import kotlin.math.round
 
 // for JavaDoc to properly show links to [Step2Fragment] documentation whole name with packages must be specified. same for step3
@@ -45,7 +43,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
 
     /**
      * Triggered by onTouch in MyView, handle onClick:
-     * mark Point in given position.
+     * mark MPoint in given position.
      */
     fun myViewClicked(event: MotionEvent?) {
         if(event != null) {
@@ -229,7 +227,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
             val imgInViewCoords = ISCalc.pointInImg(viewCoords!!) // recalculates to imageInView coordinates
 
             // save gpsNS, gpsEW, pxCoords to viewModel
-            val p = com.student.mappic.DB.Point(imgInViewCoords.x, imgInViewCoords.y, gpsEW!!, gpsNS!!)
+            val p = com.student.mappic.DB.MPoint(imgInViewCoords.x, imgInViewCoords.y, gpsEW!!, gpsNS!!)
 
             if (step == 2) {
                 viewModel.p1 = p

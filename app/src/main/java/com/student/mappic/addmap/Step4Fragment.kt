@@ -41,7 +41,7 @@ class Step4Fragment : Fragment() {
     private fun saveNewMap() {
         // verify name
         if(checkIfNameExists()) {
-            // TODO display red captions 'Map with this name already exists'
+            // TODO display red captions 'DBMap with this name already exists'
             return;
         }
         viewModel.name = binding.mapNameField.text.toString()

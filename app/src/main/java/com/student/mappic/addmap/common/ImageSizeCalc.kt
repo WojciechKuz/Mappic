@@ -54,9 +54,9 @@ class ImageSizeCalc(val original: Size, val view: Size) {
     }
 
     /**
-     * Method for checking if point is in Image displayed in ImageView.
-     * @returns true - if it fits within Image
-     * @returns false - if isn't in Image
+     * Method for checking if point is in DBImage displayed in ImageView.
+     * @returns true - if it fits within DBImage
+     * @returns false - if isn't in DBImage
      */
     fun isPointInBounds(pointInImgInView: Point): Boolean {
         // position values can be from 0 to width - 1 or from 0 to height - 1

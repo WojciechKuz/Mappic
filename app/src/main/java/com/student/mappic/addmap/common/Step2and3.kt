@@ -70,10 +70,10 @@ class Step2and3(val addMap: AddMapActivity, val TAG: String) {
             ExifInterface.ORIENTATION_ROTATE_180 to 180,
             ExifInterface.ORIENTATION_ROTATE_270 to 270
         )
-        // FIXME noticed Log.d("Image rotated...") executes 3 times
+        // FIXME noticed Log.d("DBImage rotated...") executes 3 times
         for(orient: Map.Entry<Int, Int> in orientationList) {
             if(orientation == orient.key) {
-                Log.d(TAG, ">>> Image rotated by ${orient.value} deg clockwise.")
+                Log.d(TAG, ">>> DBImage rotated by ${orient.value} deg clockwise.")
                 return orient.value
             }
         }

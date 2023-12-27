@@ -1,7 +1,7 @@
 package com.student.mappic.addmap.common
 
 /**
- * This are error types user can make in Add Map [Step2Fragment], [Step3Fragment] and [Step4Fragment].
+ * This are error types user can make in Add DBMap [Step2Fragment], [Step3Fragment] and [Step4Fragment].
  */
 enum class ErrTypes(val code: Int) {
     UNKNOWN(0),
@@ -15,8 +15,8 @@ enum class ErrTypes(val code: Int) {
     SAME_POINT(4),
     /** This is only for testing purposes */
     TEST_ERR_MESSAGE(5),
-    /** Point marked outside image */
+    /** MPoint marked outside image */
     POINT_OUT_OF_BOUNDS(6),
-    /** Map with this name already exists. */
+    /** DBMap with this name already exists. */
     NAME_EXISTS(7);
 }

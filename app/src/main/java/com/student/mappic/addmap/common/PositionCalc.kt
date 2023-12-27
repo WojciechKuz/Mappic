@@ -38,7 +38,7 @@ class PositionCalc {
 
         // TODO test it:        Also, what precision it has?
         /**
-         * Calculates distance between two points on Earth's surface.
+         * Calculates distance between two points on Earth's surface. Unit - meters.
          *
          * This method uses [Spherical Earth projected to a plane](https://en.wikipedia.org/wiki/Geographical_distance#Flat-surface_formulae) formula.
          */

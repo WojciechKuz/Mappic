@@ -16,6 +16,7 @@ import com.student.mappic.addmap.NewMapViewModel
 import com.student.mappic.addmap.features.permissions.PermissionManager
 import com.student.mappic.addmap.location.LocationProvider
 import com.student.mappic.addmap.location.PassLocation
+import com.student.mappic.clist
 import kotlin.math.round
 
 // for JavaDoc to properly show links to [Step2Fragment] documentation whole name with packages must be specified. same for step3
@@ -144,13 +145,16 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         /** returns letter symbolising direction - N, E, W, S. For '20.000 N' gets N. */
         fun getDirection(txtEd: Editable): String {
             val L = txtEd.length
-            return txtEd.subSequence(L - 2, L - 1).toString()
+            Log.d(TAG, ">>> getDirection()\n    Editable: '${txtEd.toString()}'\n    Output: '${txtEd.subSequence(L - 1, L).toString()}'")
+            return txtEd.subSequence(L - 1, L).toString()
         }
         /** returns direction value. For '20.000 N' gets 20.000 as floating point number. */
         fun getValue(txtEd: Editable): Double {
             return try {
+                Log.d(TAG, ">>> getValue()\n    Editable: '${txtEd}'\n    Output: '${txtEd.subSequence(0, txtEd.length - 2).toString().toDouble()}'")
                 txtEd.subSequence(0, txtEd.length - 2).toString().toDouble()
             } catch (e: NumberFormatException) {
+                Log.e(TAG, ">>> EXCEPTION in getValue()")
                 errorValue
             }
         }
@@ -162,6 +166,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         // if empty check
         if(editableNS.isEmpty() || editableEW.isEmpty()) {
             displayErrMsg(ErrTypes.NOT_FILLED_GPS)
+            Log.d(TAG, ">>> Gps not filled")
             return false
         }
 
@@ -172,6 +177,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
             gpsNS = -getValue(editableNS)
         } else {
             displayErrMsg(ErrTypes.INCORRECT_GPS)
+            Log.d(TAG, ">>> Incorrect GPS NS")
             return false
         }
 
@@ -182,21 +188,31 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
             gpsEW = -getValue(editableEW)
         } else {
             displayErrMsg(ErrTypes.INCORRECT_GPS)
+            Log.d(TAG, ">>> Incorrect GPS EW")
             return false
         }
 
         // check for error in letters
         if(gpsNS == errorValue || gpsEW == errorValue) {
             displayErrMsg(ErrTypes.INCORRECT_GPS)
+            Log.d(TAG, ">>> Detected error value, ${
+                if(gpsNS == errorValue) {
+                    "NS \'$gpsNS'"
+                } else {
+                    "EW \'$gpsEW'"
+                }
+            }")
             return false
         }
 
         // coordinate value check
         if (gpsNS!! > 90.0 || gpsNS!! < -90.0) {
+            Log.d(TAG, ">>> Absolute value of GPS NS is higher than 90.0 degrees")
             displayErrMsg(ErrTypes.INCORRECT_GPS)
             return false
         }
         if (gpsEW!! > 180.0 || gpsEW!! < -180.0) {
+            Log.d(TAG, ">>> Absolute value of GPS EW is higher than 180.0 degrees")
             displayErrMsg(ErrTypes.INCORRECT_GPS)
             return false
         }

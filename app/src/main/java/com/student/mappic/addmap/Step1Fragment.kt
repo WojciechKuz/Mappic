@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.student.mappic.databinding.FragmentStep1Binding
 import com.student.mappic.R
 import com.student.mappic.addmap.features.images.CamiX
+import com.student.mappic.addmap.features.permissions.PermissionManager
 import com.student.mappic.clist
 
 /**
@@ -47,7 +48,9 @@ class Step1Fragment : Fragment() {
         camiX = CamiX(addMap, R.id.camView)
 
         //addmap.step1() requests permissions for Camera, and then launches camiX.startCamera()
-        addMap.permManager.grantCamPerm { camiX.startCamera() }
+        //addMap.permManager.grantCamPerm { camiX.startCamera() }
+        //PermissionManager(addMap).grantCamPerm { camiX.startCamera() }
+        addMap.getPermissionManager().grantCamPerm { camiX.startCamera() }
 
         /**
          * Set onclick listener for button.

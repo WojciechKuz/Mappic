@@ -13,6 +13,7 @@ import android.widget.TextView
 import com.student.mappic.R
 import com.student.mappic.addmap.AddMapActivity
 import com.student.mappic.addmap.NewMapViewModel
+import com.student.mappic.addmap.features.permissions.PermissionManager
 import com.student.mappic.addmap.location.LocationProvider
 import com.student.mappic.addmap.location.PassLocation
 import kotlin.math.round
@@ -28,7 +29,7 @@ import kotlin.math.round
 class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
 
     private val step2and3 = Step2and3(addMap, TAG)
-    private val locationProvider = LocationProvider(addMap)
+    private val locationProvider = LocationProvider(addMap, addMap.getPermissionManager())
     /** NOTE: these are 'in View' coordinates'.
      *  It has to be recalculated to 'image in View' coordinates.
      *  Use ImgSizeCalc to calculate right coordinates. */

@@ -32,8 +32,10 @@ import com.student.mappic.clist
  * These methods do not return Location, instead you have to pass
  * interface (function/method that receives Location)
  * as an argument to them.
+ * @param actv activity that has member 'permManager'
+ * @param permManager PermissionManager that is member of activity
  */
-class LocationProvider(private val actv: AppCompatActivity) {
+class LocationProvider(private val actv: AppCompatActivity, private val permManager: PermissionManager) {
 
     private val locationTime: Long = 1500 // interval, in milliseconds
     private val locRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, locationTime)
@@ -80,7 +82,7 @@ class LocationProvider(private val actv: AppCompatActivity) {
             // If there's no permissions, ask user and retry
             whoAsked1++
             if(whoAsked1 < 2)
-                PermissionManager(actv).grantGpsPerm { getLocOnce(passLoc) }
+                permManager.grantGpsPerm { getLocOnce(passLoc) }
             else
                 whoAsked1 = 0
             return
@@ -123,7 +125,7 @@ class LocationProvider(private val actv: AppCompatActivity) {
             // If there's no permissions, ask user and retry
             whoAsked2++
             if (whoAsked2 < 2)
-                PermissionManager(actv).grantGpsPerm { startLocationUpdates(passLoc) }
+                permManager.grantGpsPerm { startLocationUpdates(passLoc) }
             else
                 whoAsked2 = 0
             return

@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace 'com.student.mappic'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.student.mappic"
@@ -77,11 +77,11 @@ dependencies {
     ksp "androidx.room:room-compiler:$room_version"
 
     // RxJava2 support for Room
-    implementation "androidx.room:room-rxjava2:$room_version"
+    //implementation "androidx.room:room-rxjava2:$room_version"
     // RxJava3 support for Room
     implementation "androidx.room:room-rxjava3:$room_version"
     // Guava support for Room, including Optional and ListenableFuture
-    implementation "androidx.room:room-guava:$room_version"
+    //implementation "androidx.room:room-guava:$room_version"
     // Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
     // Paging 3 Integration

@@ -110,30 +110,13 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
 
     /**
      * Decodes from given Uri size of image and orientation. Returns true when image is vertical.
+     * Used in Step2 and Step3.
      */
     fun isImgVerticalExif(uri: Uri): Boolean {
-        val exif = step2and3.getExifData(uri)
-
-        val height: Int = exif.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, -1)
-        val width: Int = exif.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, -1)
-        val orientation: Int = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1)
-
-        Log.d(TAG, ">>> Size of image: h: ${height}, w: ${width}, o: ${orientation}") // o 6=vert, 1,3=horiz
-        val vertOrient = intArrayOf(90, 270)
-        vertOrient.forEach {
-            if(it == step2and3.checkOrientation(orientation)) {
-                Log.d(TAG, ">>> Rotation - image is vertical.")
-                return true
-            }
-        }
-        if(step2and3.checkOrientation(orientation) == -1)
-            Log.e(TAG, ">>> Rotation tag in image exif data not found. cannot display it correctly.")
-        else
-            Log.d(TAG, ">>> Rotation - image is horizontal.")
-        return false
+        return step2and3.isImgVerticalExif(uri)
     }
 
-    // TODO test getGpsValues()
+    // doneTODO test getGpsValues() TESTED, SEEMS OK
     /**
      * Gets GPS values from UI, and checks if they are correct.
      * Sets gpsNS and gpsEW members even if values are incorrect!!!
@@ -145,16 +128,13 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         /** returns letter symbolising direction - N, E, W, S. For '20.000 N' gets N. */
         fun getDirection(txtEd: Editable): String {
             val L = txtEd.length
-            Log.d(TAG, ">>> getDirection()\n    Editable: '${txtEd.toString()}'\n    Output: '${txtEd.subSequence(L - 1, L).toString()}'")
             return txtEd.subSequence(L - 1, L).toString()
         }
         /** returns direction value. For '20.000 N' gets 20.000 as floating point number. */
         fun getValue(txtEd: Editable): Double {
             return try {
-                Log.d(TAG, ">>> getValue()\n    Editable: '${txtEd}'\n    Output: '${txtEd.subSequence(0, txtEd.length - 2).toString().toDouble()}'")
                 txtEd.subSequence(0, txtEd.length - 2).toString().toDouble()
             } catch (e: NumberFormatException) {
-                Log.e(TAG, ">>> EXCEPTION in getValue()")
                 errorValue
             }
         }
@@ -166,7 +146,6 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         // if empty check
         if(editableNS.isEmpty() || editableEW.isEmpty()) {
             displayErrMsg(ErrTypes.NOT_FILLED_GPS)
-            Log.d(TAG, ">>> Gps not filled")
             return false
         }
 
@@ -177,7 +156,6 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
             gpsNS = -getValue(editableNS)
         } else {
             displayErrMsg(ErrTypes.INCORRECT_GPS)
-            Log.d(TAG, ">>> Incorrect GPS NS")
             return false
         }
 
@@ -188,31 +166,21 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
             gpsEW = -getValue(editableEW)
         } else {
             displayErrMsg(ErrTypes.INCORRECT_GPS)
-            Log.d(TAG, ">>> Incorrect GPS EW")
             return false
         }
 
         // check for error in letters
         if(gpsNS == errorValue || gpsEW == errorValue) {
             displayErrMsg(ErrTypes.INCORRECT_GPS)
-            Log.d(TAG, ">>> Detected error value, ${
-                if(gpsNS == errorValue) {
-                    "NS \'$gpsNS'"
-                } else {
-                    "EW \'$gpsEW'"
-                }
-            }")
             return false
         }
 
         // coordinate value check
         if (gpsNS!! > 90.0 || gpsNS!! < -90.0) {
-            Log.d(TAG, ">>> Absolute value of GPS NS is higher than 90.0 degrees")
             displayErrMsg(ErrTypes.INCORRECT_GPS)
             return false
         }
         if (gpsEW!! > 180.0 || gpsEW!! < -180.0) {
-            Log.d(TAG, ">>> Absolute value of GPS EW is higher than 180.0 degrees")
             displayErrMsg(ErrTypes.INCORRECT_GPS)
             return false
         }
@@ -221,7 +189,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         return true
     }
 
-    // TODO test saveUserInput(), especially ImageSizeCalc
+    // doneTODO test saveUserInput(), especially ImageSizeCalc. TESTED, SEEMS OK
     /**
      * save GPS coordinates and marker position on the image of a map.
      * If it returns true save succeeded and we can navigate to next step.
@@ -237,11 +205,11 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
 
         // Not checking gpsNS and gpsEW here because it's already been checked.
         if(viewCoords != null) {
-            if (!ISCalc.isPointInBounds(viewCoords!!)) {
+            val imgInViewCoords = ISCalc.pointInImg(viewCoords!!) // recalculates to imageInView coordinates
+            if (!ISCalc.isPointInBounds(imgInViewCoords!!)) { // FIXME here, marked correctly, displays error
                 displayErrMsg(ErrTypes.POINT_OUT_OF_BOUNDS)
                 return false
             }
-            val imgInViewCoords = ISCalc.pointInImg(viewCoords!!) // recalculates to imageInView coordinates
 
             // save gpsNS, gpsEW, pxCoords to viewModel
             val p = com.student.mappic.DB.MPoint(imgInViewCoords.x, imgInViewCoords.y, gpsEW!!, gpsNS!!)

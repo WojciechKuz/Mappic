@@ -23,8 +23,9 @@ import java.util.concurrent.Executors
  * You have to handle permissions in your activity (or fragment) though.
  * @param act activity class
  * @param previewId id of CameraX PreviewView where camera preview will be shown
+ * @param appImgFolder name of folder in Pictures directory that photos will be saved in.
  */
-class CamiX(var act: AppCompatActivity, private val previewId: Int) {
+class CamiX(var act: AppCompatActivity, private val previewId: Int, private val appImgFolder: String) {
     private var imageCapture: ImageCapture? = null
     private var cameraExecutor = Executors.newSingleThreadExecutor()
 
@@ -89,7 +90,7 @@ class CamiX(var act: AppCompatActivity, private val previewId: Int) {
             put(MediaStore.MediaColumns.DISPLAY_NAME, name)
             put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
             if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-DBImage")
+                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/${appImgFolder}")
             }
         }
 

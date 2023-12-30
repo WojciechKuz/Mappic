@@ -30,7 +30,7 @@ class Step2and3(val addMap: AddMapActivity, val TAG: String) {
         //
     }*/
 
-    // FIXME compiler thinks those won't be null, but when used (or checked) it causes NullPointerException
+    // nFIXME compiler thinks those won't be null, but when used (or checked) it causes NullPointerException
     //  maybe add ? to returned value?
     // This methods shorten getting UI elements in code. Works in Step2 and Step3
     fun errMessage(): TextView {
@@ -63,17 +63,16 @@ class Step2and3(val addMap: AddMapActivity, val TAG: String) {
     /**
      * Decodes ExifInterface orientation codes into human-readable degrees which tell how much is image rotated clockwise.
      */
-    fun checkOrientation(orientation: Int): Int {
+    private fun checkOrientation(orientation: Int): Int {
         val orientationList = mapOf(
             ExifInterface.ORIENTATION_NORMAL to 0,
             ExifInterface.ORIENTATION_ROTATE_90 to 90,
             ExifInterface.ORIENTATION_ROTATE_180 to 180,
             ExifInterface.ORIENTATION_ROTATE_270 to 270
         )
-        // FIXME noticed Log.d("Image rotated...") executes 3 times
         for(orient: Map.Entry<Int, Int> in orientationList) {
             if(orientation == orient.key) {
-                Log.d(TAG, ">>> Image rotated by ${orient.value} deg clockwise.")
+                //Log.d(TAG, ">>> Image rotated by ${orient.value} deg clockwise.")
                 return orient.value
             }
         }
@@ -82,11 +81,39 @@ class Step2and3(val addMap: AddMapActivity, val TAG: String) {
 
     fun origImgSizeGet(viewModel: NewMapViewModel): Size {
         val exif = getExifData(viewModel.mapImg)
-        val height: Int = exif.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, -1)
         val width: Int = exif.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, -1)
-        return Size(width, height)
+        val height: Int = exif.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, -1)
+        return if(!isImgVerticalExif(viewModel.mapImg)) Size(width, height) else Size(height, width)
     }
+
     fun viewSizeGet(): Size {
         return Size(getImageView().width, getImageView().height)
+    }
+
+    /**
+     * Decodes from given Uri size of image and orientation. Returns true when image is vertical.
+     */
+    fun isImgVerticalExif(uri: Uri): Boolean {
+        val exif = getExifData(uri)
+
+        // This probably could have been simpler.
+
+        val width: Int = exif.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, -1)
+        val height: Int = exif.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, -1)
+        val orientation: Int = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1)
+
+        Log.d(TAG, ">>> Size of image: h: ${height}, w: ${width}, o: ${orientation}") // o 6=vert, 1,3=horiz
+        val vertOrient = intArrayOf(90, 270)
+        vertOrient.forEach {
+            if(it == checkOrientation(orientation)) {
+                Log.d(TAG, ">>> Rotation - image is vertical.")
+                return true
+            }
+        }
+        if(checkOrientation(orientation) == -1)
+            Log.e(TAG, ">>> Rotation tag in image exif data not found. cannot display it correctly.")
+        else
+            Log.d(TAG, ">>> Rotation - image is horizontal.")
+        return false
     }
 }

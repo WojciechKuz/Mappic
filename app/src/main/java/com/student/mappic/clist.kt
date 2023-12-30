@@ -1,5 +1,7 @@
 package com.student.mappic
 
+import com.student.mappic.addmap.common.ImageSizeCalc
+
 open class clist() {
     /**
      * List of classes for faster Log.d(tag, msg) lines creation.
@@ -35,5 +37,7 @@ open class clist() {
         const val Step3Fragment: String = "Step3Fragment"
         // AddmapSteps2and3Utility uses one of two above.
         const val Step4Fragment: String = "Step4Fragment"
+
+        const val ImageSizeCalc: String = "ImageSizeCalc"
     }
 }

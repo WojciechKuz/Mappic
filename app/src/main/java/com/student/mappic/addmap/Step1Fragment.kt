@@ -45,7 +45,7 @@ class Step1Fragment : Fragment() {
         //    repositionFAB()
 
         addMap = (activity as AddMapActivity)
-        camiX = CamiX(addMap, R.id.camView)
+        camiX = CamiX(addMap, R.id.camView, "Mappic")
 
         //addmap.step1() requests permissions for Camera, and then launches camiX.startCamera()
         //addMap.permManager.grantCamPerm { camiX.startCamera() }
@@ -72,7 +72,7 @@ class Step1Fragment : Fragment() {
         if(recvImgUri != null)
             viewModel.mapImg = recvImgUri
 
-        val msg = "Photo capture succeeded: ${viewModel.mapImg}"
+        val msg = R.string.photo_success // Old message: "Photo capture succeeded: ${viewModel.mapImg}"
         Toast.makeText(addMap.baseContext, msg, Toast.LENGTH_SHORT).show()
 
         // navigate to next screen

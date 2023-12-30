@@ -23,6 +23,7 @@
     <!--<string name="title_activity_add_map">AddMapActivity</string>-->
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" tools:ignore="MissingTranslation">Hello blank fragment</string>
+    <string name="photo_success">Photo saved</string>
     <string name="options">Options</string>
     <string name="thumbnail">Thumbnail</string>
     <string name="addmap">Add map</string>

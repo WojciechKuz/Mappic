@@ -63,6 +63,22 @@ class ImageSizeCalc(val original: Size, val view: Size) {
         return pointOnImgInImgview
     }
 
+    /** This is REVERSE function to [pointInImg()]. */
+    fun pointInView(pointOnImgInImgview: Point): Point {
+        if(imgInView == null) {
+            fit()
+        }
+        val emptySp = Size(
+            (view.width - imgInView!!.width) / 2, // !! = not null asserted. - I'm sure it's non-null here. It's the purpose of this operator.
+            (view.height - imgInView!!.height) / 2 // About !!: https://discuss.kotlinlang.org/t/purpose-of-double-exclamation-operator-null-check/8735
+        )
+        val pointInView = Point(
+            pointOnImgInImgview.x + emptySp.width, // x
+            pointOnImgInImgview.y + emptySp.height // y
+        )
+        return pointInView
+    }
+
     /**
      * Method for checking if point is in Image displayed in ImageView.
      * @returns true - if it fits within Image
@@ -104,7 +120,7 @@ class ImageSizeCalc(val original: Size, val view: Size) {
          * @return OpenGL coordinates, values in about [-1, 1] range depending on screen proportions
          */
         fun toOpenGLCoordinates(viewSize: Size, pixelCoordinates: PointF): PointF {
-            // TODO check if in image bounds
+            // futureTODO check if in image bounds
             //val exif = utility.getExifData(viewModel.mapImg)
             //val imageSize = Size(exif.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, -1), exif.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, -1))
             return PointF((2f*pixelCoordinates.x - 1f*viewSize.width)/ viewSize.height, -2f*pixelCoordinates.y/viewSize.height + 1f)

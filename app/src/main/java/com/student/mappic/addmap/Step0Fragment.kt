@@ -49,6 +49,15 @@ class Step0Fragment : Fragment() {
             Log.d(clist.Step0Fragment, ">>> open photo from gallery button clicked")
             openFromGallery()
         }
+
+        // if viewmodel contains mapID this means editing mode, navigate to step1ok
+        // but only once (don't do this if user navigated back to step0)
+        if(viewModel.mapid != null) { // This means editing mode
+            if(!viewModel.step0visited) {
+                viewModel.step0visited = true
+                findNavController().navigate(R.id.action_step0_to_step1ok)
+            }
+        }
     }
 
     /**

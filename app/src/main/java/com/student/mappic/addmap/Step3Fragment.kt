@@ -60,6 +60,8 @@ class Step3Fragment : Fragment() {
         }
 
         binding.touchDetector?.setPassMotionEvent { utility.myViewClicked(it) }
+
+        utility.fillFields(viewModel, 3)
     }
 
     override fun onDestroyView() {

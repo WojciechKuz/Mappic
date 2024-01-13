@@ -3,20 +3,18 @@ package com.student.mappic.addmap.common
 import android.graphics.Point
 import android.graphics.PointF
 import android.location.Location
-import androidx.exifinterface.media.ExifInterface
 import android.net.Uri
 import android.text.Editable
-import android.util.Log
 import android.util.Size
 import android.view.MotionEvent
 import android.widget.TextView
+import androidx.annotation.FloatRange
+import com.student.mappic.DB.MPoint
 import com.student.mappic.R
 import com.student.mappic.addmap.AddMapActivity
 import com.student.mappic.addmap.NewMapViewModel
-import com.student.mappic.addmap.features.permissions.PermissionManager
 import com.student.mappic.addmap.location.LocationProvider
 import com.student.mappic.addmap.location.PassLocation
-import com.student.mappic.clist
 import kotlin.math.round
 
 // for JavaDoc to properly show links to [Step2Fragment] documentation whole name with packages must be specified. same for step3
@@ -61,6 +59,27 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         //else Log.w(clist.Step2Fragment, ">>> Nie otrzymano informacji o pozycji kliknięcia!")
     }
 
+    /** If ViewModel already contains data fill text fields and mark point */
+    fun fillFields(viewModel: NewMapViewModel, step: Int) {
+        val p: MPoint?
+        if(step == 2 && viewModel.isInitialized(1)) {
+            p = viewModel.p1
+        } else if(step == 3 && viewModel.isInitialized(2)) {
+            p = viewModel.p2
+        } else return
+        fillGPSCoordinates(p.xgps, p.ygps)
+
+        // Now, mark point on img
+        val iscalc = ImageSizeCalc(step2and3.origImgSizeGet(viewModel), step2and3.viewSizeGet())
+        val piv = iscalc.pointInView(Point(p.xpx, p.ypx)) // to inView coords
+        step2and3.getOpenGLView().pointMarker( // MARK POINT
+            ImageSizeCalc.toOpenGLCoordinates(
+                step2and3.viewSizeGet(),
+                PointF(piv.x.toFloat(), piv.y.toFloat())
+            )
+        )
+    }
+
     private lateinit var passLoc: PassLocation
     //private lateinit var fillLocation: TextSignal
 
@@ -75,30 +94,40 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
      * Fills GPS coordinate text fields in app's UI. used in functional interface.
      */
     private fun fillGPSCoordinates(loc: Location) {
-
         // learn about Location class
 
         // save it with south as north negative value, and west as east negative value, but for user display E/W N/S
         loc.latitude // between -90.0 and 90.0 inclusive NS
         loc.longitude // between -180.0 and 180.0 inclusive EW
+        fillGPSCoordinates(loc.latitude, loc.longitude)
+    }
 
+    /**
+     * Fills GPS coordinate text fields in app's UI.
+     * @param latitude NS
+     * @param longitude EW
+     */
+    private fun fillGPSCoordinates(
+        @FloatRange(from = -90.0, to = 90.0) latitude: Double,
+        @FloatRange(from = -180.0, to = 180.0) longitude: Double
+    ) {
         val editableNS = step2and3.latitudeNS()
         val editableEW = step2and3.longitudeEW()
         if (editableNS != null) {
-            if(loc.latitude >= 0)
-                editableNS.setText("${loc.latitude} N")
+            if(latitude >= 0)
+                editableNS.setText("${latitude} N")
             else
-                editableNS.setText("${-loc.latitude} S")
+                editableNS.setText("${-latitude} S")
         }
         if (editableEW != null) {
-            if(loc.longitude >= 0)
-                editableEW.setText("${loc.longitude} E")
+            if(longitude >= 0)
+                editableEW.setText("${longitude} E")
             else
-                editableEW.setText("${-loc.longitude} W")
+                editableEW.setText("${-longitude} W")
         }
     }
 
-    // TODO remove it
+    /* // doneTODO remove it
     private fun getPermissions(): Boolean {
         var retVal = false
         addMap.permManager.grantGpsPerm {
@@ -107,6 +136,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         }
         return retVal
     }
+    */
 
     /**
      * Decodes from given Uri size of image and orientation. Returns true when image is vertical.
@@ -128,12 +158,12 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         /** returns letter symbolising direction - N, E, W, S. For '20.000 N' gets N. */
         fun getDirection(txtEd: Editable): String {
             val L = txtEd.length
-            return txtEd.subSequence(L - 1, L).toString()
+            return txtEd.trim().subSequence(L - 1, L).toString()
         }
         /** returns direction value. For '20.000 N' gets 20.000 as floating point number. */
         fun getValue(txtEd: Editable): Double {
             return try {
-                txtEd.subSequence(0, txtEd.length - 2).toString().toDouble()
+                txtEd.subSequence(0, txtEd.length - 2).toString().trim().toDouble()
             } catch (e: NumberFormatException) {
                 errorValue
             }
@@ -206,13 +236,13 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         // Not checking gpsNS and gpsEW here because it's already been checked.
         if(viewCoords != null) {
             val imgInViewCoords = ISCalc.pointInImg(viewCoords!!) // recalculates to imageInView coordinates
-            if (!ISCalc.isPointInBounds(imgInViewCoords!!)) { // FIXME here, marked correctly, displays error
+            if (!ISCalc.isPointInBounds(imgInViewCoords!!)) { // wasFIXME here, marked correctly, displays error
                 displayErrMsg(ErrTypes.POINT_OUT_OF_BOUNDS)
                 return false
             }
 
             // save gpsNS, gpsEW, pxCoords to viewModel
-            val p = com.student.mappic.DB.MPoint(imgInViewCoords.x, imgInViewCoords.y, gpsEW!!, gpsNS!!)
+            val p = com.student.mappic.DB.MPoint(imgInViewCoords.x, imgInViewCoords.y, gpsEW!!, gpsNS!!, reference = true)
 
             if (step == 2) {
                 viewModel.p1 = p
@@ -220,7 +250,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
             }
             if (step == 3) {
                 // If difference is greater than 10m.
-                if(PositionCalc.geoPosToDist(viewModel.p1, p) > 10) {
+                if(PositionCalc.geoPosToDist(viewModel.p1, p) > 1) { // FIXME temporarily changed minimum distance. Should be 10.
                     viewModel.p2 = p
                     return true
                 }

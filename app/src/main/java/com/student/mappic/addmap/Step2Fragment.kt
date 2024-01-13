@@ -61,8 +61,7 @@ class Step2Fragment : Fragment() {
 
         binding.touchDetector?.setPassMotionEvent { utility.myViewClicked(it) }
 
-        // okfixedFIXME temporary:
-        //utility.displayErrMsg(ErrTypes.TEST_ERR_MESSAGE)
+        utility.fillFields(viewModel, 2)
     }
 
     override fun onDestroyView() {
@@ -72,7 +71,7 @@ class Step2Fragment : Fragment() {
 }
 
 /*
-    TODO understand what this fragment parameters are, it might be useful
+    futureTODO understand what this fragment parameters are, it might be useful
 
 // nTODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -102,7 +101,7 @@ class Step2Fragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        // TODO find difference between binding.inflate and inflater.inflate
+        // futureTODO find difference between binding.inflate and inflater.inflate
         return inflater.inflate(R.layout.fragment_step2, container, false)
     }
 

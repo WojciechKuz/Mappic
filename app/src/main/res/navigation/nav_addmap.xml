@@ -16,6 +16,9 @@
         <!-- Photo picked from gallery --><action
             android:id="@+id/action_step0_to_step2"
             app:destination="@+id/step2Fragment" />
+        <!-- Editing, goto Step1ok --><action
+        android:id="@+id/action_step0_to_step1ok"
+        app:destination="@+id/step1okFragment" />
     </fragment>
 
     <fragment

@@ -16,6 +16,8 @@ import com.student.mappic.R
  */
 class Step1okFragment : Fragment() {
 
+    // TODO 'edit image' button - Intent to other apps for editing image
+
     private var _binding: FragmentStep1okBinding? = null
 
     private val viewModel: NewMapViewModel by activityViewModels()

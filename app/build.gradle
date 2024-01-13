@@ -45,6 +45,7 @@ android {
 
 dependencies {
 
+    //implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:'
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
@@ -72,6 +73,7 @@ dependencies {
 
     def room_version = "2.6.1"
     implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-coroutines:$room_version" // for suspend fun Room coroutines
     annotationProcessor "androidx.room:room-compiler:$room_version"
     // Kotlin Symbol Processing (KSP)
     ksp "androidx.room:room-compiler:$room_version"
@@ -79,7 +81,7 @@ dependencies {
     // RxJava2 support for Room
     //implementation "androidx.room:room-rxjava2:$room_version"
     // RxJava3 support for Room
-    implementation "androidx.room:room-rxjava3:$room_version"
+    //implementation "androidx.room:room-rxjava3:$room_version"
     // Guava support for Room, including Optional and ListenableFuture
     //implementation "androidx.room:room-guava:$room_version"
     // Test helpers

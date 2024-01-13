@@ -16,11 +16,16 @@ interface ImageDao {
     /** Get certain image by it's id */
     @Query("SELECT * FROM DBImage WHERE imgid = :iid")
     fun getImage(iid: Long): List<DBImage>
-
+    @Query("SELECT MAX(imgid) FROM DBImage")
+    fun getMaxId(): Long
     @Insert
     fun insertAll(vararg images: DBImage)
     @Insert
     fun insertAll(images: List<DBImage>)
     @Delete
     fun delete(image: DBImage)
+    @Query("DELETE FROM DBImage WHERE imgid == :delId")
+    fun deleteById(delId: Long)
+    @Query("DELETE FROM DBImage WHERE mapid_fk == :mid")
+    fun deleteImageForMapid(mid: Long)
 }

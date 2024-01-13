@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey
 )])
 data class DBImage(
     @PrimaryKey
-    val imgid: Long,
+    val imgid: Long? = null,
     val mapid_fk: Long?,
     val uri: String?
 )

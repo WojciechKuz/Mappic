@@ -3,6 +3,7 @@ package com.student.mappic.DB.entities
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.student.mappic.DB.MPoint
 
 // (DBImage.class, [DBImage.imgid], )
 // @ForeignKey(DBImage, [DBImage.imgid], [DBPoint.uid_fk]
@@ -14,7 +15,7 @@ import androidx.room.PrimaryKey
 )])
 data class DBPoint (
     @PrimaryKey
-    val pid: Long,
+    val pid: Long? = null,
     /** Id of image on which this point is defined. Foreign key. */
     val imgid_fk: Long?,
     val xpx: Long?,
@@ -22,8 +23,23 @@ data class DBPoint (
     /** ygps, North-South */
     val nsgps: Double?,
     /** xgps, East-West */
-    val ewgps: Double?
-)
+    val ewgps: Double?,
+    /** if point is reference for locating user. 1 or 0. */
+    val reference: Int?
+) {
+    companion object {
+        fun toDBPoint(mPoint: MPoint, imgid: Long): DBPoint {
+            return DBPoint(
+                imgid_fk = imgid,
+                xpx = mPoint.xpx.toLong(),
+                ypx = mPoint.ypx.toLong(),
+                nsgps = mPoint.ygps,
+                ewgps = mPoint.xgps,
+                reference = if(mPoint.reference) 1 else 0
+            )
+        }
+    }
+}
 
 /*
     According to this site https://techdroid6.rssing.com/chan-56565215/article9.html

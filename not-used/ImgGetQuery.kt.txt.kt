@@ -75,7 +75,7 @@ class `ImgGetQuery.kt.txt` {
 
                 // Stores column values and the contentUri in a local object
                 // that represents the media file.
-                imagesList += Images(contentUri, name, /* TODO */)
+                imagesList += Images(contentUri, name, /* notTODO */)
             }
         }
 

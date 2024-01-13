@@ -6,6 +6,6 @@ import androidx.room.PrimaryKey
 @Entity
 data class DBMap(
     @PrimaryKey
-    val mapid: Long,
+    val mapid: Long? = null,
     val map_name: String?
 )

@@ -1,22 +1,25 @@
 package com.student.mappic.maplist
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import com.student.mappic.MainViewModel
 import com.student.mappic.R
-import com.student.mappic.maplist.placeholder.PlaceholderContent
+import com.student.mappic.clist
 
 /**
  * A fragment representing a list of Items.
- * SO WHY THE F*** ITS NAME ISN'T MapItemListFragment ???
  */
-class MapItemFragment : Fragment() {
+class MapItemListFragment : Fragment() {
 
     private var columnCount = 1
+    private val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,13 +38,23 @@ class MapItemFragment : Fragment() {
         // Set the adapter
         if (view is RecyclerView) {
             with(view) {
-                layoutManager = LinearLayoutManager(context) /*when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }*/
-                adapter = MyMapItemRecyclerViewAdapter(PlaceholderContent.ITEMS)
+                layoutManager = LinearLayoutManager(context)
+
+                // TODO replace placeholder with data from viewModel
+                // TODO get map list from DB
+                val placeholder = ArrayList<RecycleMap>()
+                placeholder.add(RecycleMap(69, "My Fake Map"))
+                for (i in 1..25) {
+                    placeholder.add(RecycleMap(i.toLong(), "Map no.${i}"))
+                }
+                adapter = MyMapItemRecyclerViewAdapter(placeholder)
             }
         }
+        else Log.e(clist.MapItemListFragment, ">>> This is not RecyclerView!")
+        /* // Alternative way
+        val recyclerView: RecyclerView = findViewById(R.id.list)
+        recyclerView.adapter = recyclerView
+        */
         return view
     }
 
@@ -53,7 +66,7 @@ class MapItemFragment : Fragment() {
         // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
-            MapItemFragment().apply {
+            MapItemListFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_COLUMN_COUNT, columnCount)
                 }

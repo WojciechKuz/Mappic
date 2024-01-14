@@ -7,14 +7,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.student.mappic.addmap.AddMapActivity
 import com.student.mappic.databinding.ActivityMainBinding
 import com.student.mappic.clist
 
+/** Aka MapList Activity */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    // TODO make finally list of maps show up
+    val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -34,11 +39,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
     private fun openAddMapActivity() {
-        /*
-        HERE is something weird.
-        Kotlin: Activity::class.java
-        Java:   Activity.class
-         */
         startActivity(Intent(this, AddMapActivity::class.java))
     }
 

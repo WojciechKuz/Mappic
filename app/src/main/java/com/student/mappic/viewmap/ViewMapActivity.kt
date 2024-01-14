@@ -1,10 +1,12 @@
 package com.student.mappic.viewmap
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.widget.ImageButton
+import com.student.mappic.MainActivity
 import com.student.mappic.MapOptionsPopup.Companion.openPopupMenu
 import com.student.mappic.R
 
@@ -20,12 +22,13 @@ class ViewMapActivity : AppCompatActivity() {
         findViewById<ImageButton>(R.id.mapOptions).setOnClickListener { openPopupMenu(it) }
     }
     private fun backToMapList() {
-        // TODO go back to map list
+        val gotoList = Intent(this, MainActivity::class.java)
+        startActivity(gotoList)
     }
 
     /*
     /**
-     * Not sure if this gets the size of image or ImageView
+     * Not sure if this gets the size of image or ImageView. --> If not sure check out methods in step2and3 and in addmap package
      */
     private fun getImgSize() {
         var img = findViewById<ImageView>(R.id.mapView)

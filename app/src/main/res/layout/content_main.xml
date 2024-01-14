@@ -10,7 +10,7 @@
          Then, throw this (content_main.xml) layout away, it won't be used. -->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_list"
-        android:name="com.student.mappic.maplist.MapItemFragment"
+        android:name="com.student.mappic.maplist.MapItemListFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:defaultNavHost="true"

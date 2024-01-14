@@ -9,6 +9,6 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".maplist.MapItemFragment"
+    tools:context=".maplist.MapItemListFragment"
     tools:listitem="@layout/fragment_map_item" />
 <!-- list of fragment_map_item elements -->

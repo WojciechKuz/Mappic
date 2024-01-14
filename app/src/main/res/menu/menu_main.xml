@@ -8,5 +8,6 @@
         android:icon="@drawable/settings_48px_filled"
         android:orderInCategory="100"
         android:title="@string/action_settings"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:visible="false"/>
 </menu>

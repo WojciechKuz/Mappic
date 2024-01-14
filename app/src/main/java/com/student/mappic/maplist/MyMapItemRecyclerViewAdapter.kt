@@ -8,20 +8,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.student.mappic.MapOptionsPopup.Companion.openPopupMenu
 
-import com.student.mappic.maplist.placeholder.PlaceholderContent.PlaceholderItem
 import com.student.mappic.databinding.FragmentMapItemBinding
 
 /**
  * ADAPTER.
  * It has to have these methods implemented: onCreateViewHolder, onBindViewHolder, getItemCount.
  *
- * [RecyclerView.Adapter] that can display a [PlaceholderItem].
+ * [RecyclerView.Adapter] that can display a [RecycleMap].
  * nTODO: Replace the implementation with code for your data type.
  */
 
-    // TODO rename and replace PlaceholderItem
 class MyMapItemRecyclerViewAdapter(
-    private val values: List<PlaceholderItem>
+    private val values: List<RecycleMap>
 ) : RecyclerView.Adapter<MyMapItemRecyclerViewAdapter.ViewHolder>() {
 
     /**
@@ -33,7 +31,10 @@ class MyMapItemRecyclerViewAdapter(
      * Adds onClickListener to options in this menu. Note .show() on the end of method.
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        var holder = ViewHolder(
+
+        // there's alternative for this method
+
+        val holder = ViewHolder(
             FragmentMapItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -46,16 +47,15 @@ class MyMapItemRecyclerViewAdapter(
             openPopupMenu(it)
         }
         return holder
-
     }
 
     /**
      * Associates ViewHolder with data.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
+        val item: RecycleMap = values[position]
         //holder.idView.text = item.id
-        holder.nameView.text = item.content
+        holder.nameView.text = item.name
         // TODO bind thumbnail
         // TODO options
     }
@@ -82,7 +82,36 @@ class MyMapItemRecyclerViewAdapter(
         val moreView: ImageButton = binding.more
 
         override fun toString(): String {
-            return super.toString() + " '" + nameView.text + "'"
+            return super.toString() + "'" + nameView.text + "'"
         }
     }
+
+    /*
+    // HERE alternative for ViewHolder and onCreateViewHolder():
+
+
+    /**
+     * Provide a reference to the type of views that you are using
+     * (custom ViewHolder)
+     */
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        var thumbnail: ImageView? = null
+        val textView: TextView
+
+        init {
+            // Define click listener for the ViewHolder's View
+            textView = view.findViewById(R.id.map_name)
+            thumbnail = view.findViewById(R.id.map_thumbn)
+        }
+    }
+
+    // Create new views (invoked by the layout manager)
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
+        // Create a new view, which defines the UI of the list item
+        val view = LayoutInflater.from(viewGroup.context)
+            .inflate(R.layout.fragment_map_item, viewGroup, false)
+
+        return ViewHolder(view)
+    }
+    */
 }

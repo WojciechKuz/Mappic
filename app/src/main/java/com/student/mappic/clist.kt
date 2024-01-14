@@ -18,7 +18,7 @@ open class clist() {
 
         // maplist group
         const val MyMapItemRecyclerViewActivity: String = "MyMapItemRecyclerViewActivity"
-        const val MapItemFragment: String = "MapItemFragment"
+        const val MapItemListFragment: String = "MapItemListFragment"
         const val PlaceHolderContent: String = "PlaceHolderContent" // change this !!!
 
         // addmap group

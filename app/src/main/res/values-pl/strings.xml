@@ -37,6 +37,7 @@
     <string name="name_map">Nazwij swoją mapę</string>
     <string name="hint_mapname">Moja mapa</string>
     <string name="please_wait">Proszę czekać…</string>
+    <string name="saved_to_db">Zapisano mapę</string>
 
     <string-array name="errTypesMessages">
         <item>nieznany błąd</item>

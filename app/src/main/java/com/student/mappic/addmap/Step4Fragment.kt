@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.student.mappic.DB.DBAccess
 import com.student.mappic.DB.entities.DBMap
@@ -62,6 +63,8 @@ class Step4Fragment : Fragment() {
                 // save viewModel data to DB
                 viewModel.addNewMap(activity as AddMapActivity, viewModel) // would this work? or should be done through viewModel, I/O thread?
 
+                val msg = R.string.saved_to_db
+                Toast.makeText(activity as AddMapActivity, msg, Toast.LENGTH_SHORT).show()
                 // goto MapList activity
                 val gotoList = Intent(activity as AddMapActivity, MainActivity::class.java)
                 startActivity(gotoList)

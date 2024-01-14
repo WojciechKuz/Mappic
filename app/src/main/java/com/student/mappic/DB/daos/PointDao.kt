@@ -17,6 +17,7 @@ interface PointDao {
     fun getPointsOnMap(mid: Long): List<DBPoint>
 
     // FIXME if this doesn't work rollback to method above ^
+    // ksp WARNING during build
     /** Get ids of all points on map */
     @Query("SELECT pid FROM DBPoint WHERE imgid_fk in (SELECT imgid FROM DBImage WHERE mapid_fk = :mid)")
     fun getPointIdsOnMap(mid: Long): List<DBPoint> // NOT USED

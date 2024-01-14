@@ -8,7 +8,7 @@ import com.student.mappic.DB.entities.DBPoint
 import com.student.mappic.addmap.NewMapViewModel
 import java.util.stream.Collectors
 
-class DBAccess {
+interface DBAccess {
     /**
      * Adds everything what new map needs to database:
      * map record, image record and 2 point records
@@ -83,7 +83,7 @@ class DBAccess {
 
     // possibility to add multiple points
     fun addPoint() {}
-    fun deletePoint() {}
+    fun deletePoint() {} //(do not delete reference points. But ref points can be invisible)
     fun editPoint() {}
 
     /**

@@ -9,9 +9,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import com.student.mappic.DB.DBAccess
+import com.student.mappic.DB.entities.DBMap
 import com.student.mappic.MainActivity
 import com.student.mappic.R
 import com.student.mappic.addmap.common.ErrTypes
+import com.student.mappic.addmap.common.Signal
 import com.student.mappic.databinding.FragmentStep4Binding
 
 /**
@@ -42,21 +44,29 @@ class Step4Fragment : Fragment() {
     }
 
     // TODO check this
+    /**
+     * Save new map to DB. If map with same name already exists, map won't be saved and
+     * error will be displayed to user.
+     */
     private fun saveNewMap() {
-        // verify name
-        if(checkIfNameExists()) {
-            displayErrMsg(ErrTypes.NAME_EXISTS)
-            return
-        }
-        viewModel.name = binding.mapNameField.text.toString().trim()
+        binding.errText.text = getString(R.string.please_wait)
 
-        // save viewModel data to DB
-        DBAccess().addNewMap(activity as AddMapActivity, viewModel) // would this work? or should be done through viewModel, I/O thread?
+        // verify name - it had to be this way, because DB check is performed asynchronously
+        checkIfNameExists(
+            whenTrue = {
+                displayErrMsg(ErrTypes.NAME_EXISTS)
+            },
+            whenFalse = {
+                viewModel.name = binding.mapNameField.text.toString().trim()
 
-        // goto MapList activity
-        val gotoList = Intent(activity as AddMapActivity, MainActivity::class.java)
-        startActivity(gotoList)
+                // save viewModel data to DB
+                viewModel.addNewMap(activity as AddMapActivity, viewModel) // would this work? or should be done through viewModel, I/O thread?
 
+                // goto MapList activity
+                val gotoList = Intent(activity as AddMapActivity, MainActivity::class.java)
+                startActivity(gotoList)
+            }
+        )
     }
 
     /**
@@ -64,13 +74,20 @@ class Step4Fragment : Fragment() {
      *  - name exists -> true
      *  - name doesn't exist -> false
      */
-    private fun checkIfNameExists(): Boolean {
+    private fun checkIfNameExists(whenTrue: Signal, whenFalse: Signal) {
         val typedName = binding.mapNameField.text
         // get map names from DB
-        val dbMaps = DBAccess().getMapList(activity as AddMapActivity)
-        // check if name exists
-        return dbMaps.any{it.map_name == typedName.toString().trim()} // true if any name from list equals to typedName
+        var dbMaps: List<DBMap>?
+        viewModel.getMapList(activity as AddMapActivity) {
+            dbMaps = it
+            // check if name exists
+            if(dbMaps!!.any{it.map_name == typedName.toString().trim()}) // true if any name from list equals to typedName
+                whenTrue.startAction()
+            else
+                whenFalse.startAction()
+        }
     }
+
 
     fun displayErrMsg(err: ErrTypes) {
         val array: Array<String> = (activity as AddMapActivity).resources.getStringArray(R.array.errTypesMessages)

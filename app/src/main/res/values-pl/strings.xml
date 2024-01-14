@@ -36,6 +36,7 @@
     <string name="step3_type_gps2">Wpisz, albo użyj swoich współrzędnych jako drugi punkt</string>
     <string name="name_map">Nazwij swoją mapę</string>
     <string name="hint_mapname">Moja mapa</string>
+    <string name="please_wait">Proszę czekać…</string>
 
     <string-array name="errTypesMessages">
         <item>nieznany błąd</item>

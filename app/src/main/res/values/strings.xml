@@ -41,6 +41,7 @@
     <string name="step3_type_gps2">Type, or use your location as 2nd point</string>
     <string name="name_map">Name your map</string>
     <string name="hint_mapname">My map name</string>
+    <string name="please_wait">Please wait...</string>
 
     <string-array name="errTypesMessages">
         <item>unknown error</item>

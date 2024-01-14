@@ -17,6 +17,9 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
         /*ksp {
             arguments {
                 arg("room.schemaLocation", "$projectDir/schemas")
@@ -45,7 +48,8 @@ android {
 
 dependencies {
 
-    //implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1'
+
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
@@ -73,10 +77,11 @@ dependencies {
 
     def room_version = "2.6.1"
     implementation "androidx.room:room-runtime:$room_version"
-    implementation "androidx.room:room-coroutines:$room_version" // for suspend fun Room coroutines
+    //implementation "androidx.room:room-coroutines:$room_version" // for suspend fun Room coroutines // DOES IT EVEN EXIST?
     annotationProcessor "androidx.room:room-compiler:$room_version"
     // Kotlin Symbol Processing (KSP)
     ksp "androidx.room:room-compiler:$room_version"
+    implementation 'androidx.room:room-ktx:2.6.1'
 
     // RxJava2 support for Room
     //implementation "androidx.room:room-rxjava2:$room_version"

@@ -38,6 +38,17 @@ data class DBPoint (
                 reference = if(mPoint.reference) 1 else 0
             )
         }
+        fun updatePoint(dbPoint: DBPoint, mPoint: MPoint): DBPoint {
+            return DBPoint(
+                pid = dbPoint.pid,
+                imgid_fk = dbPoint.imgid_fk,
+                xpx = mPoint.xpx.toLong(),
+                ypx = mPoint.ypx.toLong(),
+                nsgps = mPoint.ygps,
+                ewgps = mPoint.xgps,
+                reference = if(mPoint.reference) 1 else 0
+            )
+        }
     }
 }
 

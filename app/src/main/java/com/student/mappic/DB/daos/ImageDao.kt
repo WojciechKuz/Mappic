@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.student.mappic.DB.entities.DBImage
 
 @Dao
@@ -20,6 +21,8 @@ interface ImageDao {
     fun getMaxId(): Long
     @Insert
     fun insertAll(vararg images: DBImage)
+    @Update
+    fun updateImages(vararg images: DBImage)
     @Insert
     fun insertAll(images: List<DBImage>)
     @Delete

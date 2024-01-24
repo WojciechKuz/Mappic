@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.student.mappic.DB.entities.DBMap
 
 @Dao
@@ -21,6 +22,8 @@ interface MapDao {
     fun getMaxId(): Long
     @Insert
     fun insertAll(vararg maps: DBMap)
+    @Update
+    fun updateMaps(vararg maps: DBMap)
     @Insert
     fun insertAll(maps: List<DBMap>)
     @Delete

@@ -28,7 +28,7 @@ interface DBAccess {
         // add image record, get it's id
         val imageR = DBImage(mapid_fk = newMapId, uri = viewModel.mapImg.toString())
         db.imageDao().insertAll(imageR)
-        val newImageId: Long = db.imageDao().getMaxId()
+        val newImageId: Long = db.imageDao().getMaxId() // Can this be a source of bugs? Is always newly added record id equal to maxid?
         if(!db.imageDao().getImage(newImageId)[0].uri.equals(viewModel.mapImg.toString())) {
             throw Exception("Can't find newly added image in database")
         }
@@ -47,7 +47,7 @@ interface DBAccess {
 
         viewModel.mapid = mapid
 
-        // TODO for now there's one image per map, in future this may change
+        // for now there's one image per map, in future this may change
         val image = db.imageDao().getImagesForMap(mapid)[0]
         viewModel.mapImg = Uri.parse(image.uri)
 
@@ -61,11 +61,33 @@ interface DBAccess {
      */
     fun editMap(context: Context, viewModel: NewMapViewModel) {
         val db = MapDatabase.getDB(context)
-        // TODO edit map:
-        //  -remove reference points from db
-        //  -post new reference points in db
-        //  -update image uri
-        //  -update map name
+
+        // step1: getting and updating objects
+        if (viewModel.mapid == null) {
+            throw Exception("NewMapViewModel.mapid is null!")
+        }
+        val oldMap = db.mapDao().getMap(viewModel.mapid!!)[0]
+        val newMap = DBMap(
+            oldMap.mapid,
+            viewModel.name
+        )
+        val oldImg = db.imageDao().getImagesForMap(viewModel.mapid!!)[0]
+        viewModel.mapImg = Uri.parse(oldImg.uri)
+        val newImg = DBImage(
+            oldImg.imgid,
+            oldImg.mapid_fk,
+            viewModel.mapImg.toString()
+        )
+        val oldPoints = db.pointDao().getReferencePointsForImage(oldImg.imgid!!)
+        val newPoints = listOf(
+            DBPoint.updatePoint(oldPoints[0], viewModel.p1),
+            DBPoint.updatePoint(oldPoints[1], viewModel.p2)
+        )
+
+        // step2: add updated objects to database
+        db.mapDao().updateMaps(newMap)
+        db.imageDao().updateImages(newImg)
+        db.pointDao().updatePoints(newPoints[0], newPoints[1])
     }
 
     fun getMapList(context: Context): List<DBMap> {

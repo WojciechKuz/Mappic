@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.student.mappic.DB.entities.DBPoint
 
 @Dao
@@ -34,6 +35,8 @@ interface PointDao {
     // inserts
     @Insert
     fun insertAll(vararg points: DBPoint)
+    @Update
+    fun updatePoints(vararg points: DBPoint)
     @Insert
     fun insertAll(points: List<DBPoint>)
 

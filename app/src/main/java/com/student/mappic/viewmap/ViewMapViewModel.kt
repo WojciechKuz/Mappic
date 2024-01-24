@@ -10,13 +10,16 @@ import com.student.mappic.addmap.common.PassStuff
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ViewMapViewModel: ViewModel(), DBAccess {
+class ViewMapViewModel: ViewModel() {
+
+    private inner class DBAcc: DBAccess
+
     /** Get images */
     fun getMapImages(
         context: Context, mapid: Long, receiveImages: PassStuff<List<DBImage>>
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            val images = super.getMapImages(context, mapid)
+            val images = DBAcc().getMapImages(context, mapid)
             receiveImages.pass(images)
         }
     }
@@ -25,7 +28,7 @@ class ViewMapViewModel: ViewModel(), DBAccess {
         context: Context, mapid: Long, receivePoints: PassStuff<List<DBPoint>>
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            val points = super.getMapPoints(context, mapid)
+            val points = DBAcc().getMapPoints(context, mapid)
             receivePoints.pass(points)
         }
     }

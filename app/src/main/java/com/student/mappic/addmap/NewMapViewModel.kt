@@ -19,7 +19,7 @@ import kotlin.coroutines.CoroutineContext
 /**
  * ViewModel for passing data between fragments in addmap package.
  */
-class NewMapViewModel: ViewModel(), DBAccess {
+class NewMapViewModel: ViewModel() {
     lateinit var mapImg: Uri
     lateinit var p1: MPoint
     lateinit var p2: MPoint
@@ -34,32 +34,34 @@ class NewMapViewModel: ViewModel(), DBAccess {
      */
     var step0visited = false
 
+    private inner class DBAcc: DBAccess
+
     /** Adds data from this ViewModel to database as a new map. */
     fun addNewMap(context: Context) {
         // Przekaże zadanie do puli wątków odpowiedzialnych za operacje wej/wyj
         // This will move task to shared pool of threads responsible for I/O operations
         viewModelScope.launch(Dispatchers.IO) {
             // SHOULD I MAKE THIS FUNCTION AND DAO METHODS SUSPENDED???
-            super.addNewMap(context, this@NewMapViewModel)
+            DBAcc().addNewMap(context, this@NewMapViewModel)
         }
     }
     /** Get data of map to be edited. Puts data into ViewModel */
     fun getEditMap(context: Context, mapid: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             // WARNING! if viewmodel isn't passed as reference, then it wouldn't work!
-            super.getEditMap(context, mapid, this@NewMapViewModel)
+            DBAcc().getEditMap(context, mapid, this@NewMapViewModel)
         }
     }
     /** Change map in database. Record in database will be overwritten by data from ViewModel */
     fun editMap(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
-            super.editMap(context, this@NewMapViewModel)
+            DBAcc().editMap(context, this@NewMapViewModel)
         }
     }
     /** Get list of maps */
     fun getMapList(context: Context, receiveMaps: PassStuff<List<DBMap>>) {
         viewModelScope.launch(Dispatchers.IO) {
-            val maps = super.getMapList(context)
+            val maps = DBAcc().getMapList(context)
             receiveMaps.pass(maps)
         }
     }

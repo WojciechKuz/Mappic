@@ -61,7 +61,7 @@ class Step4Fragment : Fragment() {
                 viewModel.name = binding.mapNameField.text.toString().trim()
 
                 // save viewModel data to DB
-                viewModel.addNewMap(activity as AddMapActivity, viewModel) // would this work? or should be done through viewModel, I/O thread?
+                viewModel.addNewMap(activity as AddMapActivity)
 
                 val msg = R.string.saved_to_db
                 Toast.makeText(activity as AddMapActivity, msg, Toast.LENGTH_SHORT).show()

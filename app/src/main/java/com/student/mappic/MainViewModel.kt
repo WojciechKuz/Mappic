@@ -9,12 +9,15 @@ import com.student.mappic.addmap.common.PassStuff
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainViewModel: ViewModel(), DBAccess {
+class MainViewModel: ViewModel() {
     lateinit var mapList: List<DBMap>
+
+    private inner class DBAcc: DBAccess
+
     /** Get list of maps. mapid, map_name */
     fun getMapList(context: Context, receiveMaps: PassStuff<List<DBMap>>) {
         viewModelScope.launch(Dispatchers.IO) {
-            val maplist = super.getMapList(context)
+            val maplist = DBAcc().getMapList(context)
             receiveMaps.pass(maplist)
         }
     }

@@ -9,9 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import com.student.mappic.MainActivity
 import com.student.mappic.MainViewModel
 import com.student.mappic.R
 import com.student.mappic.clist
+import java.util.stream.Collectors
 
 /**
  * A fragment representing a list of Items.
@@ -40,14 +42,19 @@ class MapItemListFragment : Fragment() {
             with(view) {
                 layoutManager = LinearLayoutManager(context)
 
-                // TODO replace placeholder with data from viewModel
-                // TODO get map list from DB
+                // If mapList not loaded, list of placeholders will be shown
                 val placeholder = ArrayList<RecycleMap>()
-                placeholder.add(RecycleMap(69, "My Fake Map"))
+                //placeholder.add(RecycleMap(69, "My Fake Map"))
                 for (i in 1..25) {
                     placeholder.add(RecycleMap(i.toLong(), "Map no.${i}"))
                 }
                 adapter = MyMapItemRecyclerViewAdapter(placeholder)
+
+                // show list of maps
+                viewModel.getMapList(activity as MainActivity) {
+                    Log.d(clist.MapItemListFragment, ">>> setting list of maps")
+                    adapter = MyMapItemRecyclerViewAdapter(it.stream().map{ dbMap -> RecycleMap.dbMaptoRecycleMap(dbMap) }.collect(Collectors.toList()))
+                }
             }
         }
         else Log.e(clist.MapItemListFragment, ">>> This is not RecyclerView!")

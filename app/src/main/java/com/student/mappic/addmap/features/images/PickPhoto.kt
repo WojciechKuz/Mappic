@@ -1,5 +1,6 @@
 package com.student.mappic.addmap.features.images
 
+import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import androidx.activity.result.PickVisualMediaRequest
@@ -9,8 +10,11 @@ import com.student.mappic.clist
 
 /**
  * Utility class for requesting system photo-picker.
+ * @param persistent if uri should be granted forever.
+ * Normally uris are short lived, and access to resource is blocked when app closes.
+ * If uri is going to be stored in database and used after app restarts, then set this to true.
  */
-class PickPhoto(addMap: AddMapActivity) {
+class PickPhoto(val addMap: AddMapActivity, val persistent: Boolean = false) {
 
     val pickMedia = addMap.registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         // Callback is invoked after the user selects a media item or closes the photo picker.
@@ -38,10 +42,21 @@ class PickPhoto(addMap: AddMapActivity) {
     }
     private fun photoPicked(uri: Uri) {
         Log.d(clist.PickPhoto, ">>> Selected URI: ${uri}.")
+        if (persistent) {
+            addMap.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
         whenSelected.receiveUri(uri)
     }
     private fun photoNotPicked(uri: Uri?) {
         Log.d(clist.PickPhoto, ">>> No media has been selected.")
         whenNotSelected.receiveUri(uri)
     }
+    /*
+    fun persistentUri(conRes: ContentResolver, uri: Uri) {
+        conRes.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        // ContentUris
+        // val code = Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+        //conRes.persistedUriPermissions
+    }
+    */
 }

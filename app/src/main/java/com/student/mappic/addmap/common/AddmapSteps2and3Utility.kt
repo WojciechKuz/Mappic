@@ -242,7 +242,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
             }
 
             // save gpsNS, gpsEW, pxCoords to viewModel
-            val p = com.student.mappic.db.MPoint(imgInViewCoords.x, imgInViewCoords.y, gpsEW!!, gpsNS!!, reference = true)
+            val p = MPoint(imgInViewCoords.x, imgInViewCoords.y, gpsEW!!, gpsNS!!, reference = true)
 
             if (step == 2) {
                 viewModel.p1 = p

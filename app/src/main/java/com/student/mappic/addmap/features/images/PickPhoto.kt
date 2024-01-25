@@ -27,7 +27,7 @@ class PickPhoto(val addMap: AddMapActivity, val persistent: Boolean = false) {
     /**
      * Pick photo through system photo-picker.
      *
-     * @param whenNotSelected - handle receiving uri of photo selected by user
+     * @param whenSelected - handle receiving uri of photo selected by user
      * @param whenNotSelected - passes null uri, don't use it's value. Use this interface only to trigger actions.
      */
     private lateinit var whenSelected: PassUri

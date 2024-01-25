@@ -1,8 +1,4 @@
-package com.student.mappic.DB.daos
-
-import androidx.room.Dao
-import androidx.room.Query
-import com.student.mappic.addmap.NewMapViewModel
+package com.student.mappic.db.daos
 
 //@Dao
 interface ViewModelDao {

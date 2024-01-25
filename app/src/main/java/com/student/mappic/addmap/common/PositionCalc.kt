@@ -1,6 +1,6 @@
 package com.student.mappic.addmap.common
 
-import com.student.mappic.DB.MPoint
+import com.student.mappic.db.MPoint
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos

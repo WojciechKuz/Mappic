@@ -9,8 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import com.student.mappic.DB.DBAccess
-import com.student.mappic.DB.entities.DBMap
+import com.student.mappic.db.entities.DBMap
 import com.student.mappic.MainActivity
 import com.student.mappic.R
 import com.student.mappic.addmap.common.ErrTypes
@@ -61,7 +60,10 @@ class Step4Fragment : Fragment() {
                 viewModel.name = binding.mapNameField.text.toString().trim()
 
                 // save viewModel data to DB
-                viewModel.addNewMap(activity as AddMapActivity)
+                if (viewModel.mapid == null)
+                    viewModel.addNewMap(activity as AddMapActivity)
+                else
+                    viewModel.editMap(activity as AddMapActivity)
 
                 val msg = R.string.saved_to_db
                 Toast.makeText(activity as AddMapActivity, msg, Toast.LENGTH_SHORT).show()

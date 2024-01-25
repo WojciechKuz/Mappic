@@ -1,27 +1,41 @@
 package com.student.mappic.maplist
 
+import android.content.Context
+import android.content.Intent
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import com.student.mappic.MapOptionsPopup.Companion.openPopupMenu
+import com.student.mappic.db.DeleteInterface
+import com.student.mappic.MapOptionsPopup
+import com.student.mappic.clist
 
 import com.student.mappic.databinding.FragmentMapItemBinding
+import com.student.mappic.viewmap.ViewMapActivity
 
 /**
  * ADAPTER.
  * It has to have these methods implemented: onCreateViewHolder, onBindViewHolder, getItemCount.
+ *
+ * Warning! I added additional constructor parameter:
+ * @param deleteMapFun elements in recycleView list have little menu with two actions - delete and edit.
+ * Delete action needs to be provided via interface (this parameter). This interface has 2 parameters -
+ * context and mapid.
  *
  * [RecyclerView.Adapter] that can display a [RecycleMap].
  * nTODO: Replace the implementation with code for your data type.
  */
 
 class MyMapItemRecyclerViewAdapter(
-    private val values: List<RecycleMap>
+    private val values: List<RecycleMap>, //navigateToMapView: Signal
+    private val deleteMapFun: DeleteInterface
 ) : RecyclerView.Adapter<MyMapItemRecyclerViewAdapter.ViewHolder>() {
 
+    private lateinit var parentContext: Context
     /**
      * Used when new ViewHolder is created (element of list).
      *
@@ -41,11 +55,10 @@ class MyMapItemRecyclerViewAdapter(
                 false
             )
         )
-        holder.nameView.setOnClickListener { openMap() }
-        holder.thumbnailView.setOnClickListener { openMap() }
-        holder.moreView.setOnClickListener {
-            openPopupMenu(it)
-        }
+        parentContext = parent.context
+        holder.nameView.setOnClickListener { holder.openMap(it) }
+        holder.thumbnailView.setOnClickListener { holder.openMap(it) }
+        //  moreView.onclickListener is set in onBindViewHolder()
         return holder
     }
 
@@ -53,21 +66,32 @@ class MyMapItemRecyclerViewAdapter(
      * Associates ViewHolder with data.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item: RecycleMap = values[position]
-        //holder.idView.text = item.id
+        var rePosition = position
+        if(position >= values.size) {
+            Log.wtf(clist.MyMapItemRecyclerViewAdapter,"In onBindViewHolder()"
+                    + " \'position\' parameter is out of bounds for values. (values: List<RecycleMap>)")
+            rePosition = values.size - 1
+        }
+        val item: RecycleMap = values[rePosition]
         holder.nameView.text = item.name
+        holder.mapid = item.mapid
+
         // TODO bind thumbnail
         // TODO options
+
+        // set onClickListener
+        val popup = MapOptionsPopup(parentContext, holder.mapid!!)
+        popup.setMapName(holder.nameView.text.toString())   // set name
+        popup.setDeleteFun({ con, id ->
+            deleteMapFun.delete(con, id)
+            holder.itemView.visibility = View.GONE
+        })                                              // set delete fun
+        holder.moreView.setOnClickListener {
+            popup.openPopupMenu(it) // finally, setting openPopup as onClickListener
+        }
     }
 
     override fun getItemCount(): Int = values.size
-
-    /**
-     * Display map
-     */
-    private fun openMap() {
-        // TODO open map to view and navigate
-    }
 
     /**
      * VIEW HOLDER
@@ -80,6 +104,19 @@ class MyMapItemRecyclerViewAdapter(
         val nameView: TextView = binding.mapName
         val thumbnailView: ImageView = binding.mapThumbn
         val moreView: ImageButton = binding.more
+        var mapid: Long? = null
+
+        /**
+         * Display map, open ViewMapActivity
+         */
+        fun openMap(view: View) {
+            if(mapid == null) {
+                return
+            }
+            val gotoMapView = Intent(view.context, ViewMapActivity::class.java)
+            gotoMapView.putExtra("whichmap", mapid!!)
+            view.context.startActivity(gotoMapView)
+        }
 
         override fun toString(): String {
             return super.toString() + "'" + nameView.text + "'"

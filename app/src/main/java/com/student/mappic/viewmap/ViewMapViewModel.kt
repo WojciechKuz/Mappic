@@ -1,11 +1,12 @@
 package com.student.mappic.viewmap
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.student.mappic.DB.DBAccess
-import com.student.mappic.DB.entities.DBImage
-import com.student.mappic.DB.entities.DBPoint
+import com.student.mappic.db.DBAccess
+import com.student.mappic.db.entities.DBImage
+import com.student.mappic.db.entities.DBPoint
 import com.student.mappic.addmap.common.PassStuff
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,6 +15,18 @@ class ViewMapViewModel: ViewModel() {
 
     private inner class DBAcc: DBAccess
 
+
+    fun getMapName(
+        context: Context, mapid: Long, receiveName: PassStuff<String>
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val name = DBAcc().getMapName(context, mapid)
+            if(name != null)
+                receiveName.pass(name)
+            else
+                Log.e("ViewMapViewModel", ">>> map name returned from DB is null")
+        }
+    }
     /** Get images */
     fun getMapImages(
         context: Context, mapid: Long, receiveImages: PassStuff<List<DBImage>>
@@ -30,6 +43,12 @@ class ViewMapViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             val points = DBAcc().getMapPoints(context, mapid)
             receivePoints.pass(points)
+        }
+    }
+    /** Deletes map and associated images and points. */
+    fun deleteMap(context: Context, mapid: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            DBAcc().deleteMap(context, mapid)
         }
     }
     // TODO override / implement methods from DBAccess

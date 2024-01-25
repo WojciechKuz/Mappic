@@ -1,6 +1,6 @@
-package com.student.mappic.DB
+package com.student.mappic.db
 
-import com.student.mappic.DB.entities.DBPoint
+import com.student.mappic.db.entities.DBPoint
 
 /**
  * MPoint, aka MapPoint or MyPoint

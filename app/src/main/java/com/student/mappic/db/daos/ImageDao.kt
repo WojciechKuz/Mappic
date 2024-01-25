@@ -1,11 +1,11 @@
-package com.student.mappic.DB.daos
+package com.student.mappic.db.daos
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.student.mappic.DB.entities.DBImage
+import com.student.mappic.db.entities.DBImage
 
 @Dao
 interface ImageDao {
@@ -29,6 +29,7 @@ interface ImageDao {
     fun delete(image: DBImage)
     @Query("DELETE FROM DBImage WHERE imgid == :delId")
     fun deleteById(delId: Long)
+    /** Remember to delete associated points first! */
     @Query("DELETE FROM DBImage WHERE mapid_fk == :mid")
     fun deleteImageForMapid(mid: Long)
 }

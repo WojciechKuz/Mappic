@@ -1,6 +1,6 @@
 package com.student.mappic.maplist
 
-import com.student.mappic.DB.entities.DBMap
+import com.student.mappic.db.entities.DBMap
 
 /** Data of row for RecyclerView in MainView */
 data class RecycleMap(

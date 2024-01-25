@@ -1,6 +1,7 @@
 package com.student.mappic.addmap
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.student.mappic.databinding.FragmentStep1okBinding
 import com.student.mappic.R
+import com.student.mappic.clist
 
 /**
  * This lets you review photo, before you continue creating map.
@@ -37,7 +39,14 @@ class Step1okFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.imgView.setImageURI(viewModel.mapImg)
+        try {
+            // FUTURE_FIXME: check if app has permission to open image with this uri
+            binding.imgView.setImageURI(viewModel.mapImg)
+        } catch (e: Exception) {
+            Log.e(clist.Step1okFragment, ">>> Can't view image. It's probably due to lack of permissions.")
+            println(e)
+            // after catching exception it crashes anyway
+        }
 
         binding.YesFAB.setOnClickListener {
             onClickYes()

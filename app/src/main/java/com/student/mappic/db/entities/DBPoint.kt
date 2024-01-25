@@ -1,9 +1,9 @@
-package com.student.mappic.DB.entities
+package com.student.mappic.db.entities
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.student.mappic.DB.MPoint
+import com.student.mappic.db.MPoint
 
 // (DBImage.class, [DBImage.imgid], )
 // @ForeignKey(DBImage, [DBImage.imgid], [DBPoint.uid_fk]
@@ -38,6 +38,10 @@ data class DBPoint (
                 reference = if(mPoint.reference) 1 else 0
             )
         }
+        /** Creates new DBPoint
+         * @param dbPoint provides ids (pid, imgid_fk),
+         * @param mPoint provides the rest
+         */
         fun updatePoint(dbPoint: DBPoint, mPoint: MPoint): DBPoint {
             return DBPoint(
                 pid = dbPoint.pid,

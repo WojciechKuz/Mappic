@@ -9,7 +9,7 @@ import android.util.Size
 import android.view.MotionEvent
 import android.widget.TextView
 import androidx.annotation.FloatRange
-import com.student.mappic.DB.MPoint
+import com.student.mappic.db.MPoint
 import com.student.mappic.R
 import com.student.mappic.addmap.AddMapActivity
 import com.student.mappic.addmap.NewMapViewModel
@@ -242,7 +242,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
             }
 
             // save gpsNS, gpsEW, pxCoords to viewModel
-            val p = com.student.mappic.DB.MPoint(imgInViewCoords.x, imgInViewCoords.y, gpsEW!!, gpsNS!!, reference = true)
+            val p = com.student.mappic.db.MPoint(imgInViewCoords.x, imgInViewCoords.y, gpsEW!!, gpsNS!!, reference = true)
 
             if (step == 2) {
                 viewModel.p1 = p

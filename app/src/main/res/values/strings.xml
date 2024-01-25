@@ -43,6 +43,11 @@
     <string name="hint_mapname">My map name</string>
     <string name="please_wait">Please wait…</string>
     <string name="saved_to_db">Map saved</string>
+    <string name="dialog_message_delete">Delete map %1$s?</string>
+    <string name="dialog_yes">Yes</string>
+    <string name="dialog_no">No</string>
+    <string name="map_deleted">Deleted.</string>
+
 
     <string-array name="errTypesMessages">
         <item>unknown error</item>

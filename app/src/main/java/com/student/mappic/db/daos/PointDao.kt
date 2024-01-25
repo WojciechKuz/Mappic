@@ -1,11 +1,11 @@
-package com.student.mappic.DB.daos
+package com.student.mappic.db.daos
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.student.mappic.DB.entities.DBPoint
+import com.student.mappic.db.entities.DBPoint
 
 @Dao
 interface PointDao {

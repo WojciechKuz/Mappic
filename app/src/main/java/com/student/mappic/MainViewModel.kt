@@ -3,8 +3,8 @@ package com.student.mappic
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.student.mappic.DB.DBAccess
-import com.student.mappic.DB.entities.DBMap
+import com.student.mappic.db.DBAccess
+import com.student.mappic.db.entities.DBMap
 import com.student.mappic.addmap.common.PassStuff
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,6 +19,12 @@ class MainViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             val maplist = DBAcc().getMapList(context)
             receiveMaps.pass(maplist)
+        }
+    }
+    /** Deletes map and associated images and points. */
+    fun deleteMap(context: Context, mapid: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            DBAcc().deleteMap(context, mapid)
         }
     }
 

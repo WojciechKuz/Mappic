@@ -6,20 +6,30 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.widget.ImageButton
+import androidx.activity.viewModels
 import com.student.mappic.MainActivity
-import com.student.mappic.MapOptionsPopup.Companion.openPopupMenu
+import com.student.mappic.MapOptionsPopup
 import com.student.mappic.R
 
 /**
  * This activity shows user map and displays user's location on it
  */
 class ViewMapActivity : AppCompatActivity() {
+
+    val viewModel: ViewMapViewModel by viewModels()
+
+    val mapid: Long = intent.getLongExtra("whichmap", -1)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_map)
 
+        val popup = MapOptionsPopup(this, mapid)
+        popup.setDeleteFun({ con, id -> viewModel.deleteMap(con, id) })
+        viewModel.getMapName(this, mapid) { popup.setMapName(it) } // DB access may take a while, it's fine
+
         findViewById<ImageButton>(R.id.backArrow).setOnClickListener { backToMapList() }
-        findViewById<ImageButton>(R.id.mapOptions).setOnClickListener { openPopupMenu(it) }
+        findViewById<ImageButton>(R.id.mapOptions).setOnClickListener { popup.openPopupMenu(it) }
     }
     private fun backToMapList() {
         val gotoList = Intent(this, MainActivity::class.java)

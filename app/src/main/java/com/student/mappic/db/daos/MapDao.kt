@@ -1,11 +1,11 @@
-package com.student.mappic.DB.daos
+package com.student.mappic.db.daos
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.student.mappic.DB.entities.DBMap
+import com.student.mappic.db.entities.DBMap
 
 @Dao
 interface MapDao {
@@ -26,6 +26,7 @@ interface MapDao {
     fun updateMaps(vararg maps: DBMap)
     @Insert
     fun insertAll(maps: List<DBMap>)
+    /** Remember to delete associated points and images first! */
     @Delete
     fun delete(map: DBMap)
     @Query("DELETE FROM DBMap WHERE mapid == :delId")

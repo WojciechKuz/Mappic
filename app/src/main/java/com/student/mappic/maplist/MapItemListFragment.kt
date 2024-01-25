@@ -1,6 +1,7 @@
 package com.student.mappic.maplist
 
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +14,7 @@ import com.student.mappic.MainActivity
 import com.student.mappic.MainViewModel
 import com.student.mappic.R
 import com.student.mappic.clist
+import kotlinx.coroutines.Dispatchers
 import java.util.stream.Collectors
 
 /**
@@ -44,17 +46,22 @@ class MapItemListFragment : Fragment() {
 
                 // If mapList not loaded, list of placeholders will be shown
                 val placeholder = ArrayList<RecycleMap>()
-                //placeholder.add(RecycleMap(69, "My Fake Map"))
                 for (i in 1..25) {
                     placeholder.add(RecycleMap(i.toLong(), "Map no.${i}"))
                 }
-                adapter = MyMapItemRecyclerViewAdapter(placeholder)
+                adapter = MyMapItemRecyclerViewAdapter(placeholder) { con, id -> /* Nothing. No real map - nothing to delete. */}
 
                 // show list of maps
                 viewModel.getMapList(activity as MainActivity) {
                     Log.d(clist.MapItemListFragment, ">>> setting list of maps")
-                    adapter = MyMapItemRecyclerViewAdapter(it.stream().map{ dbMap -> RecycleMap.dbMaptoRecycleMap(dbMap) }.collect(Collectors.toList()))
+                    Looper.getMainLooper().thread.run {
+                        // this must be run on ui thread. The way I did it is not the best solution I think...
+                        adapter = MyMapItemRecyclerViewAdapter(
+                            it.stream().map{dbMap -> RecycleMap.dbMaptoRecycleMap(dbMap)}.collect(Collectors.toList())
+                        ) { con, id -> viewModel.deleteMap(con, id) }
+                    }
                 }
+                //Dispatchers.Main
             }
         }
         else Log.e(clist.MapItemListFragment, ">>> This is not RecyclerView!")

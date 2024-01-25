@@ -3,6 +3,7 @@ package com.student.mappic.addmap
 
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.navigation.findNavController
@@ -27,6 +28,13 @@ class AddMapActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
+
+        // if contains extra it's edit map mode
+        val whichmap = intent.getLongExtra("whichmap", -1)
+        if(whichmap != -1L) {
+            val viewModel: NewMapViewModel by viewModels()
+            viewModel.getEditMap(this, whichmap)
+        }
 
         binding = ActivityAddMapBinding.inflate(layoutInflater)
         setContentView(binding.root)

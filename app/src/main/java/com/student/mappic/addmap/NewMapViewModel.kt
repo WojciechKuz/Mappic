@@ -4,17 +4,12 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.student.mappic.DB.DBAccess
-import com.student.mappic.DB.MPoint
-import com.student.mappic.DB.MapDatabase
-import com.student.mappic.DB.entities.DBImage
-import com.student.mappic.DB.entities.DBMap
-import com.student.mappic.DB.entities.DBPoint
+import com.student.mappic.db.DBAccess
+import com.student.mappic.db.MPoint
+import com.student.mappic.db.entities.DBMap
 import com.student.mappic.addmap.common.PassStuff
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 
 /**
  * ViewModel for passing data between fragments in addmap package.

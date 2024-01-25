@@ -1,10 +1,10 @@
-package com.student.mappic.DB
+package com.student.mappic.db
 
 import android.content.Context
 import android.net.Uri
-import com.student.mappic.DB.entities.DBImage
-import com.student.mappic.DB.entities.DBMap
-import com.student.mappic.DB.entities.DBPoint
+import com.student.mappic.db.entities.DBImage
+import com.student.mappic.db.entities.DBMap
+import com.student.mappic.db.entities.DBPoint
 import com.student.mappic.addmap.NewMapViewModel
 import java.util.stream.Collectors
 
@@ -103,6 +103,10 @@ interface DBAccess {
         return db.pointDao().getPointsOnMap(mapid)
     }
 
+    fun getMapName(context: Context, mapid: Long): String? {
+        val db = MapDatabase.getDB(context)
+        return db.mapDao().getMap(mapid)[0].map_name
+    }
     // possibility to add multiple points
     fun addPoint() {}
     fun deletePoint() {} //(do not delete reference points. But ref points can be invisible)

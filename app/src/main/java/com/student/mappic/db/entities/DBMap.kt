@@ -1,4 +1,4 @@
-package com.student.mappic.DB.entities
+package com.student.mappic.db.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

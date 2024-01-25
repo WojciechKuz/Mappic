@@ -38,6 +38,10 @@
     <string name="hint_mapname">Moja mapa</string>
     <string name="please_wait">Proszę czekać…</string>
     <string name="saved_to_db">Zapisano mapę</string>
+    <string name="dialog_message_delete">Czy chcesz usunąć mapę %1$s?</string>
+    <string name="dialog_yes">Tak</string>
+    <string name="dialog_no">Nie</string>
+    <string name="map_deleted">Usunięto.</string>
 
     <string-array name="errTypesMessages">
         <item>nieznany błąd</item>

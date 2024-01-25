@@ -33,7 +33,7 @@ class Step0Fragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        pickPhoto = PickPhoto(activity as AddMapActivity)
+        pickPhoto = PickPhoto(activity as AddMapActivity, persistent = true)
         _binding = FragmentStep0Binding.inflate(inflater, container, false)
         return binding.root
     }
@@ -87,6 +87,7 @@ class Step0Fragment : Fragment() {
      */
     private fun photoPicked(photo: Uri?) {
         if (photo != null) {
+
             viewModel.mapImg = photo
             findNavController().navigate(R.id.action_step0_to_step2)
         }

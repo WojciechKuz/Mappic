@@ -76,8 +76,8 @@ class MyMapItemRecyclerViewAdapter(
         holder.nameView.text = item.name
         holder.mapid = item.mapid
 
-        // TODO bind thumbnail
-        // TODO options
+        // FUTURE_TODO bind thumbnail
+        // FUTURE_TODO options
 
         // set onClickListener
         val popup = MapOptionsPopup(parentContext, holder.mapid!!)

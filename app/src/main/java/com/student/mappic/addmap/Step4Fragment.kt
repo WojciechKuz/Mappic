@@ -43,7 +43,6 @@ class Step4Fragment : Fragment() {
         binding.OkFAB.setOnClickListener { saveNewMap() }
     }
 
-    // TODO check this
     /**
      * Save new map to DB. If map with same name already exists, map won't be saved and
      * error will be displayed to user.

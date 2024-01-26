@@ -1,0 +1,152 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "666e2e0d02b1436fd8d776d043f14ff5",
+    "entities": [
+      {
+        "tableName": "DBMap",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`mapid` INTEGER, `map_name` TEXT, PRIMARY KEY(`mapid`))",
+        "fields": [
+          {
+            "fieldPath": "mapid",
+            "columnName": "mapid",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "map_name",
+            "columnName": "map_name",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "mapid"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "DBImage",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`imgid` INTEGER, `mapid_fk` INTEGER, `uri` TEXT, PRIMARY KEY(`imgid`), FOREIGN KEY(`mapid_fk`) REFERENCES `DBMap`(`mapid`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "imgid",
+            "columnName": "imgid",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mapid_fk",
+            "columnName": "mapid_fk",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "uri",
+            "columnName": "uri",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "imgid"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "DBMap",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "mapid_fk"
+            ],
+            "referencedColumns": [
+              "mapid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "DBPoint",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`pid` INTEGER, `imgid_fk` INTEGER, `xpx` INTEGER, `ypx` INTEGER, `nsgps` REAL, `ewgps` REAL, `reference` INTEGER, PRIMARY KEY(`pid`), FOREIGN KEY(`imgid_fk`) REFERENCES `DBImage`(`imgid`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "pid",
+            "columnName": "pid",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "imgid_fk",
+            "columnName": "imgid_fk",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "xpx",
+            "columnName": "xpx",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ypx",
+            "columnName": "ypx",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nsgps",
+            "columnName": "nsgps",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ewgps",
+            "columnName": "ewgps",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "reference",
+            "columnName": "reference",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "pid"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "DBImage",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "imgid_fk"
+            ],
+            "referencedColumns": [
+              "imgid"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '666e2e0d02b1436fd8d776d043f14ff5')"
+    ]
+  }
+}

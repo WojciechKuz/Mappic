@@ -44,7 +44,7 @@
             android:layout_weight="6">
 
             <!-- Overloaded view! -->
-            <com.student.mappic.addmap.common.myviews.MyView
+            <pl.umk.mat.mappic.addmap.common.myviews.MyView
                 android:id="@+id/touchDetector"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -62,7 +62,7 @@
                 tools:src="@drawable/map_h"
                 tools:ignore="ContentDescription" />
 
-            <com.student.mappic.opengl.MapGLSurfaceView
+            <pl.umk.mat.mappic.opengl.MapGLSurfaceView
                 android:id="@+id/openGLView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

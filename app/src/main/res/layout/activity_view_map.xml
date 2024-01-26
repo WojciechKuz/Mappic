@@ -24,7 +24,7 @@
             tools:srcCompat="@drawable/map_48px"
             tools:ignore="ContentDescription" />
 
-        <com.student.mappic.opengl.MapGLSurfaceView
+        <pl.umk.mat.mappic.opengl.MapGLSurfaceView
             android:id="@+id/mapView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

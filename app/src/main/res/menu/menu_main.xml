@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.student.mappic.MainActivity">
+    tools:context=".MainActivity">
     <!-- TODO add '?' icon which will open help on how to add map and how to use them -->
     <item
         android:id="@+id/action_settings"

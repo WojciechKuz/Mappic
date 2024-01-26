@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'com.student.mappic'
+    namespace 'pl.umk.mat.mappic'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.student.mappic"
+        applicationId "pl.umk.mat.mappic"
         minSdk 25
         targetSdk 33
         versionCode 1

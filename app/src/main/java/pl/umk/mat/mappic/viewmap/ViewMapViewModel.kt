@@ -1,6 +1,8 @@
 package pl.umk.mat.mappic.viewmap
 
 import android.content.Context
+import android.graphics.PointF
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,11 +12,16 @@ import pl.umk.mat.mappic.db.entities.DBPoint
 import pl.umk.mat.mappic.common.PassStuff
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import pl.umk.mat.mappic.db.MPoint
 
 class ViewMapViewModel: ViewModel() {
 
-    private inner class DBAcc: DBAccess
+    var mapid: Long? = null
+    lateinit var name: String
+    lateinit var mapImg: Uri
+    var lastPoint: PointF? = null
 
+    private inner class DBAcc: DBAccess
 
     fun getMapName(
         context: Context, mapid: Long, receiveName: PassStuff<String>
@@ -42,6 +49,15 @@ class ViewMapViewModel: ViewModel() {
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             val points = DBAcc().getMapPoints(context, mapid)
+            receivePoints.pass(points)
+        }
+    }
+    /** Get two reference points on given map */
+    fun getMapReferencePoints(
+        context: Context, mapid: Long, receivePoints: PassStuff<List<DBPoint>>
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val points = DBAcc().getMapReferencePoints(context, mapid)
             receivePoints.pass(points)
         }
     }

@@ -26,6 +26,9 @@ interface PointDao {
     @Query("SELECT * FROM DBPoint WHERE imgid_fk == :imageid AND reference == 1") // reference == 1 means == true, because it's integer
     fun getReferencePointsForImage(imageid: Long): List<DBPoint>
 
+    @Query("SELECT * FROM DBPoint WHERE imgid_fk in (SELECT imgid FROM DBImage WHERE mapid_fk = :mid) AND reference == 1")
+    fun getReferencePointsForMap(mid: Long): List<DBPoint>
+
     @Query("SELECT MAX(pid) FROM DBPoint")
     fun getMaxId(): Long
     /** Get certain point by it's id */

@@ -90,6 +90,11 @@ interface DBAccess {
         db.pointDao().updatePoints(newPoints[0], newPoints[1])
     }
 
+    fun getMapReferencePoints(context: Context, mapid: Long): List<DBPoint> {
+        val db = MapDatabase.getDB(context)
+        return db.pointDao().getReferencePointsForMap(mapid)
+    }
+
     fun getMapList(context: Context): List<DBMap> {
         val db = MapDatabase.getDB(context)
         return db.mapDao().mapList()

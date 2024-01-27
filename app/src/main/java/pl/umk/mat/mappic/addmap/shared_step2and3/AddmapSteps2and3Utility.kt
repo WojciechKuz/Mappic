@@ -34,9 +34,10 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
     /** NOTE: these are 'in View' coordinates'.
      *  It has to be recalculated to 'originalPoint' coordinates to be saved to DB.
      *  Use ImgSizeCalc to calculate right coordinates. */
-    private var viewCoords: Point? = null
+    private var viewCoords: PointF? = null
     private var gpsNS: Double? = null
     private var gpsEW: Double? = null
+    private lateinit var imgCalc: ImageSizeCalc
 
     init {
         locationProvider.activityOnCreate() // here ???
@@ -56,7 +57,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
             )
 
             // NOTE: these are coords relative to ImgView, read viewCoords documentation!
-            viewCoords = Point(round(event.x).toInt(), round(event.y).toInt())
+            viewCoords = PointF(event.x, event.y)
         }
         //else Log.w(clist.Step2Fragment, ">>> Nie otrzymano informacji o pozycji kliknięcia!")
     }
@@ -73,13 +74,13 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         fillGPSCoordinates(p.xgps, p.ygps)
 
         // Now, mark point on img
-        val iscalc = ImageSizeCalc(step2and3.origImgSizeGet(viewModel), step2and3.viewSizeGet())
-        val ivp = iscalc.toViewPoint(Point(p.xpx, p.ypx)) // original to inView coords
+        imgCalc = ImageSizeCalc(step2and3.origImgSizeGet(viewModel.mapImg), step2and3.viewSizeGet())
+        val ivp = imgCalc.toViewPoint(Point(p.xpx, p.ypx)) // original to inView coords
         viewCoords = ivp    // ivp is short for inViewPoint
         Log.d(TAG, ">>> mark point, x: ${ivp.x}, y: ${ivp.y}")
         val glcoor = ImageSizeCalc.toOpenGLPoint(
             step2and3.viewSizeGet(),
-            PointF(ivp.x.toFloat(), ivp.y.toFloat())
+            PointF(ivp.x, ivp.y)
         )
         Log.d(TAG, ">>> OpenGL coordinates: x: ${glcoor.x}, y: ${glcoor.y}")
         step2and3.getOpenGLView().pointMarker(glcoor) // MARK POINT
@@ -221,18 +222,21 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
             return false
 
         // init helper class for coordinate recalculation
-        val ISCalc = ImageSizeCalc(step2and3.origImgSizeGet(viewModel), step2and3.viewSizeGet())
+        imgCalc = ImageSizeCalc(step2and3.origImgSizeGet(viewModel.mapImg), step2and3.viewSizeGet())
 
         // Not checking gpsNS and gpsEW here because it's already been checked.
         if(viewCoords != null) {
-            val inViewCoords = viewCoords!! // recalculates to inView coordinates
-            if (!ISCalc.isPointInBounds(inViewCoords)) { // wasFIXME here, marked correctly, displays error
+            if (!imgCalc.isPointInBounds(viewCoords!!)) { // wasFIXME here, marked correctly, displays error
                 displayErrMsg(ErrTypes.POINT_OUT_OF_BOUNDS)
                 return false
             }
 
             // save gpsNS, gpsEW, pxCoords to viewModel
-            val p = MPoint(inViewCoords.x, inViewCoords.y, gpsEW!!, gpsNS!!, reference = true)
+            val origPoint = imgCalc.toOriginalPoint(viewCoords!!) // recalculates to original image coordinates
+            val p = MPoint(
+                origPoint.x, origPoint.y,
+                gpsEW!!, gpsNS!!, reference = true
+            )
 
             if (step == 2) {
                 viewModel.p1 = p

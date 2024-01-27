@@ -5,6 +5,7 @@ import android.graphics.Point
 import android.graphics.PointF
 import android.util.Log
 import pl.umk.mat.mappic.clist
+import kotlin.math.round
 
 /**
  * This class solves this problem:
@@ -72,7 +73,7 @@ class ImageSizeCalc(val original: Size, val view: Size) {
      * @returns true - if it fits within Image
      * @returns false - if isn't in Image
      */
-    private fun isScaledPointInBounds(pointInScaled: Point): Boolean {
+    private fun isScaledPointInBounds(pointInScaled: PointF): Boolean {
         // position values can be from 0 to width - 1 or from 0 to height - 1
         if(pointInScaled.x < 0 || pointInScaled.x >= scaled.width)
             return false
@@ -94,9 +95,9 @@ class ImageSizeCalc(val original: Size, val view: Size) {
      * @returns true - if it fits within Image
      * @returns false - if isn't in Image, point marked on black empty area.
      */
-    fun isPointInBounds(inViewPoint: Point): Boolean {
+    fun isPointInBounds(inViewPoint: PointF): Boolean {
         val emptySp = oneEmpty()
-        return isScaledPointInBounds( Point( // creating inScaledPoint
+        return isScaledPointInBounds( PointF( // creating inScaledPoint
             inViewPoint.x - emptySp.width,
             inViewPoint.y - emptySp.height
         ))
@@ -107,11 +108,11 @@ class ImageSizeCalc(val original: Size, val view: Size) {
      * coordinates of original image.
      * This are the coordinates that will be saved.
      */
-    fun toOriginalPoint(inViewPoint: Point): Point {
+    fun toOriginalPoint(inViewPoint: PointF): Point {
         val empty = oneEmpty()
         return Point(
-            (inViewPoint.x - empty.width) * original.width / scaled.width,
-            (inViewPoint.y - empty.height) * original.height / scaled.height
+            round((inViewPoint.x - empty.width) * original.width / scaled.width).toInt(),
+            round((inViewPoint.y - empty.height) * original.height / scaled.height).toInt()
         )
     }
 
@@ -119,11 +120,11 @@ class ImageSizeCalc(val original: Size, val view: Size) {
      * Reverse to toOriginalPoint().
      * Calculate inView coordinates from original coordinates.
      */
-    fun toViewPoint(originalPoint: Point): Point {
+    fun toViewPoint(originalPoint: Point): PointF {
         val empty = oneEmpty()
-        return Point(
-            originalPoint.x * scaled.width / original.width + empty.width,
-            originalPoint.y * scaled.height / original.height + empty.height
+        return PointF(
+            originalPoint.x * 1f * scaled.width / original.width + empty.width,
+            originalPoint.y * 1f * scaled.height / original.height + empty.height
         )
     }
 

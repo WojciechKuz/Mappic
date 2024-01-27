@@ -5,6 +5,7 @@ import android.graphics.PointF
 import pl.umk.mat.mappic.db.MPoint
 import kotlin.math.PI
 import kotlin.math.abs
+import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.round
@@ -21,10 +22,10 @@ import kotlin.math.sqrt
 class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>) {
 
     init {
-        if(px.size >= 2) { // Equal or greater is ok, anything over 2 will be ignored.
+        if(px.size < 2) { // Equal or greater is ok, anything over 2 will be ignored.
             throw IndexOutOfBoundsException("px array size must be 2!")
         }
-        if(geo.size >= 2) {
+        if(geo.size < 2) {
             throw IndexOutOfBoundsException("geo array size must be 2!")
         }
     }
@@ -37,11 +38,11 @@ class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>)
         px[1].y - px[0].y
     )
 
-    constructor(mPoints: Array<MPoint>) : this(
+    constructor(mPoints: List<MPoint>) : this(
         getPxArray(mPoints),
         getGpsArray(mPoints)
     ) {
-        if(mPoints.size >= 2) {
+        if(mPoints.size < 2) {
             throw IndexOutOfBoundsException("mPoint array size must be 2!")
         }
     }
@@ -115,13 +116,23 @@ class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>)
             return sqrt(MdistNS.pow(2) + MdistEW.pow(2))
         }
 
-        private fun getPxArray(mPoints: Array<MPoint>): Array<Point> {
+        /**
+         * Get angle for point A, pointing at pointB. Output in radians.
+         */
+        fun pointAt(a: PointF, b: PointF): Double {
+            return atan2(
+                (b.y-a.y).toDouble(),
+                (b.x-a.x).toDouble()
+            )
+        }
+
+        private fun getPxArray(mPoints: List<MPoint>): Array<Point> {
             return arrayOf(
                 Point(mPoints[0].xpx, mPoints[0].ypx),
                 Point(mPoints[1].xpx, mPoints[1].ypx)
             )
         }
-        private fun getGpsArray(mPoints: Array<MPoint>): Array<PointF> {
+        private fun getGpsArray(mPoints: List<MPoint>): Array<PointF> {
             return arrayOf(
                 PointF(mPoints[0].xgps.toFloat(), mPoints[0].ygps.toFloat()),
                 PointF(mPoints[1].xgps.toFloat(), mPoints[1].ygps.toFloat())

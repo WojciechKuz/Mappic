@@ -1,4 +1,4 @@
-package pl.umk.mat.mappic.addmap.common
+package pl.umk.mat.mappic.common
 
 import android.util.Size
 import android.graphics.Point

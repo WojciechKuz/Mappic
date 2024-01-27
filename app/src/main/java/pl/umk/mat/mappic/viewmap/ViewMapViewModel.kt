@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import pl.umk.mat.mappic.db.DBAccess
 import pl.umk.mat.mappic.db.entities.DBImage
 import pl.umk.mat.mappic.db.entities.DBPoint
-import pl.umk.mat.mappic.addmap.common.PassStuff
+import pl.umk.mat.mappic.common.PassStuff
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

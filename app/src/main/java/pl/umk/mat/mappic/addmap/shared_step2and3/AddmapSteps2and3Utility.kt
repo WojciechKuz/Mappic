@@ -1,4 +1,4 @@
-package pl.umk.mat.mappic.addmap.common
+package pl.umk.mat.mappic.addmap.shared_step2and3
 
 import android.graphics.Point
 import android.graphics.PointF
@@ -14,6 +14,9 @@ import pl.umk.mat.mappic.R
 import pl.umk.mat.mappic.addmap.AddMapActivity
 import pl.umk.mat.mappic.addmap.NewMapViewModel
 import pl.umk.mat.mappic.addmap.location.LocationProvider
+import pl.umk.mat.mappic.common.ErrTypes
+import pl.umk.mat.mappic.common.ImageSizeCalc
+import pl.umk.mat.mappic.common.PositionCalc
 import kotlin.math.round
 
 // for JavaDoc to properly show links to [Step2Fragment] documentation whole name with packages must be specified. same for step3
@@ -74,7 +77,10 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         val ivp = iscalc.toViewPoint(Point(p.xpx, p.ypx)) // original to inView coords
         viewCoords = ivp    // ivp is short for inViewPoint
         Log.d(TAG, ">>> mark point, x: ${ivp.x}, y: ${ivp.y}")
-        val glcoor = ImageSizeCalc.toOpenGLPoint(step2and3.viewSizeGet(),PointF(ivp.x.toFloat(), ivp.y.toFloat()))
+        val glcoor = ImageSizeCalc.toOpenGLPoint(
+            step2and3.viewSizeGet(),
+            PointF(ivp.x.toFloat(), ivp.y.toFloat())
+        )
         Log.d(TAG, ">>> OpenGL coordinates: x: ${glcoor.x}, y: ${glcoor.y}")
         step2and3.getOpenGLView().pointMarker(glcoor) // MARK POINT
     }

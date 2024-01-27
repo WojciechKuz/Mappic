@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import pl.umk.mat.mappic.R
-import pl.umk.mat.mappic.addmap.common.AddmapSteps2and3Utility
+import pl.umk.mat.mappic.addmap.shared_step2and3.AddmapSteps2and3Utility
 import pl.umk.mat.mappic.clist
 import pl.umk.mat.mappic.databinding.FragmentStep2Binding
 

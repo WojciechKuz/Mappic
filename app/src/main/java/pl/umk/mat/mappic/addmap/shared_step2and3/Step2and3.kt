@@ -1,4 +1,4 @@
-package pl.umk.mat.mappic.addmap.common
+package pl.umk.mat.mappic.addmap.shared_step2and3
 
 import android.net.Uri
 import android.util.Log
@@ -10,7 +10,7 @@ import androidx.exifinterface.media.ExifInterface
 import pl.umk.mat.mappic.R
 import pl.umk.mat.mappic.addmap.AddMapActivity
 import pl.umk.mat.mappic.addmap.NewMapViewModel
-import pl.umk.mat.mappic.addmap.common.myviews.MyView
+import pl.umk.mat.mappic.common.myview.MyView
 import pl.umk.mat.mappic.opengl.MapGLSurfaceView
 
 /**

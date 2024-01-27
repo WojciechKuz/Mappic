@@ -1,4 +1,4 @@
-package pl.umk.mat.mappic.addmap.common
+package pl.umk.mat.mappic.common
 
 /** Quite fun spell :D */
 fun interface PassStuff<T> {

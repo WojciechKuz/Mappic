@@ -1,4 +1,4 @@
-package pl.umk.mat.mappic.addmap.common
+package pl.umk.mat.mappic.common
 
 /**
  * This are error types user can make in Add DBMap [Step2Fragment], [Step3Fragment] and [Step4Fragment].

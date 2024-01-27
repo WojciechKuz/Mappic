@@ -13,8 +13,8 @@ import androidx.fragment.app.activityViewModels
 import pl.umk.mat.mappic.db.entities.DBMap
 import pl.umk.mat.mappic.MainActivity
 import pl.umk.mat.mappic.R
-import pl.umk.mat.mappic.addmap.common.ErrTypes
-import pl.umk.mat.mappic.addmap.common.Signal
+import pl.umk.mat.mappic.common.ErrTypes
+import pl.umk.mat.mappic.common.Signal
 import pl.umk.mat.mappic.databinding.FragmentStep4Binding
 
 /**

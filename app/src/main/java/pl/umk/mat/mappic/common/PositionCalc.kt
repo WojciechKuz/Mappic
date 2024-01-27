@@ -1,4 +1,4 @@
-package pl.umk.mat.mappic.addmap.common
+package pl.umk.mat.mappic.common
 
 import pl.umk.mat.mappic.db.MPoint
 import kotlin.math.PI

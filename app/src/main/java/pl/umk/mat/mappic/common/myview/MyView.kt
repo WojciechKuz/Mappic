@@ -1,4 +1,4 @@
-package pl.umk.mat.mappic.addmap.common.myviews
+package pl.umk.mat.mappic.common.myview
 
 import android.annotation.SuppressLint
 import android.content.Context

@@ -29,10 +29,11 @@ abstract class MapDatabase: RoomDatabase() {
         private var inits = 0
 
         fun getDB(context: Context): MapDatabase {
-            // Why synchronized? it blocks thread... Why not asynchronous, like suspend fun?
-            /*return database ?: synchronized(this) { // ?: is elvis operator - if( ==null) do something
+            /*// Why synchronized? it blocks thread... Why not asynchronous, like suspend fun?
+            return database ?: synchronized(this) { // ?: is elvis operator - if( ==null) do something
                 database ?: initDatabase(context).also { database = it }
             }*/
+
             return database ?: initDatabase(context) // ?: is elvis operator - if( ==null) do something
         }
 
@@ -40,15 +41,13 @@ abstract class MapDatabase: RoomDatabase() {
             Log.i(clist.MapDatabase, ">>> initializing Database")
             inits++
             if(inits != 1) {
-                // This is logged quite frequently
-                // TODO inspect why it creates more than one instance
-                // FIXME make sure app creates one database reference and keeps it through it's life
                 Log.w(clist.MapDatabase, ">>> Warning! Database initialized ${inits} times in app lifetime.")
             }
-            return Room.databaseBuilder(
+            database = Room.databaseBuilder(
                 context,
                 MapDatabase::class.java, DBNAME
             ).build()
+            return database!!
         }
     }
 }

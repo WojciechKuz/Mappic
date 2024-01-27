@@ -44,12 +44,16 @@ class MapItemListFragment : Fragment() {
             with(view) {
                 layoutManager = LinearLayoutManager(context)
 
+                // when creating placeholder list here, it created IndexOutOfBoundsException outside my code
+                /*
+                Log.d(clist.MapItemListFragment, ">>> adapter has not been set")
                 // If mapList not loaded, list of placeholders will be shown
                 val placeholder = ArrayList<RecycleMap>()
                 for (i in 1..25) {
                     placeholder.add(RecycleMap(i.toLong(), "Map no.${i}"))
                 }
                 adapter = MyMapItemRecyclerViewAdapter(placeholder) { con, id -> /* Nothing. No real map - nothing to delete. */}
+                */
 
                 // show list of maps
                 viewModel.getMapList(activity as MainActivity) {
@@ -60,6 +64,12 @@ class MapItemListFragment : Fragment() {
                             it.stream().map{dbMap -> RecycleMap.dbMaptoRecycleMap(dbMap)}.collect(Collectors.toList())
                         ) { con, id -> viewModel.deleteMap(con, id) }
                     }
+                }
+                if (adapter != null) {
+                    Log.d(clist.MapItemListFragment, ">>> adapter has been set")
+                }
+                else {
+                    Log.d(clist.MapItemListFragment, ">>> adapter has not been set yet")
                 }
                 //Dispatchers.Main
             }

@@ -2,6 +2,7 @@ package pl.umk.mat.mappic.addmap
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -64,10 +65,12 @@ class Step4Fragment : Fragment() {
                 else
                     viewModel.editMap(activity as AddMapActivity)
 
-                val msg = R.string.saved_to_db
-                Toast.makeText(activity as AddMapActivity, msg, Toast.LENGTH_SHORT).show()
+                Looper.prepare().run {
+                    val msg = R.string.saved_to_db
+                    Toast.makeText(activity as AddMapActivity, msg, Toast.LENGTH_SHORT).show()
+                }
                 // goto MapList activity
-                val gotoList = Intent(activity as AddMapActivity, pl.umk.mat.mappic.MainActivity::class.java)
+                val gotoList = Intent(activity as AddMapActivity, MainActivity::class.java)
                 startActivity(gotoList)
             }
         )

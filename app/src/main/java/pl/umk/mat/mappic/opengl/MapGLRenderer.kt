@@ -21,6 +21,10 @@ class MapGLRenderer: Renderer {
     private lateinit var usrArrow: Array<Triangle>
     private var drawnObjects: ArrayList<Triangle> = ArrayList()
 
+    // sometimes order of execution flips - displayPoint() before onSurfaceCreated()
+    private var displayWasFirst = false // if order flipped
+    private var laterPointF: PointF = PointF()
+
     override fun onSurfaceCreated(unused: GL10?, config: EGLConfig?) {
         // call shapes constructors here, but they can be drawn or not somewhere else.
         pinTri = Triangle()
@@ -31,11 +35,13 @@ class MapGLRenderer: Renderer {
                 0.09375f, 0.1875f, 0f
             ) // 0.09375 == 3/32; 0.1875 == 3/16 - using such numbers is computer friendly :)
         )
+        Log.d(clist.MapGLRenderer, ">>> pinTri initialized")
 
         pinCircl = CircleMaker(0.09375f).createCircleCoords(48)
         pinCircl.forEach {
             it.setColor(0.9375f, 0.3125f, 0.4375f, 0.8125f)
         }
+        Log.d(clist.MapGLRenderer, ">>> pinCircl initialized")
 
         usrArrow = Array(2) { Triangle() }
         usrArrow[0].setVertices(
@@ -52,13 +58,18 @@ class MapGLRenderer: Renderer {
                 0f, -0.03125f, 0f
             )
         ).setColor(0.25f, 0.25f, 0.875f, 0.75f) // B: 14/16
+
+        if(displayWasFirst) {
+            Log.w(clist.MapGLRenderer, ">>> calling displayPoint() again")
+            displayPoint(laterPointF)
+        }
     }
 
     /**
      * Called when screen is resized.
      */
     override fun onSurfaceChanged(unused: GL10?, width: Int, height: Int) {
-        Log.d(clist.MapGLRenderer, ">>> Surface change - w: ${width}, h: ${height}.")
+        Log.d(clist.MapGLRenderer, ">>> SURFACE CHANGE Surface change - w: ${width}, h: ${height}.")
         GLES20.glViewport(0, 0, width, height)
 
         // Set the background frame color
@@ -76,6 +87,7 @@ class MapGLRenderer: Renderer {
      * Draws all triangles from the list [drawnObjects]
      */
     override fun onDrawFrame(unused: GL10?) {
+        Log.w(clist.MapGLRenderer, ">>> DRAW FRAME")
         // Redraw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
 
@@ -96,7 +108,15 @@ class MapGLRenderer: Renderer {
      * @param p point, where marker should be displayed, in OpenGL.
      */
     fun displayPoint(p: PointF) {
+        Log.d(clist.MapGLRenderer, ">>> DISPLAY_POINT displayPoint()")
         clearDisplay()
+
+        if(!this::pinTri.isInitialized || !this::pinCircl.isInitialized) {
+            Log.w(clist.MapGLRenderer, ">>> pinTri, pinCircl weren't initialized before calling displayPoint()")
+            displayWasFirst = true
+            laterPointF = p
+            return
+        }
 
         // tri, 1
         pinTri.setPosition(ObjPosition(0f, p.x, p.y))
@@ -107,6 +127,7 @@ class MapGLRenderer: Renderer {
             it.setPosition(ObjPosition(0f, p.x, p.y + 0.1875f))
             drawnObjects.add(it)
         }
+        Log.d(clist.MapGLRenderer, ">>> POINT ADDED TO DRAW ARRAY")
 
     }
 
@@ -129,6 +150,7 @@ class MapGLRenderer: Renderer {
      * Clears display, removes objects from drawing list
      */
     fun clearDisplay() {
+        Log.d(clist.MapGLRenderer, ">>> CLEAR")
         drawnObjects.clear()
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f) // clear background. render is requested in SurfaceView
     }

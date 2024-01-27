@@ -5,7 +5,7 @@ import android.graphics.PointF
 import android.location.Location
 import android.net.Uri
 import android.text.Editable
-import android.util.Size
+import android.util.Log
 import android.view.MotionEvent
 import android.widget.TextView
 import androidx.annotation.FloatRange
@@ -14,7 +14,6 @@ import pl.umk.mat.mappic.R
 import pl.umk.mat.mappic.addmap.AddMapActivity
 import pl.umk.mat.mappic.addmap.NewMapViewModel
 import pl.umk.mat.mappic.addmap.location.LocationProvider
-import pl.umk.mat.mappic.addmap.location.PassLocation
 import kotlin.math.round
 
 // for JavaDoc to properly show links to [Step2Fragment] documentation whole name with packages must be specified. same for step3
@@ -30,7 +29,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
     private val step2and3 = Step2and3(addMap, TAG)
     private val locationProvider = LocationProvider(addMap, addMap.getPermissionManager())
     /** NOTE: these are 'in View' coordinates'.
-     *  It has to be recalculated to 'image in View' coordinates.
+     *  It has to be recalculated to 'originalPoint' coordinates to be saved to DB.
      *  Use ImgSizeCalc to calculate right coordinates. */
     private var viewCoords: Point? = null
     private var gpsNS: Double? = null
@@ -47,10 +46,10 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
      */
     fun myViewClicked(event: MotionEvent?) {
         if(event != null) {
+            // event.x and event.y are inView coordinates
             //Log.d(clist.Step2Fragment, ">>> Kliknięto w " + "x: " + event.x + "; y: " + event.y)
-            val viewSize = Size(step2and3.getImageView().width, step2and3.getImageView().height)
             step2and3.getOpenGLView().pointMarker(
-                ImageSizeCalc.toOpenGLCoordinates(viewSize, PointF(event.x, event.y))
+                ImageSizeCalc.toOpenGLPoint(step2and3.viewSizeGet(), PointF(event.x, event.y))
             )
 
             // NOTE: these are coords relative to ImgView, read viewCoords documentation!
@@ -67,21 +66,18 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         } else if(step == 3 && viewModel.isInitialized(2)) {
             p = viewModel.p2
         } else return
+        Log.d(TAG, ">>> fill coordinates, p.xgps: ${p.xgps}, p.ygps: ${p.ygps}")
         fillGPSCoordinates(p.xgps, p.ygps)
 
         // Now, mark point on img
         val iscalc = ImageSizeCalc(step2and3.origImgSizeGet(viewModel), step2and3.viewSizeGet())
-        val piv = iscalc.pointInView(Point(p.xpx, p.ypx)) // to inView coords
-        step2and3.getOpenGLView().pointMarker( // MARK POINT
-            ImageSizeCalc.toOpenGLCoordinates(
-                step2and3.viewSizeGet(),
-                PointF(piv.x.toFloat(), piv.y.toFloat())
-            )
-        )
+        val ivp = iscalc.toViewPoint(Point(p.xpx, p.ypx)) // original to inView coords
+        viewCoords = ivp    // ivp is short for inViewPoint
+        Log.d(TAG, ">>> mark point, x: ${ivp.x}, y: ${ivp.y}")
+        val glcoor = ImageSizeCalc.toOpenGLPoint(step2and3.viewSizeGet(),PointF(ivp.x.toFloat(), ivp.y.toFloat()))
+        Log.d(TAG, ">>> OpenGL coordinates: x: ${glcoor.x}, y: ${glcoor.y}")
+        step2and3.getOpenGLView().pointMarker(glcoor) // MARK POINT
     }
-
-    private lateinit var passLoc: PassLocation
-    //private lateinit var fillLocation: TextSignal
 
     /**
      * Fill text fields with GPS coordinates automatically
@@ -89,7 +85,6 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
     fun getCoordinates() {
         locationProvider.getUserLocation { this.fillGPSCoordinates(it) }
     }
-
     /**
      * Fills GPS coordinate text fields in app's UI. used in functional interface.
      */
@@ -118,25 +113,16 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
                 editableNS.setText("${latitude} N")
             else
                 editableNS.setText("${-latitude} S")
-        }
+        } else
+            Log.e(TAG, ">>> editableNS is null!")
         if (editableEW != null) {
             if(longitude >= 0)
                 editableEW.setText("${longitude} E")
             else
                 editableEW.setText("${-longitude} W")
-        }
+        } else
+            Log.e(TAG, ">>> editableEW is null!")
     }
-
-    /* // doneTODO remove it
-    private fun getPermissions(): Boolean {
-        var retVal = false
-        addMap.permManager.grantGpsPerm {
-            Log.d(TAG, ">>> Permissions Granted!")
-            retVal = true
-        }
-        return retVal
-    }
-    */
 
     /**
      * Decodes from given Uri size of image and orientation. Returns true when image is vertical.
@@ -146,7 +132,6 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         return step2and3.isImgVerticalExif(uri)
     }
 
-    // doneTODO test getGpsValues() TESTED, SEEMS OK
     /**
      * Gets GPS values from UI, and checks if they are correct.
      * Sets gpsNS and gpsEW members even if values are incorrect!!!
@@ -219,7 +204,6 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         return true
     }
 
-    // doneTODO test saveUserInput(), especially ImageSizeCalc. TESTED, SEEMS OK
     /**
      * save GPS coordinates and marker position on the image of a map.
      * If it returns true save succeeded and we can navigate to next step.
@@ -235,14 +219,14 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
 
         // Not checking gpsNS and gpsEW here because it's already been checked.
         if(viewCoords != null) {
-            val imgInViewCoords = ISCalc.pointInImg(viewCoords!!) // recalculates to imageInView coordinates
-            if (!ISCalc.isPointInBounds(imgInViewCoords!!)) { // wasFIXME here, marked correctly, displays error
+            val inViewCoords = viewCoords!! // recalculates to inView coordinates
+            if (!ISCalc.isPointInBounds(inViewCoords)) { // wasFIXME here, marked correctly, displays error
                 displayErrMsg(ErrTypes.POINT_OUT_OF_BOUNDS)
                 return false
             }
 
             // save gpsNS, gpsEW, pxCoords to viewModel
-            val p = MPoint(imgInViewCoords.x, imgInViewCoords.y, gpsEW!!, gpsNS!!, reference = true)
+            val p = MPoint(inViewCoords.x, inViewCoords.y, gpsEW!!, gpsNS!!, reference = true)
 
             if (step == 2) {
                 viewModel.p1 = p

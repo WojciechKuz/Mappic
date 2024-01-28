@@ -46,6 +46,8 @@ interface DBAccess {
         val db = MapDatabase.getDB(context)
 
         viewModel.mapid = mapid
+        val map = db.mapDao().getMap(mapid)[0]
+        viewModel.name = map.map_name ?: "null-map_name"
 
         // for now there's one image per map, in future this may change
         val image = db.imageDao().getImagesForMap(mapid)[0]

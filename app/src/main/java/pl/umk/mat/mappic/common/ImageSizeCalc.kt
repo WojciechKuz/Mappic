@@ -33,40 +33,6 @@ class ImageSizeCalc(val original: Size, val view: Size) {
         Log.d(clist.ImageSizeCalc, ">>> Original size: ${original}, View size: ${view}, Scaled image size: ${scaled}.")
     }
 
-    /* // CODE GRAVEYARD
-    /**
-     * Translates coordinates relative to ImageView to coordinates relative to
-     * actual space occupied by the image
-     * @returns point position relative to scaledImg
-     */
-    fun pointInScaled(pointInView: Point): Point {
-        Log.d(clist.ImageSizeCalc, ">>> Point inview: ${pointInView}")
-        val emptySp = Size(
-            (view.width - scaled.width) / 2, // !! = not null asserted. - I'm sure it's non-null here. It's the purpose of this operator.
-            (view.height - scaled.height) / 2 // About !!: https://discuss.kotlinlang.org/t/purpose-of-double-exclamation-operator-null-check/8735
-        )
-        Log.d(clist.ImageSizeCalc, ">>> Original size: ${original}, View size: ${view}. Image inview size: ")
-        Log.d(clist.ImageSizeCalc, ">>> empty space (1 of 2): ${emptySp}")
-        val pointOnScaledImg = Point(
-            pointInView.x - emptySp.width, // x
-            pointInView.y - emptySp.height // y
-        )
-        Log.d(clist.ImageSizeCalc, ">>> Point on image inview: ${pointOnScaledImg}")
-        return pointOnScaledImg
-    }
-
-    /** This is REVERSE function to [pointInScaled()]. */
-    fun pointInView(pointOnImgScaled: Point): Point {
-        val emptySp = Size(
-            (view.width - scaled.width) / 2, // !! = not null asserted. - I'm sure it's non-null here. It's the purpose of this operator.
-            (view.height - scaled.height) / 2 // About !!: https://discuss.kotlinlang.org/t/purpose-of-double-exclamation-operator-null-check/8735
-        )
-        val pointInView = Point(
-            pointOnImgScaled.x + emptySp.width, // x
-            pointOnImgScaled.y + emptySp.height // y
-        )
-        return pointInView
-    }*/
 
     /**
      * Method for checking if point is in Image displayed in ImageView.
@@ -161,33 +127,7 @@ class ImageSizeCalc(val original: Size, val view: Size) {
                 (2f*inViewPoint.x - 1f*viewSize.width) / smallerSize,
                 -((2f*inViewPoint.y - 1f*viewSize.height) / smallerSize) // minus must be last operation
             )
-            /* // if coordinates were always in [-1, 1] range:
-            return PointF(
-                inViewPoint.x * 2f / viewSize.width - 1f,
-                inViewPoint.y * -2f / viewSize.height - 1f
-            )
-            */
         }
 
-        /* // REMOVED CODE
-        /**
-         * Translate from pixel coordinate system to OpenGL coordinate system
-         * gl_x := ( ((2*px_x) - width) / height )
-         * gl_y := -( ((2*px_y) / height) - 1 )     // !!! minus!
-         * @param viewSize in pixels
-         * @param inviewPoint pixel coordinates
-         * @return OpenGL coordinates, values in about [-1, 1] range depending on screen proportions
-         */
-        //@Deprecated("This function does not support views with height greater than width, use toOpenGLPoint() instead.")
-        fun toOpenGLCoordinates(viewSize: Size, inviewPoint: PointF): PointF {
-            // futureTODO check if in image bounds
-            //val exif = utility.getExifData(viewModel.mapImg)
-            //val imageSize = Size(exif.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, -1), exif.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, -1))
-            return PointF(
-                (2f*inviewPoint.x - 1f*viewSize.width)/ viewSize.height,
-                -2f*inviewPoint.y/viewSize.height + 1f
-            )
-        }
-        */
     }
 }

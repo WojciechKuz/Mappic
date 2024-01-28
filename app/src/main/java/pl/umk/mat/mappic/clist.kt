@@ -39,6 +39,7 @@ open class clist() {
         const val MapDatabase: String = "MapDatabase"
 
         const val ImageSizeCalc: String = "ImageSizeCalc"
+        const val PositionCalc: String = "PositionCalc"
         const val MyMapItemRecyclerViewAdapter: String = "MyMapItemRecyclerViewAdapter"
     }
 }

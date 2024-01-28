@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.os.Looper
 import android.util.DisplayMetrics
 import android.util.Log
+import android.util.Size
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -30,6 +31,9 @@ import pl.umk.mat.mappic.db.entities.DBPoint
 import pl.umk.mat.mappic.opengl.MapGLSurfaceView
 import java.util.stream.Collectors
 
+/** If log debug messages */
+private const val iflog = false
+
 /**
  * This activity shows user map and displays user's location on it
  */
@@ -48,6 +52,11 @@ class ViewMapActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_map)
 
+        // set map_name field height to height of backArrow button
+        val nameView = findViewById<TextView>(R.id.map_name)
+        nameView.layoutParams.height = findViewById<ImageButton>(R.id.backArrow).height
+
+        // read extra - mapid
         viewModel.mapid = intent.getLongExtra("whichmap", -1)
         locationProvider = LocationProvider(this, getPermissionManager())
         glView = findViewById<MapGLSurfaceView>(R.id.mapView)
@@ -57,18 +66,15 @@ class ViewMapActivity : AppCompatActivity() {
         popup.setDeleteFun({ con, id -> viewModel.deleteMap(con, id) })
         viewModel.getMapName(this, viewModel.mapid!!) {
             popup.setMapName(it)
-            @UiThread
-            fun setText() { // Must be done on UI thread Looper.getMainLooper().run
-                findViewById<TextView>(R.id.map_name).text = it
-            }
-            setText()
+            nameView.text = it
         } // DB access may take a while, it's fine
 
         // get reference points
         viewModel.getMapReferencePoints(this, viewModel.mapid!!) {
             val mapPoints = it.stream().map{ dbPoint -> MPoint.toMPoint(dbPoint) }.collect(Collectors.toList())
             if(mapPoints.size >= 2) {
-                posCalc = PositionCalc(mapPoints.subList(0, 2))
+                //Log.d(clist.ViewMapActivity, ">>> Got points from DB:\n${mapPoints.subList(0, 2)}") // OK CORRECT
+                posCalc = PositionCalc(mapPoints.subList(0, 2)) // SUS
             }
             else {
                 // error!
@@ -79,16 +85,28 @@ class ViewMapActivity : AppCompatActivity() {
         viewModel.getMapImages(this, viewModel.mapid!!) {
             viewModel.mapImg = Uri.parse(it[0].uri)
             findViewById<ImageView>(R.id.mapBackground).setImageURI(viewModel.mapImg)
-            imgCalc = ImageSizeCalc(
-                SizeGetter(this).origImgSizeGet(viewModel.mapImg),
-                SizeGetter.viewSizeGet(findViewById(R.id.mapBackground))
-            )
+            runOnUiThread {
+                imgCalc = ImageSizeCalc(
+                    SizeGetter(this).origImgSizeGet(viewModel.mapImg),
+                    SizeGetter.viewSizeGet(findViewById<ImageView>(R.id.mapBackground))
+                )
+            }
         }
 
         findViewById<ImageButton>(R.id.backArrow).setOnClickListener { backToMapList() }
         findViewById<ImageButton>(R.id.mapOptions).setOnClickListener { popup.openPopupMenu(it) }
         locationProvider.activityOnCreate()
         created = true
+    }
+
+    private fun setImageCalc() {
+        val imgView = findViewById<ImageView>(R.id.mapBackground)
+        imgView.post {
+            imgCalc = ImageSizeCalc(
+                SizeGetter(this).origImgSizeGet(viewModel.mapImg),
+                SizeGetter.viewSizeGet(imgView)
+            )
+        }
     }
 
     override fun onStart() {
@@ -108,15 +126,21 @@ class ViewMapActivity : AppCompatActivity() {
 
     fun receiveLocation(loc: Location) {
         val origPoint = posCalc.basic_whereUser(PointF(
-            loc.latitude.toFloat(), // between -90.0 and 90.0 inclusive NS
-            loc.longitude.toFloat() // between -180.0 and 180.0 inclusive EW
+            loc.longitude.toFloat(), // between -180.0 and 180.0 inclusive EW x
+            loc.latitude.toFloat() // between -90.0 and 90.0 inclusive NS y
         ))
         val viewPoint = imgCalc.toViewPoint(origPoint) // point inView
+
+        if(iflog) Log.d(clist.ViewMapActivity, ">>> Original point: ${origPoint}")
+        if(iflog) Log.d(clist.ViewMapActivity, ">>> In View point: ${origPoint}")
+
         if(true) {
             var angle = 0.0
             if(viewModel.lastPoint != null) {
-                // use lastPoint to point in opposite direction (forward
-                angle = PositionCalc.toDeg(PositionCalc.pointAt(viewPoint, viewModel.lastPoint!!)) + 180.0
+                // use lastPoint to point in opposite direction (forward)
+
+                // FIXME temporarily disabled
+                // angle = PositionCalc.toDeg(PositionCalc.pointAt(viewPoint, viewModel.lastPoint!!)) + 180.0
             }
             val viewSize = SizeGetter.viewSizeGet(findViewById(R.id.mapBackground))
             glView.userMarker(
@@ -158,3 +182,20 @@ class ViewMapActivity : AppCompatActivity() {
 
     // TODO show map & user position
 }
+/*
+Methods of executing on ui thread:
+
+# no 1.
+runOnUiThread {}
+
+# no 2.
+@UiThread
+fun doUiThing() {
+    // do it here
+}
+doUiThing()
+
+# no 3*.
+Looper.getMainLooper().run {} // * - Usually works. MainThread != UiThread (Most times equal, sometimes not.)
+
+ */

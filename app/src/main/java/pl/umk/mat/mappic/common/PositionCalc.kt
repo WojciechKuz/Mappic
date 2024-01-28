@@ -80,7 +80,7 @@ class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>)
 
     companion object {
         /** Earth sphere radius in meters. Mean Earth radius 6371.0088 km defined in WGS 84. */
-        val EARTH_RADIUS = 6371008.8
+        const val EARTH_RADIUS = 6371008.8
         fun toRad(deg: Double): Double { return deg / 180.0 * PI }
         fun toDeg(rad: Double): Double { return rad * PI / 180.0 }
         private fun meanLatitude(lat1: Double, lat2: Double): Double { return (lat1 + lat2) / 2.0 }

@@ -9,6 +9,7 @@
     <!-- This layout file does not require landscape version. -->
 
     <FrameLayout
+        android:id="@+id/viewFrame"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

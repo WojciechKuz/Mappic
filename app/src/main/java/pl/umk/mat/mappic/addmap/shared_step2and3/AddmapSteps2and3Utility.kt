@@ -1,5 +1,6 @@
 package pl.umk.mat.mappic.addmap.shared_step2and3
 
+import android.annotation.SuppressLint
 import android.graphics.Point
 import android.graphics.PointF
 import android.location.Location
@@ -14,6 +15,7 @@ import pl.umk.mat.mappic.R
 import pl.umk.mat.mappic.addmap.AddMapActivity
 import pl.umk.mat.mappic.addmap.NewMapViewModel
 import pl.umk.mat.mappic.addmap.location.LocationProvider
+import pl.umk.mat.mappic.clist
 import pl.umk.mat.mappic.common.ErrTypes
 import pl.umk.mat.mappic.common.ImageSizeCalc
 import pl.umk.mat.mappic.common.PositionCalc
@@ -51,7 +53,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
     fun myViewClicked(event: MotionEvent?) {
         if(event != null) {
             // event.x and event.y are inView coordinates
-            //Log.d(clist.Step2Fragment, ">>> Kliknięto w " + "x: " + event.x + "; y: " + event.y)
+            Log.d(TAG, ">>> Kliknięto w " + "x: " + event.x + "; y: " + event.y)
             step2and3.getOpenGLView().pointMarker(
                 ImageSizeCalc.toOpenGLPoint(step2and3.viewSizeGet(), PointF(event.x, event.y))
             )
@@ -109,6 +111,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
      * @param latitude NS
      * @param longitude EW
      */
+    @SuppressLint("SetTextI18n")
     private fun fillGPSCoordinates(
         @FloatRange(from = -90.0, to = 90.0) latitude: Double,
         @FloatRange(from = -180.0, to = 180.0) longitude: Double
@@ -139,6 +142,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         return step2and3.isImgVerticalExif(uri)
     }
 
+    // Return or assignment can be lifted out
     /**
      * Gets GPS values from UI, and checks if they are correct.
      * Sets gpsNS and gpsEW members even if values are incorrect!!!

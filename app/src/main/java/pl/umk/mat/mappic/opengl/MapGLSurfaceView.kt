@@ -18,8 +18,6 @@ class MapGLSurfaceView(context: Context, attrs: AttributeSet): GLSurfaceView(con
     val renderer: MapGLRenderer // displayPoint, displayUser, clearDisplay
 
     init {
-        Log.d(clist.MapGLSurfaceView, ">>> default init, 2 arg")
-
         setEGLContextClientVersion(2) // OpenGL ES 2.0 context
 
         // this creates transparent background
@@ -42,7 +40,7 @@ class MapGLSurfaceView(context: Context, attrs: AttributeSet): GLSurfaceView(con
      * Render point marker in given position
      */
     fun pointMarker(p: PointF) {
-        //Log.d(clist.MapGLSurfaceView, ">>> punkt [${p.x}, ${p.y}]")
+        Log.d(clist.MapGLSurfaceView, ">>> pointMarker [${p.x}, ${p.y}]")
         renderer.displayPoint(p)
         requestRender()
     }
@@ -50,6 +48,7 @@ class MapGLSurfaceView(context: Context, attrs: AttributeSet): GLSurfaceView(con
      * Render user marker in given position
      */
     fun userMarker(p: PointF, rotation: Float) {
+        Log.d(clist.MapGLSurfaceView, ">>> userMarker [${p.x}, ${p.y}]")
         renderer.displayUser(p, rotation)
         requestRender()
     }

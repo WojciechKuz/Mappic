@@ -4,8 +4,11 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import android.util.Size
-import android.widget.ImageView
+import android.view.View
 import androidx.exifinterface.media.ExifInterface
+
+/** If log debug messages */
+private const val iflog = false
 
 open class SizeGetter(val context: Context, val TAG: String = "SizeGetter") {
 
@@ -13,7 +16,6 @@ open class SizeGetter(val context: Context, val TAG: String = "SizeGetter") {
     fun getExifData(uri: Uri): ExifInterface {
         val istream = context.contentResolver.openInputStream(uri)
             ?: throw Exception("Input stream 'istream' is null!") // do it when istream is null
-        Log.d(TAG, ">>> Decoding size of image")
         val exif = ExifInterface(istream)
         if(exif.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, -1) == -1)
             Log.e(TAG, ">>> Width tag in image exif data not found. cannot display it correctly.")
@@ -43,24 +45,24 @@ open class SizeGetter(val context: Context, val TAG: String = "SizeGetter") {
         val height: Int = exif.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, -1)
         val orientation: Int = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1)
 
-        Log.d(TAG, ">>> Size of image: h: ${height}, w: ${width}, o: ${orientation}") // o 6=vert, 1,3=horiz
+        if(iflog) Log.d(TAG, ">>> Size of image: h: ${height}, w: ${width}, o: ${orientation}") // o 6=vert, 1,3=horiz
         val vertOrient = intArrayOf(90, 270)
         vertOrient.forEach {
             if(it == checkOrientation(orientation)) {
-                Log.d(TAG, ">>> Rotation - image is vertical.")
+                if(iflog) Log.d(TAG, ">>> Rotation - image is vertical.")
                 return true
             }
         }
         if(checkOrientation(orientation) == -1)
             Log.e(TAG, ">>> Rotation tag in image exif data not found. cannot display it correctly.")
         else
-            Log.d(TAG, ">>> Rotation - image is horizontal.")
+            if(iflog) Log.d(TAG, ">>> Rotation - image is horizontal.")
         return false
     }
 
     companion object {
         /** Create size object for view size */
-        fun viewSizeGet(imgView: ImageView): Size {
+        fun viewSizeGet(imgView: View): Size {
             return Size(imgView.width, imgView.height)
         }
 

@@ -46,16 +46,16 @@ class MapGLRenderer: Renderer {
         usrArrow = Array(2) { Triangle() }
         usrArrow[0].setVertices(
             floatArrayOf(
-                0f, 0.125f, 0f,
-                0.09375f, -0.0625f, 0f,
-                0f, -0.03125f, 0f
+                0f, 0.0625f, 0f,
+                0.046875f, -0.03125f, 0f,
+                0f, -0.015625f, 0f
             )
         ).setColor(0.25f, 0.25f, 0.75f, 0.75f) // B: 13/16 = 0.8125f;
         usrArrow[1].setVertices(
             floatArrayOf(
-                0f, 0.125f, 0f,
-                -0.09375f, -0.0625f, 0f,
-                0f, -0.03125f, 0f
+                0f, 0.0625f, 0f,
+                -0.046875f, -0.03125f, 0f,
+                0f, -0.015625f, 0f
             )
         ).setColor(0.25f, 0.25f, 0.875f, 0.75f) // B: 14/16
 

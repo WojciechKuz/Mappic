@@ -25,6 +25,14 @@ class MapGLRenderer: Renderer {
     private var displayWasFirst = false // if order flipped
     private var laterPointF: PointF = PointF()
 
+    // color of user arrow, order: R, G, B, a. All in range [0, 1].
+    private val color0 = floatArrayOf(
+        0.5f, 0.5f, 0.75f, 0.75f
+    )
+    private val color1 = floatArrayOf(
+        0.5f, 0.5f, 0.875f, 0.75f
+    )
+
     override fun onSurfaceCreated(unused: GL10?, config: EGLConfig?) {
         // call shapes constructors here, but they can be drawn or not somewhere else.
         pinTri = Triangle()
@@ -46,18 +54,18 @@ class MapGLRenderer: Renderer {
         usrArrow = Array(2) { Triangle() }
         usrArrow[0].setVertices(
             floatArrayOf(
-                0f, 0.0625f, 0f,
-                0.046875f, -0.03125f, 0f,
-                0f, -0.015625f, 0f
+                0f, 0.125f, 0f,
+                0.09375f, -0.0625f, 0f,
+                0f, -0.03125f, 0f
             )
-        ).setColor(0.25f, 0.25f, 0.75f, 0.75f) // B: 13/16 = 0.8125f;
+        ).setColor(color0[0], color0[1], color0[2], color0[3]) // B: 13/16 = 0.8125f;
         usrArrow[1].setVertices(
             floatArrayOf(
-                0f, 0.0625f, 0f,
-                -0.046875f, -0.03125f, 0f,
-                0f, -0.015625f, 0f
+                0f, 0.125f, 0f,
+                -0.09375f, -0.0625f, 0f,
+                0f, -0.03125f, 0f
             )
-        ).setColor(0.25f, 0.25f, 0.875f, 0.75f) // B: 14/16
+        ).setColor(color1[0], color1[1], color1[2], color1[3]) // B: 14/16
 
         if(displayWasFirst) {
             Log.w(clist.MapGLRenderer, ">>> calling displayPoint() again")
@@ -128,7 +136,27 @@ class MapGLRenderer: Renderer {
             drawnObjects.add(it)
         }
         Log.d(clist.MapGLRenderer, ">>> POINT ADDED TO DRAW ARRAY")
+    }
 
+    /** Change size of user marker */
+    fun userSize(multiplyBy: Int, divideBy: Int) {
+        if(!this::usrArrow.isInitialized) {
+            Log.w(clist.MapGLRenderer, ">>> usrArrow wasn't initialized before calling userSize()")
+            return
+        }
+        fun rec(f: Float): Float {
+            return if (divideBy != 0) f * multiplyBy / divideBy else f * multiplyBy
+        }
+        usrArrow[0].setVertices(floatArrayOf(
+            rec(0f), rec(0.125f), 0f,
+            rec(0.09375f), rec(-0.0625f), 0f,
+            rec(0f), rec(-0.03125f), 0f
+        )).setColor(color0[0], color0[1], color0[2], color0[3])
+        usrArrow[1].setVertices(floatArrayOf(
+            rec(0f), rec(0.125f), 0f,
+            rec(-0.09375f), rec(-0.0625f), 0f,
+            rec(0f), rec(-0.03125f), 0f
+        )).setColor(color1[0], color1[1], color1[2], color1[3])
     }
 
     /**

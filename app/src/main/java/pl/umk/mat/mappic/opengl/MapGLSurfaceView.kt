@@ -52,6 +52,11 @@ class MapGLSurfaceView(context: Context, attrs: AttributeSet): GLSurfaceView(con
         renderer.displayUser(p, rotation)
         requestRender()
     }
+    /** Change size of user marker */
+    fun userSize(multiplyBy: Int, divideBy: Int) {
+        renderer.userSize(multiplyBy, divideBy)
+        requestRender()
+    }
     fun clear() {
         renderer.clearDisplay()
         requestRender()

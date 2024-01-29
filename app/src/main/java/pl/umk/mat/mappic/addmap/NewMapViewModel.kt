@@ -28,6 +28,8 @@ class NewMapViewModel: ViewModel() {
      * This allows to navigate back to step0.
      */
     var step0visited = false
+    var fromPicker = false
+    var fromPickerNavigated = false
 
     private inner class DBAcc: DBAccess
 
@@ -61,6 +63,9 @@ class NewMapViewModel: ViewModel() {
         }
     }
 
+    fun nameInitialized(): Boolean {
+        return this::name.isInitialized
+    }
     /** check if point p1 or p2 is initialized */
     fun isInitialized(pointNo: Int): Boolean {
         return when (pointNo) {

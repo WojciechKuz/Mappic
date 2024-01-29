@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_settings -> {
-                pl.umk.mat.mappic.SnackShow(
+                SnackShow(
                     this,
                     R.id.fragment_list,
                     "Clicked on settings. No act."

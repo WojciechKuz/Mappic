@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.widget.TextView
 import androidx.annotation.FloatRange
+import com.google.android.material.snackbar.Snackbar
 import pl.umk.mat.mappic.db.MPoint
 import pl.umk.mat.mappic.R
 import pl.umk.mat.mappic.addmap.AddMapActivity
@@ -20,6 +21,9 @@ import pl.umk.mat.mappic.common.ErrTypes
 import pl.umk.mat.mappic.common.ImageSizeCalc
 import pl.umk.mat.mappic.common.PositionCalc
 import kotlin.math.round
+
+/** If log debug messages */
+private const val iflog = true
 
 // for JavaDoc to properly show links to [Step2Fragment] documentation whole name with packages must be specified. same for step3
 /**
@@ -53,7 +57,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
     fun myViewClicked(event: MotionEvent?) {
         if(event != null) {
             // event.x and event.y are inView coordinates
-            Log.d(TAG, ">>> Kliknięto w " + "x: " + event.x + "; y: " + event.y)
+            if(iflog) Log.d(TAG, ">>> Kliknięto w " + "x: " + event.x + "; y: " + event.y)
             step2and3.getOpenGLView().pointMarker( // FIXME maybe getBindingOpenGLView()?
                 ImageSizeCalc.toOpenGLPoint(step2and3.viewSizeGet(), PointF(event.x, event.y))
             )
@@ -72,20 +76,29 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         } else if(step == 3 && viewModel.isInitialized(2)) {
             p = viewModel.p2
         } else return
-        Log.d(TAG, ">>> fill coordinates, p.xgps: ${p.xgps}, p.ygps: ${p.ygps}")
         fillGPSCoordinates(p.xgps, p.ygps)
 
         // Now, mark point on img
-        imgCalc = ImageSizeCalc(step2and3.origImgSizeGet(viewModel.mapImg), step2and3.viewSizeGet())
-        val ivp = imgCalc.toViewPoint(Point(p.xpx, p.ypx)) // original to inView coords
-        viewCoords = ivp    // ivp is short for inViewPoint
-        Log.d(TAG, ">>> mark point, x: ${ivp.x}, y: ${ivp.y}")
-        val glcoor = ImageSizeCalc.toOpenGLPoint(
-            step2and3.viewSizeGet(),
-            PointF(ivp.x, ivp.y)
-        )
-        Log.d(TAG, ">>> OpenGL coordinates: x: ${glcoor.x}, y: ${glcoor.y}")
-        step2and3.getBindingOpenGLView().pointMarker(glcoor) // MARK POINT
+        step2and3.viewSizeWhenReady {
+            val viewSize = it
+            imgCalc = ImageSizeCalc(step2and3.origImgSizeGet(viewModel.mapImg)?: viewSize, viewSize)
+            val ivp = imgCalc.toViewPoint(Point(p.xpx, p.ypx)) // original to inView coords
+            viewCoords = ivp    // ivp is short for inViewPoint
+
+            // openGL
+            val glcoor = ImageSizeCalc.toOpenGLPoint(
+                step2and3.viewSizeGet(),
+                PointF(ivp.x, ivp.y)
+            )
+            Log.d(TAG, ">>> OpenGL coordinates: x: ${glcoor.x}, y: ${glcoor.y}")
+            step2and3.getBindingOpenGLView().pointMarker(glcoor) // MARK POINT
+        }
+    }
+
+    fun checkImgSizeData(viewModel: NewMapViewModel) {
+        if(step2and3.origImgSizeGet(viewModel.mapImg) == null) {
+            displayErrMsg(ErrTypes.NO_SIZE_DATA)
+        }
     }
 
     /**
@@ -146,15 +159,6 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
                 editableEW.setText("${-longitude} W")
         } else
             Log.e(TAG, ">>> editableEW is null!")
-
-        /* // This does not really check
-        if(step2and3.latitudeNS()!!.text.toString() == "$latitude N") {
-            Log.d(TAG, ">>> Coordinates filled correctly!")
-        }
-        else {
-            Log.e(TAG, ">>> Coordinates were not filled!")
-        }
-        */
     }
 
     /**
@@ -249,11 +253,11 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
             return false
 
         // init helper class for coordinate recalculation
-        imgCalc = ImageSizeCalc(step2and3.origImgSizeGet(viewModel.mapImg), step2and3.viewSizeGet())
+        imgCalc = ImageSizeCalc(step2and3.origImgSizeGet(viewModel.mapImg)?: step2and3.viewSizeGet(), step2and3.viewSizeGet())
 
         // Not checking gpsNS and gpsEW here because it's already been checked.
         if(viewCoords != null) {
-            if (!imgCalc.isPointInBounds(viewCoords!!)) { // wasFIXME here, marked correctly, displays error
+            if (!imgCalc.isPointInBounds(viewCoords!!)) {
                 displayErrMsg(ErrTypes.POINT_OUT_OF_BOUNDS)
                 return false
             }
@@ -271,7 +275,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
             }
             if (step == 3) {
                 // If difference is greater than 10m.
-                if(PositionCalc.geoPosToDist(viewModel.p1, p) > 1) { // FIXME temporarily changed minimum distance. Should be 10.
+                if(PositionCalc.geoPosToDist(viewModel.p1, p) > 10) {
                     viewModel.p2 = p
                     return true
                 }

@@ -59,7 +59,9 @@ class Step4Fragment : Fragment() {
         // verify name - it had to be this way, because DB check is performed asynchronously
         checkIfNameExists(
             whenTrue = {
-                displayErrMsg(ErrTypes.NAME_EXISTS)
+                (activity as AddMapActivity).runOnUiThread {
+                    displayErrMsg(ErrTypes.NAME_EXISTS)
+                }
             },
             whenFalse = {
                 viewModel.name = binding.mapNameField.text.toString().trim()
@@ -75,10 +77,11 @@ class Step4Fragment : Fragment() {
                 (activity as AddMapActivity).runOnUiThread {
                     val msg = R.string.saved_to_db
                     Toast.makeText(activity as AddMapActivity, msg, Toast.LENGTH_SHORT).show()
+
+                    // goto MapList activity
+                    val gotoList = Intent(activity as AddMapActivity, MainActivity::class.java)
+                    startActivity(gotoList)
                 }
-                // goto MapList activity
-                val gotoList = Intent(activity as AddMapActivity, MainActivity::class.java)
-                startActivity(gotoList)
             }
         )
     }
@@ -89,16 +92,36 @@ class Step4Fragment : Fragment() {
      *  - name doesn't exist -> false
      */
     private fun checkIfNameExists(whenTrue: Signal, whenFalse: Signal) {
-        val typedName = binding.mapNameField.text
-        // get map names from DB
-        var dbMaps: List<DBMap>?
-        viewModel.getMapList(activity as AddMapActivity) {
-            dbMaps = it
-            // check if name exists
-            if(dbMaps!!.any{it.map_name == typedName.toString().trim()}) // true if any name from list equals to typedName
-                whenTrue.startAction()
-            else
-                whenFalse.startAction()
+        //val typedName = binding.mapNameField.text
+        viewModel.name = binding.mapNameField.text.toString().trim() // typed name
+
+        if(viewModel.mapid == null) {
+
+            // get map names from DB
+            viewModel.getMapList(activity as AddMapActivity) {
+
+                // check if name exists
+                if(it.any{ dbMap -> dbMap.map_name == viewModel.name}) // true if any name from list equals to typedName
+                    whenTrue.startAction()
+                else
+                    whenFalse.startAction()
+            }
+        }
+        if(viewModel.mapid != null) { // when editing user may want to leave name unchanged.
+            viewModel.getMapList((activity as AddMapActivity)) {
+
+                // checks if other map has same name
+                val otherMapSameName: Boolean = it.any { dbMap ->
+                    ((viewModel.mapid != dbMap.mapid) && (viewModel.name == dbMap.map_name))
+                    // if ids are different (other map) and names are the same
+                    // checks if map (other map) has same name as this one
+                }
+                if(!otherMapSameName) { // name not found among existing maps, map name is unique
+                    whenFalse.startAction()
+                } else {                // there is other map with same name
+                    whenFalse.startAction()
+                }
+            }
         }
     }
 

@@ -43,11 +43,11 @@ class Step3Fragment : Fragment() {
         utility.step2and3.binding3 = binding
 
         Log.d(clist.Step3Fragment, ">>> Step 3")
-        binding.imgView.setImageURI(viewModel.mapImg)
+        binding.imgMapView?.setImageURI(viewModel.mapImg)
         // Img takes too much space when img is vertical. So I have to disable adjustViewBounds.
         if(utility.isImgVerticalExif(viewModel.mapImg)) {
             Log.d(clist.Step3Fragment, ">>> turning 'adjusting view bounds' off")
-            binding.imgView.adjustViewBounds = false
+            binding.imgMapView?.adjustViewBounds = false
         }
 
         // set onclicklisteners here

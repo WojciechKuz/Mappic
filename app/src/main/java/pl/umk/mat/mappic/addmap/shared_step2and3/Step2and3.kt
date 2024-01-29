@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import pl.umk.mat.mappic.R
 import pl.umk.mat.mappic.addmap.AddMapActivity
+import pl.umk.mat.mappic.common.PassStuff
 import pl.umk.mat.mappic.common.myview.MyView
 import pl.umk.mat.mappic.databinding.FragmentStep2Binding
 import pl.umk.mat.mappic.databinding.FragmentStep3Binding
@@ -58,6 +59,25 @@ class Step2and3(val addMap: AddMapActivity, TAG: String): SizeGetter(addMap, TAG
             else -> throw Exception("Can't get MapGLSurfaceView")
         }
     }
+    fun viewSizeGetBinding(): Size { // Does not work, output: (0, 0)
+        val imgView = when(whichFragment) {
+            2 -> binding2?.imgMapView
+            3 -> binding3?.imgMapView
+            else -> throw Exception("Can't get MapGLSurfaceView")
+        }?: throw Exception("ImageView from step$whichFragment binding is null!") //getImageView()
+        return Size(imgView.width, imgView.height)
+    }
+
+    /**
+     * Get R.id.imgMapView size, when size values have been initialized. Passed through interface.
+     * <!--https://stackoverflow.com/questions/3591784/views-getwidth-and-getheight-returns-0-->
+     */
+    fun viewSizeWhenReady(getSize: PassStuff<Size>) {
+        val imgView = getImageView()
+        imgView.post {
+            getSize.pass(Size(imgView.width, imgView.height))
+        }
+    }
 
     // nFIXME compiler thinks those won't be null, but when used (or checked) it causes NullPointerException
     //  maybe add ? to returned value?
@@ -66,7 +86,7 @@ class Step2and3(val addMap: AddMapActivity, TAG: String): SizeGetter(addMap, TAG
         return addMap.findViewById<TextView>(R.id.errorText)
     }
     fun getImageView(): ImageView {
-        return addMap.findViewById<ImageView>(R.id.imgView)
+        return addMap.findViewById<ImageView>(R.id.imgMapView)
     }
     fun getOpenGLView(): MapGLSurfaceView {
         return addMap.findViewById<MapGLSurfaceView>(R.id.openGLView)

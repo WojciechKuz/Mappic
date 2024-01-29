@@ -15,12 +15,15 @@ import android.util.Size
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.UiThread
 import androidx.core.graphics.toPointF
+import com.google.android.material.snackbar.Snackbar
 import pl.umk.mat.mappic.MainActivity
 import pl.umk.mat.mappic.MapOptionsPopup
 import pl.umk.mat.mappic.R
+import pl.umk.mat.mappic.addmap.AddMapActivity
 import pl.umk.mat.mappic.addmap.features.permissions.PermissionManager
 import pl.umk.mat.mappic.addmap.location.LocationProvider
 import pl.umk.mat.mappic.clist
@@ -47,6 +50,8 @@ class ViewMapActivity : AppCompatActivity() {
     private lateinit var glView: MapGLSurfaceView
     private lateinit var posCalc: PositionCalc
     private lateinit var imgCalc: ImageSizeCalc
+    //private var iscInitialized: Boolean = false
+    //private var pcInitialized: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +66,7 @@ class ViewMapActivity : AppCompatActivity() {
         locationProvider = LocationProvider(this, getPermissionManager())
         glView = findViewById<MapGLSurfaceView>(R.id.mapView)
 
-        // set popup menu for 3 dots button, het map name for it
+        // set popup menu for 3 dots button, get map name for it
         val popup = MapOptionsPopup(this, viewModel.mapid!!)
         popup.setDeleteFun({ con, id -> viewModel.deleteMap(con, id) })
         viewModel.getMapName(this, viewModel.mapid!!) {
@@ -69,29 +74,30 @@ class ViewMapActivity : AppCompatActivity() {
             nameView.text = it
         } // DB access may take a while, it's fine
 
+        // get uri and set image
+        viewModel.getMapImages(this, viewModel.mapid!!) {
+            viewModel.mapImg = Uri.parse(it[0].uri)
+            // set image here or in runOnUiThread ???
+            runOnUiThread {
+                findViewById<ImageView>(R.id.mapBackground).setImageURI(viewModel.mapImg)
+                setImageCalc()
+            }
+            if(iflog) Log.d(clist.ViewMapActivity, ">>> Got mapImg Uri")
+        }
+
         // get reference points
         viewModel.getMapReferencePoints(this, viewModel.mapid!!) {
             val mapPoints = it.stream().map{ dbPoint -> MPoint.toMPoint(dbPoint) }.collect(Collectors.toList())
             if(mapPoints.size >= 2) {
                 //Log.d(clist.ViewMapActivity, ">>> Got points from DB:\n${mapPoints.subList(0, 2)}") // OK CORRECT
                 posCalc = PositionCalc(mapPoints.subList(0, 2)) // SUS
+                if(iflog) Log.d(clist.ViewMapActivity, ">>> Got points")
             }
             else {
                 // error!
             }
         }
 
-        // get uri and set image
-        viewModel.getMapImages(this, viewModel.mapid!!) {
-            viewModel.mapImg = Uri.parse(it[0].uri)
-            findViewById<ImageView>(R.id.mapBackground).setImageURI(viewModel.mapImg)
-            runOnUiThread {
-                imgCalc = ImageSizeCalc(
-                    SizeGetter(this).origImgSizeGet(viewModel.mapImg),
-                    SizeGetter.viewSizeGet(findViewById<ImageView>(R.id.mapBackground))
-                )
-            }
-        }
 
         findViewById<ImageButton>(R.id.backArrow).setOnClickListener { backToMapList() }
         findViewById<ImageButton>(R.id.mapOptions).setOnClickListener { popup.openPopupMenu(it) }
@@ -101,16 +107,20 @@ class ViewMapActivity : AppCompatActivity() {
 
     private fun setImageCalc() {
         val imgView = findViewById<ImageView>(R.id.mapBackground)
+        val origImgSize = SizeGetter(this).origImgSizeGet(viewModel.mapImg) // UI Thread ok?
         imgView.post {
+            val viewSize = SizeGetter.viewSizeGet(imgView)
             imgCalc = ImageSizeCalc(
-                SizeGetter(this).origImgSizeGet(viewModel.mapImg),
-                SizeGetter.viewSizeGet(imgView)
+                origImgSize?: viewSize,
+                viewSize
             )
         }
     }
 
     override fun onStart() {
         super.onStart()
+        if(!this::imgCalc.isInitialized)
+            setImageCalc()
         locationProvider.startLocationUpdates { receiveLocation(it) }
     }
     override fun onResume() {
@@ -139,8 +149,7 @@ class ViewMapActivity : AppCompatActivity() {
             if(viewModel.lastPoint != null) {
                 // use lastPoint to point in opposite direction (forward)
 
-                // FIXME temporarily disabled
-                // angle = PositionCalc.toDeg(PositionCalc.pointAt(viewPoint, viewModel.lastPoint!!)) + 180.0
+                angle = PositionCalc.toDeg(PositionCalc.pointAt(viewPoint, viewModel.lastPoint!!)) + 180.0
             }
             val viewSize = SizeGetter.viewSizeGet(findViewById(R.id.mapBackground))
             glView.userMarker(
@@ -159,16 +168,6 @@ class ViewMapActivity : AppCompatActivity() {
             Log.w(clist.ViewMapActivity, ">>> Activity not created yet !!!")
         return permManager
     }
-
-    /*
-    /**
-     * Not sure if this gets the size of image or ImageView. --> If not sure check out methods in step2and3 and in addmap package
-     */
-    private fun getImgSize() {
-        var img = findViewById<ImageView>(R.id.mapView)
-        var width: Int = img.measuredWidth
-        var height: Int = img.measuredHeight
-    }*/
 
     /**
      * This gets size of image (as List(width, height)) for later calculations

@@ -87,9 +87,9 @@ class Step0Fragment : Fragment() {
      */
     private fun photoPicked(photo: Uri?) {
         if (photo != null) {
-
             viewModel.mapImg = photo
-            findNavController().navigate(R.id.action_step0_to_step2)
+            viewModel.fromPicker = true
+            findNavController().navigate(R.id.action_step0_to_step1ok)
         }
         else  {
             // What a Terrible Failure! This error can't happen logically

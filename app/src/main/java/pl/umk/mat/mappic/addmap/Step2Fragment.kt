@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import pl.umk.mat.mappic.R
 import pl.umk.mat.mappic.addmap.shared_step2and3.AddmapSteps2and3Utility
 import pl.umk.mat.mappic.clist
@@ -43,12 +44,13 @@ class Step2Fragment : Fragment() {
         utility.step2and3.binding2 = binding
 
         Log.d(clist.Step3Fragment, ">>> Step 2")
-        binding.imgView.setImageURI(viewModel.mapImg)
+        binding.imgMapView?.setImageURI(viewModel.mapImg)
         // Img takes too much space when img is vertical. So I have to disable adjustViewBounds.
         if(utility.isImgVerticalExif(viewModel.mapImg)) {
             Log.d(clist.Step2Fragment, ">>> turning 'adjusting view bounds' off")
-            binding.imgView.adjustViewBounds = false
+            binding.imgMapView?.adjustViewBounds  = false
         }
+        utility.checkImgSizeData(viewModel)
 
         // set onclicklisteners here
         binding.OkFAB.setOnClickListener {

@@ -52,5 +52,6 @@
         <item>Testowa wiadomość o błędzie</item>
         <item>Zaznaczono punkt poza obrazkiem</item>
         <item>Mapa z taką nazwą już istnieje</item>
+        <item>Nie znaleziono rozmiaru obrazka. Spróbuj wyedytować obrazek.</item>
     </string-array>
 </resources>

@@ -18,5 +18,7 @@ enum class ErrTypes(val code: Int) {
     /** MPoint marked outside image */
     POINT_OUT_OF_BOUNDS(6),
     /** DBMap with this name already exists. */
-    NAME_EXISTS(7);
+    NAME_EXISTS(7),
+    /** If size data of original image were not found */
+    NO_SIZE_DATA(8);
 }

@@ -58,5 +58,6 @@
         <item>Test error message</item>
         <item>Point is marked outside image</item>
         <item>Map with this name already exists</item>
+        <item>Error, can\'t get Image size. Try to edit image.</item>
     </string-array>
 </resources>

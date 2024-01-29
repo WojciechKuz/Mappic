@@ -57,6 +57,9 @@ class Step1okFragment : Fragment() {
         binding.YesFAB.setOnClickListener {
             onClickYes()
         }
+        binding.EditFAB?.setOnClickListener {
+            onClickEdit()
+        }
         binding.NoFAB.setOnClickListener {
             onClickNo()
         }
@@ -73,6 +76,16 @@ class Step1okFragment : Fragment() {
         // Photos are saved instantly, so there's no need to save again, just navigate to nxt fragment.
         // The only downside is, that user needs to manually delete unused photos. Could be done later.
         findNavController().navigate(R.id.action_step1ok_to_step2)
+    }
+
+    /** Launch intent to edit image */
+    fun onClickEdit() {
+        if (viewModel.uriInitialized()) {
+            val intent = Intent(Intent.ACTION_EDIT)
+            intent.setDataAndType(viewModel.mapImg, "image/*")
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            startActivity(Intent.createChooser(intent, null))
+        }
     }
 
     /**

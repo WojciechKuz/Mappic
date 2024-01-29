@@ -63,6 +63,9 @@ class NewMapViewModel: ViewModel() {
         }
     }
 
+    fun uriInitialized(): Boolean {
+        return this::mapImg.isInitialized
+    }
     fun nameInitialized(): Boolean {
         return this::name.isInitialized
     }

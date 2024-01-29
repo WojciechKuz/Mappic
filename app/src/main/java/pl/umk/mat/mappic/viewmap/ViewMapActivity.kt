@@ -139,6 +139,7 @@ class ViewMapActivity : AppCompatActivity() {
     }
 
     private var changedSize = false
+    var angle = 0.0
 
     fun receiveLocation(loc: Location) {
 
@@ -158,10 +159,11 @@ class ViewMapActivity : AppCompatActivity() {
         if(iflog) Log.d(clist.ViewMapActivity, ">>> In View point: ${origPoint}")
 
         if(true) {
-            var angle = 0.0
             if(viewModel.lastPoint != null) {
                 // use lastPoint to point in opposite direction (forward)
-                angle = PositionCalc.toDeg(PositionCalc.pointAt(viewPoint, viewModel.lastPoint!!)) + 180.0
+                // direction will be changed only if difference between last and current point is greater than 3m.
+                val angleChange = PositionCalc.toDeg(PositionCalc.pointAt(viewPoint, viewModel.lastPoint!!)) + 180.0
+                angle = if(PositionCalc.geoPosToDist(viewPoint, viewModel.lastPoint!!) > 3) angleChange else angle
             }
             val viewSize = SizeGetter.viewSizeGet(findViewById(R.id.mapBackground))
             val gluser = ImageSizeCalc.toOpenGLPoint(viewSize, viewPoint)
@@ -172,7 +174,7 @@ class ViewMapActivity : AppCompatActivity() {
             )
             if(!changedSize) {
                 when (resources.configuration.orientation) {
-                    Configuration.ORIENTATION_LANDSCAPE -> glView.userSize(3, 4)
+                    Configuration.ORIENTATION_LANDSCAPE -> glView.userSize(1, 1)
                     Configuration.ORIENTATION_PORTRAIT -> glView.userSize(3, 8)
                     Configuration.ORIENTATION_SQUARE -> glView.userSize(1, 2)
                     Configuration.ORIENTATION_UNDEFINED -> glView.userSize(1, 2)

@@ -82,8 +82,8 @@ class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>)
         /** Earth sphere radius in meters. Mean Earth radius 6371.0088 km defined in WGS 84. */
         const val EARTH_RADIUS = 6371008.8
         fun toRad(deg: Double): Double { return deg / 180.0 * PI }
-        fun toDeg(rad: Double): Double { return rad * PI / 180.0 }
-        private fun meanLatitude(lat1: Double, lat2: Double): Double { return (lat1 + lat2) / 2.0 }
+        fun toDeg(rad: Double): Double { return rad * 180.0 / PI }
+        private fun meanLatitude(lat1: Float, lat2: Float): Double { return (lat1 + lat2) / 2.0 }
 
         /**
          * Earth CIRCLE radius on certain Latitude. In meters.
@@ -98,19 +98,34 @@ class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>)
          */
         fun curvatureLength(deg: Double, radius: Double): Double { return radius * toRad(deg) }
 
-        // TODO test it:        Also, what precision it has?
-        // This would be harder in polar update
         /**
-         * Calculates distance between two points on Earth's surface. Unit - meters.
+         * Calculates distance between two points on Earth's surface.
          *
          * This method uses [Spherical Earth projected to a plane](https://en.wikipedia.org/wiki/Geographical_distance#Flat-surface_formulae) formula.
+         * @return distance in meters.
          */
         fun geoPosToDist(a: MPoint, b: MPoint): Double {
-            val degDistNS = abs(b.ygps - a.ygps)
-            val degDistEW = abs(b.xgps - a.xgps)
-            val meanLatit = meanLatitude(a.ygps, b.ygps) // aka average latitude
-            val MdistNS = curvatureLength(degDistNS, LATIT_RADIUS)
-            val MdistEW = curvatureLength(degDistEW, radiusAtLatitude(meanLatit))
+            return geoPosToDist(
+                PointF(a.xgps.toFloat(), a.ygps.toFloat()),
+                PointF(b.xgps.toFloat(), b.ygps.toFloat())
+            )
+        }
+        // This would be harder in polar update
+        /**
+         * Calculates distance between two points on Earth's surface.
+         * For Parameter points -
+         * x should be EW longitude,
+         * y should be NS latitude.
+         *
+         * This method uses [Spherical Earth projected to a plane](https://en.wikipedia.org/wiki/Geographical_distance#Flat-surface_formulae) formula.
+         * @return distance in meters.
+         */
+        fun geoPosToDist(a: PointF, b: PointF): Double {
+            val degDistNS = abs(b.y - a.y)
+            val degDistEW = abs(b.x - a.x)
+            val meanLatit = meanLatitude(a.y, b.y) // aka average latitude
+            val MdistNS = curvatureLength(degDistNS.toDouble(), LATIT_RADIUS)
+            val MdistEW = curvatureLength(degDistEW.toDouble(), radiusAtLatitude(meanLatit))
 
             // ...and Pythagoras:
             return sqrt(MdistNS.pow(2) + MdistEW.pow(2))

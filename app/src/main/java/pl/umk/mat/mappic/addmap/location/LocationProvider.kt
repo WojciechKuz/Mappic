@@ -21,6 +21,9 @@ import com.google.android.gms.tasks.Task
 import pl.umk.mat.mappic.addmap.features.permissions.PermissionManager
 import pl.umk.mat.mappic.clist
 
+/** If log debug messages */
+private const val iflog = false
+
 /**
  * Provides location as single or continuous location updates.
  * Before requesting any location updates you need to call activityOnCreate()
@@ -106,7 +109,7 @@ class LocationProvider(private val actv: AppCompatActivity, private val permMana
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationRes: LocationResult) {
                 // Pass last retrieved location to interface
-                Log.d(clist.LocationProvider, ">>> getting last location")
+                if(iflog) Log.d(clist.LocationProvider, ">>> getting last location")
                 val lastLoc = locationRes.lastLocation
                 lastLoc ?: return
                 passLoc.pass(lastLoc)

@@ -3,6 +3,7 @@ package pl.umk.mat.mappic.addmap
 import android.content.Intent
 import android.os.Bundle
 import android.os.Looper
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.fragment.app.activityViewModels
 import pl.umk.mat.mappic.db.entities.DBMap
 import pl.umk.mat.mappic.MainActivity
 import pl.umk.mat.mappic.R
+import pl.umk.mat.mappic.clist
 import pl.umk.mat.mappic.common.ErrTypes
 import pl.umk.mat.mappic.common.Signal
 import pl.umk.mat.mappic.databinding.FragmentStep4Binding
@@ -82,6 +84,7 @@ class Step4Fragment : Fragment() {
                     val gotoList = Intent(activity as AddMapActivity, MainActivity::class.java)
                     startActivity(gotoList)
                 }
+                Log.i(clist.Step4Fragment, ">>> Map saved successfully")
             }
         )
     }

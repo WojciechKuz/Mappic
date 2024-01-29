@@ -69,8 +69,10 @@ class Step1Fragment : Fragment() {
      * Then, navigates to this fragment.
      */
     private fun setMapImg(recvImgUri: Uri?) {
-        if(recvImgUri != null)
+        if(recvImgUri != null) {
             viewModel.mapImg = recvImgUri
+            Log.i(clist.Step1Fragment, ">>> Image uri saved")
+        }
 
         val msg = R.string.photo_success // Old message: "Photo capture succeeded: ${viewModel.mapImg}"
         Toast.makeText(addMap.baseContext, msg, Toast.LENGTH_SHORT).show()

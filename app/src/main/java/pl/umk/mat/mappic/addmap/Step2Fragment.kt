@@ -43,7 +43,7 @@ class Step2Fragment : Fragment() {
         utility = AddmapSteps2and3Utility(activity as AddMapActivity, clist.Step2Fragment)
         utility.step2and3.binding2 = binding
 
-        Log.d(clist.Step3Fragment, ">>> Step 2")
+        Log.d(clist.Step2Fragment, ">>> Step 2")
         binding.imgMapView?.setImageURI(viewModel.mapImg)
         // Img takes too much space when img is vertical. So I have to disable adjustViewBounds.
         if(utility.isImgVerticalExif(viewModel.mapImg)) {

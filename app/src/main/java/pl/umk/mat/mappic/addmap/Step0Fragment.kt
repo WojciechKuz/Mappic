@@ -87,6 +87,7 @@ class Step0Fragment : Fragment() {
      */
     private fun photoPicked(photo: Uri?) {
         if (photo != null) {
+            Log.i(clist.Step0Fragment, ">>> Image uri saved")
             viewModel.mapImg = photo
             viewModel.fromPicker = true
             findNavController().navigate(R.id.action_step0_to_step1ok)

@@ -8,6 +8,9 @@ import android.view.MotionEvent
 import android.view.View
 import pl.umk.mat.mappic.clist
 
+/** If log debug messages */
+private const val iflog = false
+
 /**
  * This view is used to provide onClick data such as x, y positions.
  * You can put it over a view, from which you want to capture onClick position (x, y).
@@ -26,11 +29,11 @@ class MyView(context: Context, attrs: AttributeSet): View(context, attrs) {
     var passMotEv: PassMotionEvent? = null // public
 
     init {
-        Log.d(clist.MyView, ">>> default init, 2 arg")
-        Log.d(clist.MyView, ">>> MyView is initialized !")
+        if(iflog) Log.d(clist.MyView, ">>> default init, 2 arg")
+        if(iflog) Log.d(clist.MyView, ">>> MyView is initialized !")
     }
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int): this(context, attrs) {
-        Log.d(clist.MyView, ">>> init, 3 args")
+        if(iflog) Log.d(clist.MyView, ">>> init, 3 args")
     }
 
     /**
@@ -39,7 +42,7 @@ class MyView(context: Context, attrs: AttributeSet): View(context, attrs) {
      */
     fun setPassMotionEvent(passMotEv: PassMotionEvent) {
         this.passMotEv = passMotEv
-        Log.d(clist.MyView, ">>> passMotionEvent is set")
+        if(iflog) Log.d(clist.MyView, ">>> passMotionEvent is set")
     }
 
     @SuppressLint("ClickableViewAccessibility")

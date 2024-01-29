@@ -31,7 +31,7 @@
     <string name="map_icon_desc">Ikona mapy</string>
     <string name="use_my_location_butt">Użyj mojej lokalizacji</string>
     <string name="latitude">Szerokość geogr. (N/S)</string>
-    <string name="longitude">Długość geogr. (W/Z)</string>
+    <string name="longitude">Długość geogr. (E/W)</string>
     <string name="step2_type_gps1">Wpisz, albo użyj swoich współrzędnych jako punkt pierwszy</string>
     <string name="step3_type_gps2">Wpisz, albo użyj swoich współrzędnych jako drugi punkt</string>
     <string name="name_map">Nazwij swoją mapę</string>

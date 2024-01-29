@@ -82,7 +82,8 @@ class ViewMapActivity : AppCompatActivity() {
                 findViewById<ImageView>(R.id.mapBackground).setImageURI(viewModel.mapImg)
                 setImageCalc()
             }
-            if(iflog) Log.d(clist.ViewMapActivity, ">>> Got mapImg Uri")
+            //if(iflog)
+            Log.d(clist.ViewMapActivity, ">>> Got mapImg Uri")
         }
 
         // get reference points
@@ -91,7 +92,8 @@ class ViewMapActivity : AppCompatActivity() {
             if(mapPoints.size >= 2) {
                 //Log.d(clist.ViewMapActivity, ">>> Got points from DB:\n${mapPoints.subList(0, 2)}") // OK CORRECT
                 posCalc = PositionCalc(mapPoints.subList(0, 2)) // SUS
-                if(iflog) Log.d(clist.ViewMapActivity, ">>> Got points")
+                //if(iflog)
+                Log.d(clist.ViewMapActivity, ">>> Got points")
             }
             else {
                 // error!
@@ -139,6 +141,7 @@ class ViewMapActivity : AppCompatActivity() {
             loc.longitude.toFloat(), // between -180.0 and 180.0 inclusive EW x
             loc.latitude.toFloat() // between -90.0 and 90.0 inclusive NS y
         ))
+        Log.d(clist.ViewMapActivity, ">>> User is in ${loc.latitude.toFloat()} N, ${loc.longitude.toFloat()} E")
         val viewPoint = imgCalc.toViewPoint(origPoint) // point inView
 
         if(iflog) Log.d(clist.ViewMapActivity, ">>> Original point: ${origPoint}")
@@ -153,7 +156,9 @@ class ViewMapActivity : AppCompatActivity() {
             }
             val viewSize = SizeGetter.viewSizeGet(findViewById(R.id.mapBackground))
             glView.userMarker(
-                ImageSizeCalc.toOpenGLPoint(viewSize, viewPoint), angle.toFloat())
+                //ImageSizeCalc.toOpenGLPoint(viewSize, viewPoint), angle.toFloat()
+                PointF(0f, 0f), 0f  // FIXME check accepted angle values
+            )
         }
         viewModel.lastPoint = viewPoint
     }

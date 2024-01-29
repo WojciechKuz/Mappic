@@ -76,7 +76,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         } else if(step == 3 && viewModel.isInitialized(2)) {
             p = viewModel.p2
         } else return
-        fillGPSCoordinates(p.xgps, p.ygps)
+        fillGPSCoordinates(p.ygps, p.xgps)
 
         // Now, mark point on img
         step2and3.viewSizeWhenReady {
@@ -126,8 +126,8 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
      */
     @SuppressLint("SetTextI18n")
     private fun fillGPSCoordinates(
-        @FloatRange(from = -90.0, to = 90.0) latitude: Double,
-        @FloatRange(from = -180.0, to = 180.0) longitude: Double
+        @FloatRange(from = -90.0, to = 90.0) latitude: Double, // NS
+        @FloatRange(from = -180.0, to = 180.0) longitude: Double // EW
     ) {
         //val editableNS = step2and3.latitudeNS()
         //val editableEW = step2and3.longitudeEW() // They were using findViewById() and step3 was getting EditText of step2

@@ -97,6 +97,7 @@ class MapOptionsPopup(val context: Context, val mapid: Long) {
             deleteFun.delete(context, mapid) // deletes map from DB
             val msg = R.string.map_deleted
             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+            Log.i(clist.MapOptionsPopup, ">>> Map deleted.")
         }
         else {
             Log.e(clist.MapOptionsPopup, ">>> Deleting function has not been set")

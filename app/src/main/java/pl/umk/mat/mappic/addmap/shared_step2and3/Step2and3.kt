@@ -7,6 +7,8 @@ import android.widget.TextView
 import pl.umk.mat.mappic.R
 import pl.umk.mat.mappic.addmap.AddMapActivity
 import pl.umk.mat.mappic.common.myview.MyView
+import pl.umk.mat.mappic.databinding.FragmentStep2Binding
+import pl.umk.mat.mappic.databinding.FragmentStep3Binding
 import pl.umk.mat.mappic.opengl.MapGLSurfaceView
 import pl.umk.mat.mappic.viewmap.SizeGetter
 
@@ -21,17 +23,41 @@ import pl.umk.mat.mappic.viewmap.SizeGetter
  * - checkOrientation()
  */
 class Step2and3(val addMap: AddMapActivity, TAG: String): SizeGetter(addMap, TAG) {
+    private val whichFragment = if(TAG.contains("2")) 2
+    else if(TAG.contains("3")) 3
+    else throw Exception("Tag does not contain accepted step number of 2 or 3")
 
-    // redundant
+    var binding2: FragmentStep2Binding? = null
+    var binding3: FragmentStep3Binding? = null
+
+    // UI getting methods shortened
     fun latitudeNS(): EditText? {
         return addMap.findViewById<EditText>(R.id.gpsLatitude)
     }
     fun longitudeEW(): EditText? {
         return addMap.findViewById<EditText>(R.id.gpsLongitude)
     }
-    /*fun getMarkerPosition() {
-        //
-    }*/
+    fun bindingLatitudeNS(): EditText? {
+        return when(whichFragment) {
+            2 -> binding2?.gpsLatitude
+            3 -> binding3?.gpsLatitude
+            else -> null
+        }
+    }
+    fun bindingLongitudeEW(): EditText? {
+        return when(whichFragment) {
+            2 -> binding2?.gpsLongitude
+            3 -> binding3?.gpsLongitude
+            else -> null
+        }
+    }
+    fun getBindingOpenGLView(): MapGLSurfaceView {
+        return when(whichFragment) {
+            2 -> binding2?.openGLView!!
+            3 -> binding3?.openGLView!!
+            else -> throw Exception("Can't get MapGLSurfaceView")
+        }
+    }
 
     // nFIXME compiler thinks those won't be null, but when used (or checked) it causes NullPointerException
     //  maybe add ? to returned value?

@@ -31,7 +31,7 @@ import kotlin.math.round
  */
 class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
 
-    private val step2and3 = Step2and3(addMap, TAG)
+    val step2and3 = Step2and3(addMap, TAG)
     private val locationProvider = LocationProvider(addMap, addMap.getPermissionManager())
     /** NOTE: these are 'in View' coordinates'.
      *  It has to be recalculated to 'originalPoint' coordinates to be saved to DB.
@@ -54,7 +54,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         if(event != null) {
             // event.x and event.y are inView coordinates
             Log.d(TAG, ">>> Kliknięto w " + "x: " + event.x + "; y: " + event.y)
-            step2and3.getOpenGLView().pointMarker(
+            step2and3.getOpenGLView().pointMarker( // FIXME maybe getBindingOpenGLView()?
                 ImageSizeCalc.toOpenGLPoint(step2and3.viewSizeGet(), PointF(event.x, event.y))
             )
 
@@ -85,7 +85,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
             PointF(ivp.x, ivp.y)
         )
         Log.d(TAG, ">>> OpenGL coordinates: x: ${glcoor.x}, y: ${glcoor.y}")
-        step2and3.getOpenGLView().pointMarker(glcoor) // MARK POINT
+        step2and3.getBindingOpenGLView().pointMarker(glcoor) // MARK POINT
     }
 
     /**
@@ -116,8 +116,22 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         @FloatRange(from = -90.0, to = 90.0) latitude: Double,
         @FloatRange(from = -180.0, to = 180.0) longitude: Double
     ) {
-        val editableNS = step2and3.latitudeNS()
-        val editableEW = step2and3.longitudeEW()
+        //val editableNS = step2and3.latitudeNS()
+        //val editableEW = step2and3.longitudeEW() // They were using findViewById() and step3 was getting EditText of step2
+        val editableNS = step2and3.bindingLatitudeNS()
+        val editableEW = step2and3.bindingLongitudeEW()
+        /* // FUTURE_TODO This behaviour needs some investigation.
+        when(step2and3.latitudeNS()!!.text.toString()) {
+            "2." -> Log.d(TAG, ">>> Found EditText of Step2Fragment") // "2." was set in step2 xml setText
+            ":(" -> Log.d(TAG, ">>> Found EditText of Step3Fragment") // ":(" was set in step3 xml setText
+            "" -> Log.d(TAG, ">>> Found empty EditText")
+            else -> Log.d(TAG, ">>> Found unexpected text: \"${step2and3.latitudeNS()!!.text}\"")
+            // It was getting values filled in step2, when using findViewById to get EditText.
+            // It is even funnier now. It's getting correct values for step3 and I haven't filled it before!
+            // FUTURE_TODO This behaviour needs some investigation.
+        }
+        */
+
         if (editableNS != null) {
             if(latitude >= 0)
                 editableNS.setText("${latitude} N")
@@ -132,6 +146,15 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
                 editableEW.setText("${-longitude} W")
         } else
             Log.e(TAG, ">>> editableEW is null!")
+
+        /* // This does not really check
+        if(step2and3.latitudeNS()!!.text.toString() == "$latitude N") {
+            Log.d(TAG, ">>> Coordinates filled correctly!")
+        }
+        else {
+            Log.e(TAG, ">>> Coordinates were not filled!")
+        }
+        */
     }
 
     /**
@@ -166,8 +189,8 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
         }
 
         // read text values from UI
-        val editableNS = step2and3.latitudeNS()!!.editableText
-        val editableEW = step2and3.longitudeEW()!!.editableText
+        val editableNS = step2and3.latitudeNS()!!.editableText // FIXME use bindingLatitudeNS()
+        val editableEW = step2and3.longitudeEW()!!.editableText // FIXME use bindingLongitudeEW()
 
         // if empty check
         if(editableNS.isEmpty() || editableEW.isEmpty()) {

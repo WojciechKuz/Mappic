@@ -40,6 +40,7 @@ class Step2Fragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         utility = AddmapSteps2and3Utility(activity as AddMapActivity, clist.Step2Fragment)
+        utility.step2and3.binding2 = binding
 
         Log.d(clist.Step3Fragment, ">>> Step 2")
         binding.imgView.setImageURI(viewModel.mapImg)

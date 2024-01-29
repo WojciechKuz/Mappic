@@ -31,7 +31,7 @@ import pl.umk.mat.mappic.viewmap.ViewMapActivity
  */
 
 class MyMapItemRecyclerViewAdapter(
-    private val values: List<RecycleMap>, //navigateToMapView: Signal
+    private val values: ArrayList<RecycleMap>, //navigateToMapView: Signal
     private val deleteMapFun: DeleteInterface
 ) : RecyclerView.Adapter<MyMapItemRecyclerViewAdapter.ViewHolder>() {
 
@@ -84,7 +84,9 @@ class MyMapItemRecyclerViewAdapter(
         popup.setMapName(holder.nameView.text.toString())   // set name
         popup.setDeleteFun({ con, id ->
             deleteMapFun.delete(con, id)
-            holder.itemView.visibility = View.GONE
+            //holder.itemView.visibility = View.GONE // leaves blank space
+            values.removeAt(position)
+            this@MyMapItemRecyclerViewAdapter.notifyItemRemoved(position)
         })                                              // set delete fun
         holder.moreView.setOnClickListener {
             popup.openPopupMenu(it) // finally, setting openPopup as onClickListener

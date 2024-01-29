@@ -61,7 +61,7 @@ class MapItemListFragment : Fragment() {
                     Log.d(clist.MapItemListFragment, ">>> setting list of maps")
                     (activity as MainActivity).runOnUiThread {
                         adapter = MyMapItemRecyclerViewAdapter(
-                            it.stream().map{dbMap -> RecycleMap.dbMaptoRecycleMap(dbMap)}.collect(Collectors.toList())
+                            ArrayList(it.stream().map{dbMap -> RecycleMap.dbMaptoRecycleMap(dbMap)}.collect(Collectors.toList()))
                         ) { con, id -> viewModel.deleteMap(con, id) }
                     }
                 }

@@ -60,8 +60,8 @@ class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>)
      */
     fun basic_whereUser(geoUserP: PointF): Point {
         val relative2Geo1 = PointF(
-            geo[0].x - geoUserP.x,
-            geo[0].y - geoUserP.y
+            geoUserP.x - geo[0].x,
+            geoUserP.y - geo[0].y
         )
         val geoScale = PointF(
             relative2Geo1.x / geoDiff.x,

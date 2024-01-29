@@ -110,22 +110,21 @@ class ImageSizeCalc(val original: Size, val view: Size) {
         /**
          * Translate coordinates from inView coordinates to OpenGL coordinates.
          *  This is what it calculates:
-         *  - smll := min(width, height)
-         *  - gl_x :=  ((2*px_x - width) / smll)
-         *  - gl_y := -((2*px_y - height)/ smll)  // !!! minus!
+         *  - gl_x :=  ((2*px_x - width) / height)
+         *  - gl_y := -((2*px_y - height)/ height)  // !!! minus!
+         *  Height is always in range [[-1, 1]], meanwhile width changes depending on screen proportion.
          * @return OpenGL coordinates, gl_x, gl_y values in about [[-1, 1]] range depending on screen proportions
          */
         fun toOpenGLPoint(viewSize: Size, inViewPoint: PointF): PointF {
             /*
              OpenGL Coordinate limits for view proportions:
              For 1:1 view: x [-1, 1]; y [-1, 1];
-             For 2:1 view: x [-1.5, 1.5]; y [-1, 1];
-             For 1:2 view: x [-1, 1]; y [-1.5, 1.5];
+             For 2:1 view: x [-2, 2]; y [-1, 1];
+             For 1:2 view: x [-0.5, 0.5]; y [-1, 1];
              */
-            val smallerSize = if(viewSize.width < viewSize.height) viewSize.width else viewSize.height
             return PointF(
-                (2f*inViewPoint.x - 1f*viewSize.width) / smallerSize,
-                -((2f*inViewPoint.y - 1f*viewSize.height) / smallerSize) // minus must be last operation
+                (2f*inViewPoint.x - 1f*viewSize.width) / viewSize.height,
+                -((2f*inViewPoint.y - 1f*viewSize.height) / viewSize.height) // minus must be last operation
             )
         }
 

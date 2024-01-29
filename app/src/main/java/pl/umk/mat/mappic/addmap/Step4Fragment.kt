@@ -42,6 +42,11 @@ class Step4Fragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.OkFAB.setOnClickListener { saveNewMap() }
+
+
+        if(viewModel.mapid != null || viewModel.nameInitialized()) { // if edit mode
+            binding.mapNameField.setText(viewModel.name)
+        }
     }
 
     /**
@@ -65,7 +70,9 @@ class Step4Fragment : Fragment() {
                 else
                     viewModel.editMap(activity as AddMapActivity)
 
-                Looper.prepare().run {
+                // toast
+                //Looper.prepare().run {
+                (activity as AddMapActivity).runOnUiThread {
                     val msg = R.string.saved_to_db
                     Toast.makeText(activity as AddMapActivity, msg, Toast.LENGTH_SHORT).show()
                 }

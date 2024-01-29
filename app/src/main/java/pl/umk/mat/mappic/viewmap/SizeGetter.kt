@@ -30,6 +30,8 @@ open class SizeGetter(val context: Context, val TAG: String = "SizeGetter") {
         val exif = getExifData(imageUri)
         val width: Int = exif.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, -1)
         val height: Int = exif.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, -1)
+        if(width == -1 || height == -1)
+            Log.e(TAG, ">>> Can't get size of original image based on Exif data.")
         return if(!isImgVerticalExif(imageUri)) Size(width, height) else Size(height, width)
     }
 

@@ -59,15 +59,11 @@ class MapItemListFragment : Fragment() {
                 // show list of maps
                 viewModel.getMapList(activity as MainActivity) {
                     Log.d(clist.MapItemListFragment, ">>> setting list of maps")
-                    //Looper.getMainLooper().thread.run
-                    @UiThread
-                    fun runOnUi() {
-                        // this must be run on ui thread. The way I did it is not the best solution I think...
+                    (activity as MainActivity).runOnUiThread {
                         adapter = MyMapItemRecyclerViewAdapter(
                             it.stream().map{dbMap -> RecycleMap.dbMaptoRecycleMap(dbMap)}.collect(Collectors.toList())
                         ) { con, id -> viewModel.deleteMap(con, id) }
                     }
-                    runOnUi()
                 }
                 if (adapter != null) {
                     Log.d(clist.MapItemListFragment, ">>> adapter has been set")

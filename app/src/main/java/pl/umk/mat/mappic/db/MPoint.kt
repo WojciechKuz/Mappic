@@ -34,4 +34,8 @@ data class MPoint(
             )
         }
     }
+
+    override fun toString(): String {
+        return "MPoint(xpx=$xpx, ypx=$ypx, xgps=$xgps, ygps=$ygps, reference=$reference)"
+    }
 }

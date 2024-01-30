@@ -31,9 +31,13 @@ class AddMapActivity : AppCompatActivity() {
 
         // if contains extra it's edit map mode
         val whichmap = intent.getLongExtra("whichmap", -1)
+        val startWith = intent.getIntExtra("startWith", -1)
+        val viewModel: NewMapViewModel by viewModels()
         if(whichmap != -1L) {
-            val viewModel: NewMapViewModel by viewModels()
             viewModel.getEditMap(this, whichmap)
+        }
+        if(startWith == 0) {
+            viewModel.startWith0 = true
         }
 
         binding = ActivityAddMapBinding.inflate(layoutInflater)

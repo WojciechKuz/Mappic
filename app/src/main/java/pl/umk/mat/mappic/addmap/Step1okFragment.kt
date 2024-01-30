@@ -93,16 +93,28 @@ class Step1okFragment : Fragment() {
      * Navigate to [Step1Fragment].
      */
     private fun onClickNo() {
-        // if from photopicker, start from step0
-        if(viewModel.fromPicker) {
-            // can't use navigateBack because there's onActivity register there and back navigating there causes app crash
-            val intent = Intent(activity as AddMapActivity, AddMapActivity::class.java)
-            if(viewModel.mapid != null) {
-                intent.putExtra("whichmap", viewModel.mapid)
-            }
+        val intent = Intent(activity as AddMapActivity, AddMapActivity::class.java)
+
+        if(viewModel.mapid != null) { // edit mode
+            intent.putExtra("whichmap", viewModel.mapid)
+            intent.putExtra("startWith", 0)
+            Log.d(clist.Step1okFragment, ">>> Restart activity. edit mode")
             startActivity(intent)
             return
         }
+
+        // if from photopicker, start from step0
+        if(viewModel.fromPicker) {
+            // can't use navigateBack because there's onActivity register there and back navigating there causes app crash
+            if(viewModel.mapid != null) { // edit mode
+                intent.putExtra("whichmap", viewModel.mapid)
+                intent.putExtra("startWith", 0)
+            }
+            Log.d(clist.Step1okFragment, ">>> Restart activity. frompicker")
+            startActivity(intent)
+            return
+        }
+        Log.d(clist.Step1okFragment, ">>> Normal navigate back")
         parentFragmentManager.popBackStackImmediate() // Navigates to step1
 
     }

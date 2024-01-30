@@ -28,6 +28,8 @@ class NewMapViewModel: ViewModel() {
      * This allows to navigate back to step0.
      */
     var step0visited = false
+    /** If edit mode and already been started in step1ok, let navigate (start) with step0 */
+    var startWith0 = false
     var fromPicker = false
     var fromPickerNavigated = false
 

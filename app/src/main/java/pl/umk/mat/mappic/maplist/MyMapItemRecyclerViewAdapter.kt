@@ -117,6 +117,7 @@ class MyMapItemRecyclerViewAdapter(
             }
             val gotoMapView = Intent(view.context, ViewMapActivity::class.java)
             gotoMapView.putExtra("whichmap", mapid!!)
+            gotoMapView.putExtra("startWith", 1)
             view.context.startActivity(gotoMapView)
         }
 

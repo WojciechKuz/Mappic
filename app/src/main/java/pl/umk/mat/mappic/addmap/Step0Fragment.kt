@@ -55,7 +55,8 @@ class Step0Fragment : Fragment() {
         if(viewModel.mapid != null) { // This means editing mode
             if(!viewModel.step0visited) {
                 viewModel.step0visited = true
-                findNavController().navigate(R.id.action_step0_to_step1ok)
+                if(!viewModel.startWith0)
+                    findNavController().navigate(R.id.action_step0_to_step1ok)
             }
         }
     }

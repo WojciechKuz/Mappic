@@ -158,31 +158,35 @@ class ViewMapActivity : AppCompatActivity() {
         if(iflog) Log.d(clist.ViewMapActivity, ">>> Original point: ${origPoint}")
         if(iflog) Log.d(clist.ViewMapActivity, ">>> In View point: ${origPoint}")
 
-        if(true) {
-            if(viewModel.lastPoint != null) {
-                // use lastPoint to point in opposite direction (forward)
-                // direction will be changed only if difference between last and current point is greater than 3m.
-                val angleChange = PositionCalc.toDeg(PositionCalc.pointAt(viewPoint, viewModel.lastPoint!!)) + 180.0
-                angle = if(PositionCalc.geoPosToDist(viewPoint, viewModel.lastPoint!!) > 3) angleChange else angle
-            }
-            val viewSize = SizeGetter.viewSizeGet(findViewById(R.id.mapBackground))
-            val gluser = ImageSizeCalc.toOpenGLPoint(viewSize, viewPoint)
+        if(viewModel.lastPoint != null) {
+            // use lastPoint to point in opposite direction (forward)
+            // direction will be changed only if difference between last and current point is greater than 10m.
+            val coveredDistance = PositionCalc.geoPosToDist(viewPoint, viewModel.lastPoint!!)
+            val angleChange = PositionCalc.toDeg(PositionCalc.pointAt(viewPoint, viewModel.lastPoint!!)) + 180.0
+            angle = if(coveredDistance > 10.0) angleChange else angle
 
-            Log.d(clist.ViewMapActivity, ">>> OpenGL user point: ${gluser.x}, ${gluser.y}, $angle")
-            glView.userMarker(
-                gluser, angle.toFloat()
-            )
-            if(!changedSize) {
-                when (resources.configuration.orientation) {
-                    Configuration.ORIENTATION_LANDSCAPE -> glView.userSize(1, 1)
-                    Configuration.ORIENTATION_PORTRAIT -> glView.userSize(3, 8)
-                    Configuration.ORIENTATION_SQUARE -> glView.userSize(1, 2)
-                    Configuration.ORIENTATION_UNDEFINED -> glView.userSize(1, 2)
-                }
-                changedSize = true
-            }
+            // change lastPoint only if difference is greater than 10m - for increasing orientation stability
+            viewModel.lastPoint = if(coveredDistance > 10.0)
+                PointF(viewPoint.x, viewPoint.y) // copy
+            else
+                viewModel.lastPoint
         }
-        viewModel.lastPoint = PointF(viewPoint.x, viewPoint.y) // copy
+        val viewSize = SizeGetter.viewSizeGet(findViewById(R.id.mapBackground))
+        val gluser = ImageSizeCalc.toOpenGLPoint(viewSize, viewPoint)
+
+        Log.d(clist.ViewMapActivity, ">>> OpenGL user point: ${gluser.x}, ${gluser.y}, $angle")
+        glView.userMarker(
+            gluser, angle.toFloat()
+        )
+        if(!changedSize) {
+            when (resources.configuration.orientation) {
+                Configuration.ORIENTATION_LANDSCAPE -> glView.userSize(1, 1)
+                Configuration.ORIENTATION_PORTRAIT -> glView.userSize(3, 8)
+                Configuration.ORIENTATION_SQUARE -> glView.userSize(1, 2)
+                Configuration.ORIENTATION_UNDEFINED -> glView.userSize(1, 2)
+            }
+            changedSize = true
+        }
     }
 
     private var glfake = PointF(0f, 0f)

@@ -275,7 +275,7 @@ class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
             }
             if (step == 3) {
                 // If difference is greater than 10m.
-                if(PositionCalc.geoPosToDist(viewModel.p1, p) > 10) {
+                if(PositionCalc.geoPosToDist(viewModel.p1, p) > 10.0) {
                     viewModel.p2 = p
                     return true
                 }

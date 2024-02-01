@@ -14,7 +14,7 @@ private const val iflog = false
 /**
  * This view is used to provide onClick data such as x, y positions.
  * You can put it over a view, from which you want to capture onClick position (x, y).
- * Used in [Step2Fragment] and [Step3Fragment].
+ * Used in [pl.umk.mat.mappic.addmap.Step2Fragment] and [pl.umk.mat.mappic.addmap.Step3Fragment].
  */
 class MyView(context: Context, attrs: AttributeSet): View(context, attrs) {
 
@@ -32,9 +32,7 @@ class MyView(context: Context, attrs: AttributeSet): View(context, attrs) {
         if(iflog) Log.d(clist.MyView, ">>> default init, 2 arg")
         if(iflog) Log.d(clist.MyView, ">>> MyView is initialized !")
     }
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int): this(context, attrs) {
-        if(iflog) Log.d(clist.MyView, ">>> init, 3 args")
-    }
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int): this(context, attrs) {}
 
     /**
      * Set what should be called after onTouch() is performed.

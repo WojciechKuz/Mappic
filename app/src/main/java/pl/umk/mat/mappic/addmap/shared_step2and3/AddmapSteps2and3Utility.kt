@@ -24,11 +24,11 @@ private const val iflog = true
 
 // for JavaDoc to properly show links to [Step2Fragment] documentation whole name with packages must be specified. same for step3
 /**
- * Fragments [Step2Fragment] and [Step3Fragment] are nearly identical.
+ * Fragments [pl.umk.mat.mappic.addmap.Step2Fragment] and [pl.umk.mat.mappic.addmap.Step3Fragment] are nearly identical.
  * It serves methods used by both.
  *
  * This class was created to prevent code duplication.
- * Some other helper methods are in [Step2and3]
+ * Some other helper methods are in [pl.umk.mat.mappic.addmap.shared_step2and3.Step2and3]
  */
 class AddmapSteps2and3Utility(val addMap: AddMapActivity, val TAG: String) {
 

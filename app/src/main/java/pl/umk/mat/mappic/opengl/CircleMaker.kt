@@ -5,9 +5,8 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 /**
- * Creates circels.
- * @param radius
- * @param transl - translation. Move circle by transl.x and transl.y
+ * Creates circles.
+ * @param radius - radius of circle to draw
  */
 class CircleMaker(
     private val radius: Float = 0f

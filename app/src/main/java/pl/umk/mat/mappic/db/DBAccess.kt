@@ -6,7 +6,6 @@ import pl.umk.mat.mappic.db.entities.DBImage
 import pl.umk.mat.mappic.db.entities.DBMap
 import pl.umk.mat.mappic.db.entities.DBPoint
 import pl.umk.mat.mappic.addmap.NewMapViewModel
-import java.util.stream.Collectors
 
 interface DBAccess {
     /**
@@ -123,9 +122,5 @@ interface DBAccess {
         db.pointDao().deletePointsForMapid(mapid)
         db.imageDao().deleteImageForMapid(mapid)
         db.mapDao().deleteById(mapid)
-    }
-
-    fun getStuff(context: Context, mapid: Long) {
-        val db = MapDatabase.getDB(context)
     }
 }

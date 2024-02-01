@@ -9,8 +9,6 @@ import pl.umk.mat.mappic.db.entities.DBImage
 
 @Dao
 interface ImageDao {
-    /*@Query("SELECT imgid FROM DBImage WHERE mapid_fk = :mid")
-    fun getImgIdsOnMap(mid: Int): List<Int>*/
 
     @Query("SELECT * FROM DBImage WHERE mapid_fk = :mid")
     fun getImagesForMap(mid: Long): List<DBImage>

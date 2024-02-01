@@ -36,8 +36,6 @@ class CircleMaker(
         val point1 = pointOnCircle(i)
         val point2 = pointOnCircle((i+1) % verticCount) // when i = (size - 1) this must be 0, thus modulo operator is used
         // third point is '0, 0'
-        //Log.d("CircleMaker", ">>> Point1: [${point1.x}, ${point1.y}]")
-        //Log.d("CircleMaker", ">>> Point2: [${point2.x}, ${point2.y}]")
 
         // 3 coordinates in vertex, 3 vertices
         val vertics = floatArrayOf(
@@ -56,8 +54,6 @@ class CircleMaker(
         return PointF(
             cos(i * step) * radius + 0f, // x
             sin(i * step) * radius + 0f  // y
-            // 0f here was supposed to be translation, but I removed it, as it can be set later.
         )
     }
-    companion object {}
 }

@@ -1,6 +1,6 @@
 package pl.umk.mat.mappic.common
 
-/** Quite fun spell :D */
+/** Universal functional interface for passing data  */
 fun interface PassStuff<T> {
     fun pass(stuff: T)
 }

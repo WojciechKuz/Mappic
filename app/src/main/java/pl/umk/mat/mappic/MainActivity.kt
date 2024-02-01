@@ -11,7 +11,6 @@ import androidx.activity.viewModels
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import pl.umk.mat.mappic.addmap.AddMapActivity
 import pl.umk.mat.mappic.databinding.ActivityMainBinding
-import pl.umk.mat.mappic.clist
 
 /** Aka MapList Activity */
 class MainActivity : AppCompatActivity() {
@@ -31,9 +30,7 @@ class MainActivity : AppCompatActivity() {
 
         // View ID names should be Activity-wide unique.
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
-            //SnackShow(this, R.id.fab, "Clicked +. No act.")
             Log.d(clist.MainActivity, ">>> Opening AddMapActivity.")
-            // open AddeMapActivity
             openAddMapActivity()
         }
     }
@@ -56,7 +53,7 @@ class MainActivity : AppCompatActivity() {
                 SnackShow(
                     this,
                     R.id.fragment_list,
-                    "Clicked on settings. No act."
+                    "No action available."
                 )
                 Log.d(clist.MainActivity, ">>> Clicked settings. no action available yet.")
                 return true

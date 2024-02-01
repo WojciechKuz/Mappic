@@ -1,7 +1,6 @@
 package pl.umk.mat.mappic.opengl
 
 class ShaderCode {
-    // This code was in Triangle.kt, but this code is not foldable and is ugly, so i moved it away.
     class TriangleShaderCode {
         companion object {
             val fragmentShaderCode =

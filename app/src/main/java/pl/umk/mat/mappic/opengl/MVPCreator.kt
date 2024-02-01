@@ -10,7 +10,6 @@ import android.util.Log
  * Here is tutorial about transformation matrices: [opengl-tutorial.org - matrices](http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/)
  */
 class MVPCreator {
-    // http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/
 
     // object dependent
     val translationMatrix = FloatArray(16) // obj translation
@@ -58,7 +57,7 @@ class MVPCreator {
     }
 
     /**
-     * Calculate translation ( math translation, not language :D )
+     * Calculate translation
      * @param movez not used, but keep for future
      */
     private fun calculateMoveMx(movex: Float, movey: Float, movez: Float) {

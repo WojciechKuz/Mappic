@@ -5,9 +5,6 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import pl.umk.mat.mappic.db.MPoint
 
-// (DBImage.class, [DBImage.imgid], )
-// @ForeignKey(DBImage, [DBImage.imgid], [DBPoint.uid_fk]
-
 @Entity(foreignKeys = [ForeignKey(
     entity = DBImage::class,
     childColumns = ["imgid_fk"],
@@ -55,8 +52,3 @@ data class DBPoint (
         }
     }
 }
-
-/*
-    According to this site https://techdroid6.rssing.com/chan-56565215/article9.html
-    In Entity class ? behind field type prevents field in SQLite from being declared as NOT NULL
-*/

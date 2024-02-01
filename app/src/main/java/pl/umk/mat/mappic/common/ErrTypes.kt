@@ -10,7 +10,7 @@ enum class ErrTypes(val code: Int) {
     /** When user didn't filled GPS data. */
     NOT_FILLED_GPS(2),
     /** When user typed incorrect value in GPS fields. */
-    INCORRECT_GPS(3), // There could be more types of this error. incorrect value, value out of bounds, incorrect direction(NEWS)
+    INCORRECT_GPS(3),
     /** When user marked second point same as first or difference is too small. (less than 10m) */
     SAME_POINT(4),
     /** This is only for testing purposes */

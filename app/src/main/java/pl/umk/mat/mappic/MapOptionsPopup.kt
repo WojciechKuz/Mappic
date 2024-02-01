@@ -80,18 +80,6 @@ class MapOptionsPopup(val context: Context, val mapid: Long) {
         showDeleteDialog()
     }
 
-    /*
-        private fun showDeleteDialog(context: Context, deleteAction: PassStuff<Int>, mapid: Int, map_name: String = "") {
-            val messageMapName = if(map_name.isNotEmpty()) "\"$map_name\"" else ""
-            val builder = AlertDialog.Builder(context)
-            builder.setMessage(context.getString(R.string.dialog_message_delete, messageMapName))
-            builder.setPositiveButton(R.string.dialog_yes) { dialog, id ->
-                deleteAction.pass(mapid)
-            }
-            builder.setNegativeButton(R.string.dialog_no) { dialog, id -> /* Do nothing. */ }
-        }
-        */
-
     private fun deleteMap() {
         if(this::deleteFun.isInitialized) {
             deleteFun.delete(context, mapid) // deletes map from DB

@@ -58,7 +58,6 @@ class MyMapItemRecyclerViewAdapter(
         parentContext = parent.context
         holder.nameView.setOnClickListener { holder.openMap(it) }
         holder.thumbnailView.setOnClickListener { holder.openMap(it) }
-        //  moreView.onclickListener is set in onBindViewHolder()
         return holder
     }
 
@@ -76,15 +75,11 @@ class MyMapItemRecyclerViewAdapter(
         holder.nameView.text = item.name
         holder.mapid = item.mapid
 
-        // FUTURE_TODO bind thumbnail
-        // FUTURE_TODO options
-
         // set onClickListener
         val popup = MapOptionsPopup(parentContext, holder.mapid!!)
         popup.setMapName(holder.nameView.text.toString())   // set name
         popup.setDeleteFun({ con, id ->
             deleteMapFun.delete(con, id)
-            //holder.itemView.visibility = View.GONE // leaves blank space
             values.removeAt(position)
             this@MyMapItemRecyclerViewAdapter.notifyItemRemoved(position)
         })                                              // set delete fun
@@ -126,32 +121,4 @@ class MyMapItemRecyclerViewAdapter(
         }
     }
 
-    /*
-    // HERE alternative for ViewHolder and onCreateViewHolder():
-
-
-    /**
-     * Provide a reference to the type of views that you are using
-     * (custom ViewHolder)
-     */
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var thumbnail: ImageView? = null
-        val textView: TextView
-
-        init {
-            // Define click listener for the ViewHolder's View
-            textView = view.findViewById(R.id.map_name)
-            thumbnail = view.findViewById(R.id.map_thumbn)
-        }
-    }
-
-    // Create new views (invoked by the layout manager)
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        // Create a new view, which defines the UI of the list item
-        val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.fragment_map_item, viewGroup, false)
-
-        return ViewHolder(view)
-    }
-    */
 }

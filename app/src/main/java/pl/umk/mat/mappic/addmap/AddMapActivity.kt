@@ -14,7 +14,6 @@ import pl.umk.mat.mappic.R
 import pl.umk.mat.mappic.addmap.features.permissions.PermissionManager
 import pl.umk.mat.mappic.clist
 import pl.umk.mat.mappic.databinding.ActivityAddMapBinding
-//import com.student.mappic.addmap.features.permissions.PermissionManager
 
 
 class AddMapActivity : AppCompatActivity() {
@@ -45,17 +44,15 @@ class AddMapActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-        //permManager = PermissionManager(this)
-        val navController = findNavController(R.id.nav_host_fragment_2) // ref na miejsce na fragment   ??? Po czasie widzę ten komentarz i nie wiem co znaczy...
+        val navController = findNavController(R.id.nav_host_fragment_2)
         appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration) // toolbar u góry z nazwą elementu
+        setupActionBarWithNavController(navController, appBarConfiguration) // toolbar on top with element name
         created = true
     }
 
     fun getPermissionManager(): PermissionManager {
         if(!created)
             Log.w(clist.AddMapActivity, ">>> Activity not created yet !!!")
-        //return PermissionManager(this)
         return permManager
     }
 

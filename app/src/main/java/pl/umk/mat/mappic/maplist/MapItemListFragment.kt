@@ -1,7 +1,6 @@
 package pl.umk.mat.mappic.maplist
 
 import android.os.Bundle
-import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,13 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.UiThread
 import androidx.fragment.app.activityViewModels
 import pl.umk.mat.mappic.MainActivity
 import pl.umk.mat.mappic.MainViewModel
 import pl.umk.mat.mappic.R
 import pl.umk.mat.mappic.clist
-import kotlinx.coroutines.Dispatchers
 import java.util.stream.Collectors
 
 /**
@@ -45,17 +42,6 @@ class MapItemListFragment : Fragment() {
             with(view) {
                 layoutManager = LinearLayoutManager(context)
 
-                // when creating placeholder list here, it created IndexOutOfBoundsException outside my code
-                /*
-                Log.d(clist.MapItemListFragment, ">>> adapter has not been set")
-                // If mapList not loaded, list of placeholders will be shown
-                val placeholder = ArrayList<RecycleMap>()
-                for (i in 1..25) {
-                    placeholder.add(RecycleMap(i.toLong(), "Map no.${i}"))
-                }
-                adapter = MyMapItemRecyclerViewAdapter(placeholder) { con, id -> /* Nothing. No real map - nothing to delete. */}
-                */
-
                 // show list of maps
                 viewModel.getMapList(activity as MainActivity) {
                     Log.d(clist.MapItemListFragment, ">>> setting list of maps")
@@ -75,10 +61,6 @@ class MapItemListFragment : Fragment() {
             }
         }
         else Log.e(clist.MapItemListFragment, ">>> This is not RecyclerView!")
-        /* // Alternative way
-        val recyclerView: RecyclerView = findViewById(R.id.list)
-        recyclerView.adapter = recyclerView
-        */
         return view
     }
 

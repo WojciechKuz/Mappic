@@ -47,16 +47,12 @@ class MyView(context: Context, attrs: AttributeSet): View(context, attrs) {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        // here my code
         if (event != null) {
             //Log.d(clist.MyView, ">>> W myView wykryto klik w " + "x: " + event.x + "; y: " + event.y)
             if(passMotEv != null) {
                 passMotionEvent(event)
             }
         }
-        /*else {
-            Log.e(clist.MyView, ">>> Eeee, w myView MotionEvent jest null")
-        }*/
         return super.performClick()
     }
     private fun passMotionEvent(event: MotionEvent) {

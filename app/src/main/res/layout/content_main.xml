@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <!-- TODO Skip this layout and nest fragment directly in activity_main.xml
-         Then, throw this (content_main.xml) layout away, it won't be used. -->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_list"
         android:name="pl.umk.mat.mappic.maplist.MapItemListFragment"

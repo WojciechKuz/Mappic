@@ -2,7 +2,6 @@ package pl.umk.mat.mappic.addmap
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import pl.umk.mat.mappic.db.entities.DBMap
 import pl.umk.mat.mappic.MainActivity
 import pl.umk.mat.mappic.R
 import pl.umk.mat.mappic.clist

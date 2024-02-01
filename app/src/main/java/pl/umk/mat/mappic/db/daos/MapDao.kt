@@ -9,10 +9,6 @@ import pl.umk.mat.mappic.db.entities.DBMap
 
 @Dao
 interface MapDao {
-    // prepend fun declarations with 'suspend' to make it asynchronous
-    // https://medium.com/androiddevelopers/room-coroutines-422b786dc4c5
-    // suspend fun is cool. It executes content of function asynchronously
-    // It doesn't work as intended. suspended functions can only be called by coroutines or by other suspend functions. launch instruction does not work too.
     @Query("SELECT * FROM DBMap")
     fun mapList(): List<DBMap>
     /** Get certain map by it's id */

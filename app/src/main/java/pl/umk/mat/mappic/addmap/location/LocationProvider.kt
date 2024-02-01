@@ -159,16 +159,13 @@ class LocationProvider(private val actv: AppCompatActivity, private val permMana
         val task: Task<LocationSettingsResponse> = client.checkLocationSettings(settRequest.build())
         task.addOnSuccessListener { locationSettingsResponse ->
             // ok, can request location
-            // TODO settings ok, now do something
         }
         task.addOnFailureListener { exception ->
             if(exception is ResolvableApiException) {
                 // https://developer.android.com/develop/sensors-and-location/location/change-location-settings
                 try {
-                    // TODO shouw user dialog to enable location setting
                 }
                 catch (exc2: IntentSender.SendIntentException) {
-                    // ignore error
                     Log.w(clist.LocationProvider, ">>> Caught SendIntentException!")
                 }
             }

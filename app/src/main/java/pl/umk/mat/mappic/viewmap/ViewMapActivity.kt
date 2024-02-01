@@ -2,35 +2,26 @@ package pl.umk.mat.mappic.viewmap
 
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.graphics.Point
 import android.graphics.PointF
 import android.location.Location
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Looper
 import android.util.DisplayMetrics
 import android.util.Log
-import android.util.Size
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.annotation.UiThread
-import androidx.core.graphics.toPointF
-import com.google.android.material.snackbar.Snackbar
 import pl.umk.mat.mappic.MainActivity
 import pl.umk.mat.mappic.MapOptionsPopup
 import pl.umk.mat.mappic.R
-import pl.umk.mat.mappic.addmap.AddMapActivity
 import pl.umk.mat.mappic.addmap.features.permissions.PermissionManager
 import pl.umk.mat.mappic.addmap.location.LocationProvider
 import pl.umk.mat.mappic.clist
 import pl.umk.mat.mappic.common.ImageSizeCalc
 import pl.umk.mat.mappic.common.PositionCalc
 import pl.umk.mat.mappic.db.MPoint
-import pl.umk.mat.mappic.db.entities.DBPoint
 import pl.umk.mat.mappic.opengl.MapGLSurfaceView
 import java.util.stream.Collectors
 import android.content.res.Configuration
@@ -51,8 +42,6 @@ class ViewMapActivity : AppCompatActivity() {
     private lateinit var glView: MapGLSurfaceView
     private lateinit var posCalc: PositionCalc
     private lateinit var imgCalc: ImageSizeCalc
-    //private var iscInitialized: Boolean = false
-    //private var pcInitialized: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,10 +88,8 @@ class ViewMapActivity : AppCompatActivity() {
             }
         }
 
-
         findViewById<ImageButton>(R.id.backArrow).setOnClickListener { backToMapList() }
         findViewById<ImageButton>(R.id.mapOptions).setOnClickListener { popup.openPopupMenu(it) }
-        //findViewById<MapGLSurfaceView>(R.id.mapView).setOnClickListener { fakeUserPosition() }
         locationProvider.activityOnCreate()
         created = true
     }
@@ -189,17 +176,6 @@ class ViewMapActivity : AppCompatActivity() {
         }
     }
 
-    private var glfake = PointF(0f, 0f)
-
-    fun fakeUserPosition() {
-        glfake.x -= 0.05f
-        //glfake.y -= 0.05f
-        Log.d(clist.ViewMapActivity, ">>> Fake OpenGL user point: ${glfake.x}, ${glfake.y}")
-        glView.userMarker(
-            glfake, 0.0f
-        )
-    }
-
     private fun backToMapList() {
         val gotoList = Intent(this, MainActivity::class.java)
         startActivity(gotoList)
@@ -220,23 +196,4 @@ class ViewMapActivity : AppCompatActivity() {
         val bmp = BitmapFactory.decodeResource(resources, R.id.mapView, opt)
         return listOf(bmp.width, bmp.height)
     }
-
-    // TODO show map & user position
 }
-/*
-Methods of executing on ui thread:
-
-# no 1.
-runOnUiThread {}
-
-# no 2.
-@UiThread
-fun doUiThing() {
-    // do it here
-}
-doUiThing()
-
-# no 3*.
-Looper.getMainLooper().run {} // * - Usually works. MainThread != UiThread (Most times equal, sometimes not.)
-
- */

@@ -41,7 +41,7 @@ class MapGLRenderer: Renderer {
                 0f, 0f, 0f,
                 -0.09375f, 0.1875f, 0f,
                 0.09375f, 0.1875f, 0f
-            ) // 0.09375 == 3/32; 0.1875 == 3/16 - using such numbers is computer friendly :)
+            ) // using such numbers is computer friendly :)
         )
         Log.d(clist.MapGLRenderer, ">>> pinTri initialized")
 
@@ -108,7 +108,6 @@ class MapGLRenderer: Renderer {
         return (img.width * 1.0) / (img.height * 1.0)
     }
 
-    // My drawing methods
     /**
      * Marks where user has clicked with point.
      * Changes objects listed on [drawnObjects] so when requestRender() -> onDrawFrame() is called,

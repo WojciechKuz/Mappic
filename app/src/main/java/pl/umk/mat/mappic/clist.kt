@@ -10,7 +10,6 @@ open class clist() {
         // main group
         const val MainActivity: String = "MainActivity"
         const val MapOptionsPopup: String = "MapOptionsPopup"
-        const val SnackShow: String = "SnackShow"
 
         // viewmap group
         const val ViewMapActivity: String = "ViewMapActivity"
@@ -18,7 +17,6 @@ open class clist() {
         // maplist group
         const val MyMapItemRecyclerViewActivity: String = "MyMapItemRecyclerViewActivity"
         const val MapItemListFragment: String = "MapItemListFragment"
-        const val PlaceHolderContent: String = "PlaceHolderContent" // change this !!!
 
         // addmap group
         const val AddMapActivity: String = "AddMapActivity"

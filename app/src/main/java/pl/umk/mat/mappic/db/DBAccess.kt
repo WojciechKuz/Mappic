@@ -28,7 +28,7 @@ interface DBAccess {
         // add image record, get it's id
         val imageR = DBImage(mapid_fk = newMapId, uri = viewModel.mapImg.toString())
         db.imageDao().insertAll(imageR)
-        val newImageId: Long = db.imageDao().getMaxId() // Can this be a source of bugs? Is always newly added record id equal to maxid?
+        val newImageId: Long = db.imageDao().getMaxId()
         if(!db.imageDao().getImage(newImageId)[0].uri.equals(viewModel.mapImg.toString())) {
             throw Exception("Can't find newly added image in database")
         }
@@ -114,29 +114,16 @@ interface DBAccess {
         val db = MapDatabase.getDB(context)
         return db.mapDao().getMap(mapid)[0].map_name
     }
-    // possibility to add multiple points
-    fun addPoint() {}
-    fun deletePoint() {} //(do not delete reference points. But ref points can be invisible)
-    fun editPoint() {}
 
     /**
      * Delete everything that is associated with map and map itself.
      */
     fun deleteMap(context: Context, mapid: Long) {
-        //delPointsByMapId_1(context, mapid)
         val db = MapDatabase.getDB(context)
         db.pointDao().deletePointsForMapid(mapid)
         db.imageDao().deleteImageForMapid(mapid)
         db.mapDao().deleteById(mapid)
     }
-    private fun delPointsByMapId_1(context: Context, mapid: Long) {
-        val db = MapDatabase.getDB(context)
-        val delPoints: List<DBPoint> = db.pointDao().getPointIdsOnMap(mapid)
-        val delPointIds: List<Long> = delPoints.stream().map{ point -> point.pid!! }.collect(Collectors.toList())
-        db.pointDao().deleteMultiple(delPointIds)
-    }
-
-
 
     fun getStuff(context: Context, mapid: Long) {
         val db = MapDatabase.getDB(context)

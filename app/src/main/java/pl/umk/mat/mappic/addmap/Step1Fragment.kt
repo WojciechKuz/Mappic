@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import pl.umk.mat.mappic.databinding.FragmentStep1Binding
 import pl.umk.mat.mappic.R
 import pl.umk.mat.mappic.addmap.features.images.CamiX
-import pl.umk.mat.mappic.addmap.features.permissions.PermissionManager
 import pl.umk.mat.mappic.clist
 
 /**
@@ -41,15 +40,10 @@ class Step1Fragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(clist.Step1Fragment, ">>> onViewCreated()")
-        //if(!isPortraitMode())
-        //    repositionFAB()
 
         addMap = (activity as AddMapActivity)
         camiX = CamiX(addMap, R.id.camView, "Mappic")
 
-        //addmap.step1() requests permissions for Camera, and then launches camiX.startCamera()
-        //addMap.permManager.grantCamPerm { camiX.startCamera() }
-        //PermissionManager(addMap).grantCamPerm { camiX.startCamera() }
         addMap.getPermissionManager().grantCamPerm { camiX.startCamera() }
 
         /**

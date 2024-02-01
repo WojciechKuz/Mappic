@@ -21,10 +21,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- when in landscape mode on larger devices, both 'picture' and 'linLayout' float
-    to left instead of scaling up or 'picture' to left and 'linLayout' to right
-    TODO make elements scale up on larger devices -->
-
     <!-- map image or icon (as picture) here -->
     <ImageView
         android:id="@+id/picture"
@@ -72,34 +68,6 @@
             android:text="@string/choose_from_gallery"
             android:drawableLeft="@drawable/add_photo_alternate_48px"
             tools:ignore="RtlHardcoded" />
-        <!--
-        Warning: replace drawableLeft with DrawableStart - ok, maybe later. I don't know how element would look like before launching app.
-        When drawableStart position of drawable is known on runtime and not known when compiling.
-         -->
     </LinearLayout>
 
-    <!--
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/PhotoFAB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="12dp"
-        android:layout_marginTop="12dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:scaleX="1.2"
-        android:scaleY="1.2"
-        android:src="@android:drawable/ic_menu_camera"
-
-        app:fabCustomSize="64dp"
-        app:fabSize="auto"
-        app:flow_horizontalAlign="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:useCompatPadding="true"
-        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
-        -->
 </androidx.constraintlayout.widget.ConstraintLayout>

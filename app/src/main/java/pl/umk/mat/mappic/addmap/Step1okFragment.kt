@@ -72,7 +72,6 @@ class Step1okFragment : Fragment() {
      * Navigate to next screen
      */
     private fun onClickYes() {
-        // wasTODO save photo and pass reference to it, to database or temporary value holder
         // Photos are saved instantly, so there's no need to save again, just navigate to nxt fragment.
         // The only downside is, that user needs to manually delete unused photos. Could be done later.
         findNavController().navigate(R.id.action_step1ok_to_step2)
@@ -118,7 +117,6 @@ class Step1okFragment : Fragment() {
         parentFragmentManager.popBackStackImmediate() // Navigates to step1
 
     }
-
 
 
     override fun onDestroyView() {

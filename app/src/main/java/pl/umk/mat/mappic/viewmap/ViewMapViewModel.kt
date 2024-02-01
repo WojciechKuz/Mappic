@@ -12,7 +12,6 @@ import pl.umk.mat.mappic.db.entities.DBPoint
 import pl.umk.mat.mappic.common.PassStuff
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import pl.umk.mat.mappic.db.MPoint
 
 class ViewMapViewModel: ViewModel() {
 
@@ -67,10 +66,4 @@ class ViewMapViewModel: ViewModel() {
             DBAcc().deleteMap(context, mapid)
         }
     }
-    // TODO override / implement methods from DBAccess
-    //  addPoint()
-    //  deletePoint()
-    //  editPoint()
-
-    // maybe points should contain names?
 }

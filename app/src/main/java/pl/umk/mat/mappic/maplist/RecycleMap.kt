@@ -6,7 +6,6 @@ import pl.umk.mat.mappic.db.entities.DBMap
 data class RecycleMap(
     val mapid: Long?,
     val name: String
-    // FUTURE thumbnail?
 ) {
     fun toDBMap(): DBMap {
         return DBMap(mapid, name)

@@ -29,11 +29,6 @@ abstract class MapDatabase: RoomDatabase() {
         private var inits = 0
 
         fun getDB(context: Context): MapDatabase {
-            /*// Why synchronized? it blocks thread... Why not asynchronous, like suspend fun?
-            return database ?: synchronized(this) { // ?: is elvis operator - if( ==null) do something
-                database ?: initDatabase(context).also { database = it }
-            }*/
-
             return database ?: initDatabase(context) // ?: is elvis operator - if( ==null) do something
         }
 

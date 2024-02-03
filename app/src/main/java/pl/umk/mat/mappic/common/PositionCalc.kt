@@ -2,6 +2,7 @@ package pl.umk.mat.mappic.common
 
 import android.graphics.Point
 import android.graphics.PointF
+import androidx.core.graphics.toPointF
 import pl.umk.mat.mappic.db.MPoint
 import kotlin.math.PI
 import kotlin.math.abs
@@ -9,6 +10,7 @@ import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.round
+import kotlin.math.sin
 import kotlin.math.sqrt
 
 /**
@@ -47,14 +49,15 @@ class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>)
         }
     }
 
-    // TODO polar update (so it handles coordinates on north pole)
     /**
      * Calculate pixel user position on (original) image, based on geolocation.
      * @param geoUserP user geoposition
      * These are steps performed to calculate:\
      * relGeo1 = geoUserP - geo1    \
      * geoScale = relGeo1 / geoDiff \
-     * relPx1 = geoScale * pxDiff   \
+     * rotGeo = -rotate(geoScale, angle(geo1, geo2))
+     * rotPx = rotate(rotGeo, angle(px1, px2))
+     * relPx1 = rotPx * pxDiff   \
      * pxUserP = relPx1 + px1
      * @return pixel user position
      */
@@ -67,9 +70,11 @@ class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>)
             relative2Geo1.x / geoDiff.x,
             relative2Geo1.y / geoDiff.y
         )
+        val rotGeo = neg(rotateCoords(geoScale, pointAt(geo[0], geo[1]).toFloat()))
+        val rotPx = rotateCoords(rotGeo, pointAt(px[0].toPointF(), px[1].toPointF()).toFloat())
         val relative2px1 = PointF(
-            geoScale.x * pxDiff.x.toFloat(),
-            geoScale.y * pxDiff.y.toFloat()
+            rotPx.x * pxDiff.x.toFloat(),
+            rotPx.y * pxDiff.y.toFloat()
         )
         val pxUserP = Point(
             round(relative2px1.x + px[0].x).toInt(),
@@ -77,6 +82,13 @@ class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>)
         )
         return pxUserP
     }
+
+    /*
+    fun coordTransform(geoUserP: PointF): Point {
+        val geoAngle = pointAt(geo[0], geo[1])
+        val pxAngle = pointAt(px[0].toPointF(), px[1].toPointF())
+    }
+    */
 
     companion object {
         /** Earth sphere radius in meters. Mean Earth radius 6371.0088 km defined in WGS 84. */
@@ -139,6 +151,42 @@ class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>)
                 (b.y-a.y).toDouble(),
                 (b.x-a.x).toDouble()
             )
+        }
+
+        /**
+         * Takes input coordinates
+         * and returns coordinates rotated around [[0, 0]] point by angle.
+         * a in matrix definition is angle parameter.
+         * matrix A = {{cos(a), -sin(a)}, {sin(a), cos(a)}}
+         * @param p
+         * @return A*p
+         */
+        fun rotateCoords(p: PointF, angle: Float): PointF {
+            fun multiplyMatrixRow(row1: Array<Float>, row2: Array<Float>): Float {
+                // exception will be thrown in scenario, where they're not the same size
+                var sum = 0.0f
+                for(i:Int in row1.indices) { // 0..(size-1) -> 0..<size -> indices
+                    sum += row1[i] * row2[i]
+                }
+                return sum
+            }
+            val a0 = arrayOf(cos(angle), -sin(angle))
+            val a1 = arrayOf(sin(angle),  cos(angle))
+            val A = arrayOf(a0, a1) // coordinate rotation matrix
+            val af = arrayOf(p.x, p.y)
+            val p_out = ArrayList<Float>()
+            for(row in A) {
+                p_out.add(multiplyMatrixRow(row, af))
+            }
+            return PointF(p_out[0], p_out[1])
+        }
+
+        /**
+         * Get negative point.
+         * @return -p
+         */
+        fun neg(p: PointF): PointF {
+            return PointF(-p.x, -p.y)
         }
 
         private fun getPxArray(mPoints: List<MPoint>): Array<Point> {

@@ -55,13 +55,13 @@ class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>)
      * These are steps performed to calculate:\
      * relGeo1 = geoUserP - geo1    \
      * geoScale = relGeo1 / geoDiff \
-     * rotGeo = -rotate(geoScale, angle(geo1, geo2))
+     * rotGeo = rotate(geoScale, -angle(geo1, geo2))
      * rotPx = rotate(rotGeo, angle(px1, px2))
      * relPx1 = rotPx * pxDiff   \
      * pxUserP = relPx1 + px1
      * @return pixel user position
      */
-    fun basic_whereUser(geoUserP: PointF): Point {
+    fun whereUser(geoUserP: PointF): Point {
         val relative2Geo1 = PointF(
             geoUserP.x - geo[0].x,
             geoUserP.y - geo[0].y
@@ -70,7 +70,7 @@ class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>)
             relative2Geo1.x / geoDiff.x,
             relative2Geo1.y / geoDiff.y
         )
-        val rotGeo = neg(rotateCoords(geoScale, pointAt(geo[0], geo[1]).toFloat()))
+        val rotGeo = rotateCoords(geoScale, -pointAt(geo[0], geo[1]).toFloat())
         val rotPx = rotateCoords(rotGeo, pointAt(px[0].toPointF(), px[1].toPointF()).toFloat())
         val relative2px1 = PointF(
             rotPx.x * pxDiff.x.toFloat(),

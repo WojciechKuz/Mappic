@@ -135,7 +135,7 @@ class ViewMapActivity : AppCompatActivity() {
         if(!this::imgCalc.isInitialized)
             return
 
-        val origPoint = posCalc.basic_whereUser(PointF(
+        val origPoint = posCalc.whereUser(PointF(
             loc.longitude.toFloat(), // between -180.0 and 180.0 inclusive EW x
             loc.latitude.toFloat() // between -90.0 and 90.0 inclusive NS y
         ))

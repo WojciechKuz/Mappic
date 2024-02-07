@@ -58,7 +58,7 @@
             android:alpha=1 == fully visible
             -->
             <ImageView
-                android:id="@+id/imgView"
+                android:id="@+id/imgMapView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/black"

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import kotlinx.coroutines.runBlocking
 import pl.umk.mat.mappic.MainActivity
 import pl.umk.mat.mappic.R
 import pl.umk.mat.mappic.clist
@@ -66,14 +67,17 @@ class Step4Fragment : Fragment() {
             whenFalse = {
                 viewModel.name = binding.mapNameField.text.toString().trim()
 
-                // save viewModel data to DB
-                if (viewModel.mapid == null)
-                    viewModel.addNewMap(activity as AddMapActivity)
-                else
-                    viewModel.editMap(activity as AddMapActivity)
+                // understand "runBlocking". Do called methods need to be suspended?
+                runBlocking {
+                    // save viewModel data to DB
+                    if (viewModel.mapid == null)
+                        viewModel.addNewMap(activity as AddMapActivity)
+                    else
+                        viewModel.editMap(activity as AddMapActivity)
+                }
+                    // toast
+                    //Looper.prepare().run {
 
-                // toast
-                //Looper.prepare().run {
                 (activity as AddMapActivity).runOnUiThread {
                     val msg = R.string.saved_to_db
                     Toast.makeText(activity as AddMapActivity, msg, Toast.LENGTH_SHORT).show()

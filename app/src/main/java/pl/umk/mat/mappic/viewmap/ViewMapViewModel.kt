@@ -66,4 +66,7 @@ class ViewMapViewModel: ViewModel() {
             DBAcc().deleteMap(context, mapid)
         }
     }
+    fun mapImgInitialized(): Boolean {
+        return this::mapImg.isInitialized
+    }
 }

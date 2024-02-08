@@ -73,7 +73,6 @@ interface DBAccess {
             viewModel.name
         )
         val oldImg = db.imageDao().getImagesForMap(viewModel.mapid!!)[0]
-        viewModel.mapImg = Uri.parse(oldImg.uri)
         val newImg = DBImage(
             oldImg.imgid,
             oldImg.mapid_fk,

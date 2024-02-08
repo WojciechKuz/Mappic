@@ -177,7 +177,7 @@ class MapGLRenderer: Renderer {
      * Clears display, removes objects from drawing list
      */
     fun clearDisplay() {
-        Log.d(clist.MapGLRenderer, ">>> CLEAR")
+        //Log.d(clist.MapGLRenderer, ">>> CLEAR")
         drawnObjects.clear()
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f) // clear background. render is requested in SurfaceView
     }

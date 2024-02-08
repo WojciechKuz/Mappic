@@ -89,7 +89,7 @@ open class SizeGetter(val context: Context, val TAG: String = "SizeGetter") {
             }
         }
         if(checkOrientation(orientation) == -1) {
-            Log.e(TAG, ">>> Rotation tag in image exif data not found. cannot display it correctly.")
+            Log.w(TAG, ">>> Rotation tag in image exif data not found. cannot display it correctly.")
 
         }
         else

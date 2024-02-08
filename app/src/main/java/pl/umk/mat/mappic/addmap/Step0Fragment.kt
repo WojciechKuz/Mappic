@@ -66,7 +66,6 @@ class Step0Fragment : Fragment() {
      *  [Step1Fragment] (taking photo screeen) is then displayed.
      */
     private fun takePicture() {
-        Log.d(clist.Step0Fragment, ">>> navController is alright!\n trying to navigate up...")
         findNavController().navigate(R.id.action_step0_to_step1)
     }
 

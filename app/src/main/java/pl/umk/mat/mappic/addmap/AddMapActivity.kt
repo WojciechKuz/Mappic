@@ -52,7 +52,7 @@ class AddMapActivity : AppCompatActivity() {
 
     fun getPermissionManager(): PermissionManager {
         if(!created)
-            Log.w(clist.AddMapActivity, ">>> Activity not created yet !!!")
+            Log.w(clist.AddMapActivity, ">>> Activity not created yet!")
         return permManager
     }
 

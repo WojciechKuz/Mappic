@@ -163,6 +163,9 @@ class ViewMapActivity : AppCompatActivity() {
                 origImgSize?: viewSize,
                 viewSize
             )
+            if (origImgSize == null) {
+                Log.e(clist.ViewMapActivity, ">>> original size of image not found")
+            }
             doNext?.startAction()
         }
     }

@@ -27,8 +27,8 @@ class PickPhoto(val addMap: AddMapActivity, val persistent: Boolean = false) {
     /**
      * Pick photo through system photo-picker.
      *
-     * @param whenSelected - handle receiving uri of photo selected by user
-     * @param whenNotSelected - passes null uri, don't use it's value. Use this interface only to trigger actions.
+     * whenSelected - handle receiving uri of photo selected by user
+     * whenNotSelected - passes null uri, don't use it's value. Use this interface only to trigger actions.
      */
     private lateinit var whenSelected: PassUri
     private lateinit var whenNotSelected: PassUri
@@ -43,6 +43,8 @@ class PickPhoto(val addMap: AddMapActivity, val persistent: Boolean = false) {
     private fun photoPicked(uri: Uri) {
         Log.d(clist.PickPhoto, ">>> Selected URI: ${uri}.")
         if (persistent) {
+            val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION // FIXME Android 10
+            addMap.grantUriPermission(addMap.packageName, uri, flags)
             addMap.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
         whenSelected.receiveUri(uri)

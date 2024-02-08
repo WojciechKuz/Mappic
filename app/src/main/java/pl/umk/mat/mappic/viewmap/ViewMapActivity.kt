@@ -244,7 +244,7 @@ class ViewMapActivity : AppCompatActivity() {
         val viewPoint = imgCalc.toViewPoint(origPoint) // point inView
 
         if(iflog) Log.d(clist.ViewMapActivity, ">>> Original point: ${origPoint}")
-        if(iflog) Log.d(clist.ViewMapActivity, ">>> In View point: ${origPoint}")
+        if(iflog) Log.d(clist.ViewMapActivity, ">>> In View point: ${viewPoint}")
 
         if(viewModel.lastPoint != null) {
             // use lastPoint to point in opposite direction (forward)

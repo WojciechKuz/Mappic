@@ -185,7 +185,7 @@ class ViewMapActivity : AppCompatActivity() {
         // instead of runBlocking, passed
         newOnStart() {
             // init finished
-            locationProvider.startLocationUpdates { receiveLocation(it) }
+            locationProvider.startLocationUpdates { receiveLocation(it) } // FIXME exception
             Log.d(clist.ViewMapActivity, ">>> everything is initialized")
         }
 

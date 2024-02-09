@@ -6,6 +6,7 @@ import android.opengl.GLSurfaceView.Renderer
 import android.util.Log
 import android.util.Size
 import pl.umk.mat.mappic.clist
+import pl.umk.mat.mappic.common.Signal
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -21,9 +22,11 @@ class MapGLRenderer: Renderer {
     private lateinit var usrArrow: Array<Triangle>
     private var drawnObjects: ArrayList<Triangle> = ArrayList()
 
+    /*
     // sometimes order of execution flips - displayPoint() before onSurfaceCreated()
     private var displayWasFirst = false // if order flipped
     private var laterPointF: PointF = PointF()
+    */
 
     // color of user arrow, order: R, G, B, a. All in range [0, 1].
     private val color0 = floatArrayOf(
@@ -67,10 +70,26 @@ class MapGLRenderer: Renderer {
             )
         ).setColor(color1[0], color1[1], color1[2], color1[3]) // B: 14/16
 
+        /*
         if(displayWasFirst) {
             Log.w(clist.MapGLRenderer, ">>> calling displayPoint() again")
             displayPoint(laterPointF)
         }
+        */
+        initComplete()
+    }
+
+    /**
+     * Set what to do after initialization.
+     * Sometimes displayPoint() and displayUser() are called before completing initialization.
+     * In such case, these methods are not executed immediately, they are assigned to this
+     * functional interface to be executed when initialization is complete.
+     */
+    private var afterInit: Signal? = null
+    private var isInitialized = false
+    private fun initComplete() {
+        isInitialized = true
+        afterInit?.startAction()
     }
 
     /**
@@ -118,11 +137,18 @@ class MapGLRenderer: Renderer {
         Log.d(clist.MapGLRenderer, ">>> DISPLAY_POINT displayPoint()")
         clearDisplay()
 
-        if(!this::pinTri.isInitialized || !this::pinCircl.isInitialized) {
+        if(!isInitialized) {
+            Log.w(clist.MapGLRenderer, ">>> pinTri, pinCircl are not initialized yet")
+            afterInit = Signal() {
+                displayPoint(p)
+            }
+            return
+            /*
             Log.w(clist.MapGLRenderer, ">>> pinTri, pinCircl weren't initialized before calling displayPoint()")
             displayWasFirst = true
             laterPointF = p
             return
+            */
         }
 
         // tri, 1
@@ -167,6 +193,14 @@ class MapGLRenderer: Renderer {
     fun displayUser(p: PointF, rotation: Float) {
         clearDisplay()
 
+        // if not initialized delay execution
+        if(!isInitialized) {
+            Log.w(clist.MapGLRenderer, ">>> usrArrow is not initialized yet")
+            afterInit = Signal() {
+                displayUser(p, rotation)
+            }
+            return
+        }
         usrArrow.forEach {
             it.setPosition(ObjPosition(rotation, p.x, p.y))
             drawnObjects.add(it)

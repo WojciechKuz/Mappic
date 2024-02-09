@@ -185,7 +185,7 @@ class ViewMapActivity : AppCompatActivity() {
         // instead of runBlocking, passed
         newOnStart() {
             // init finished
-            locationProvider.startLocationUpdates { receiveLocation(it) } // FIXME exception
+            locationProvider.startLocationUpdates { receiveLocation(it) }
             Log.d(clist.ViewMapActivity, ">>> everything is initialized")
         }
 
@@ -227,6 +227,7 @@ class ViewMapActivity : AppCompatActivity() {
     private var changedSize = false
     var angle = 0.0
 
+    private var snackShown = false
     /**
      * This is executed when locationProvider passes location.
      * Calculates user marker position and orientation based on user's real geographical location.
@@ -266,7 +267,7 @@ class ViewMapActivity : AppCompatActivity() {
         val gluser = ImageSizeCalc.toOpenGLPoint(viewSize, viewPoint)
 
         Log.d(clist.ViewMapActivity, ">>> OpenGL user point: ${gluser.x}, ${gluser.y}, $angle")
-        glView.userMarker( // FIXME exception
+        glView.userMarker(
             gluser, angle.toFloat()
         )
         if(!changedSize) {

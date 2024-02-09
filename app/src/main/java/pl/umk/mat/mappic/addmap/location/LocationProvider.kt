@@ -112,7 +112,7 @@ class LocationProvider(private val actv: AppCompatActivity, private val permMana
                 if(iflog) Log.d(clist.LocationProvider, ">>> getting last location")
                 val lastLoc = locationRes.lastLocation
                 lastLoc ?: return
-                passLoc.pass(lastLoc) // FIXME exception
+                passLoc.pass(lastLoc)
             }
         }
 

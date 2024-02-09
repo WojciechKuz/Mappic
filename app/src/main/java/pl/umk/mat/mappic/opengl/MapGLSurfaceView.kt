@@ -49,7 +49,7 @@ class MapGLSurfaceView(context: Context, attrs: AttributeSet): GLSurfaceView(con
      */
     fun userMarker(p: PointF, rotation: Float) {
         Log.d(clist.MapGLSurfaceView, ">>> userMarker [${p.x}, ${p.y}]")
-        renderer.displayUser(p, rotation) // FIXME exception
+        renderer.displayUser(p, rotation)
         requestRender()
     }
     /** Change size of user marker */

@@ -266,7 +266,7 @@ class ViewMapActivity : AppCompatActivity() {
         val gluser = ImageSizeCalc.toOpenGLPoint(viewSize, viewPoint)
 
         Log.d(clist.ViewMapActivity, ">>> OpenGL user point: ${gluser.x}, ${gluser.y}, $angle")
-        glView.userMarker(
+        glView.userMarker( // FIXME exception
             gluser, angle.toFloat()
         )
         if(!changedSize) {

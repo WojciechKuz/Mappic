@@ -45,6 +45,7 @@
     <string name="dialog_yes">Yes</string>
     <string name="dialog_no">No</string>
     <string name="map_deleted">Deleted.</string>
+    <string name="out_of_bounds">You are outside of bounds</string>
 
 
     <string-array name="errTypesMessages">

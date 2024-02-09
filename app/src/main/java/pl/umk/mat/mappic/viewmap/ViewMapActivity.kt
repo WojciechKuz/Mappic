@@ -25,6 +25,8 @@ import pl.umk.mat.mappic.db.MPoint
 import pl.umk.mat.mappic.opengl.MapGLSurfaceView
 import java.util.stream.Collectors
 import android.content.res.Configuration
+import android.widget.FrameLayout
+import pl.umk.mat.mappic.SnackShow
 import pl.umk.mat.mappic.common.Signal
 
 /** If log debug messages */
@@ -246,6 +248,10 @@ class ViewMapActivity : AppCompatActivity() {
         ))
         if(iflog) Log.d(clist.ViewMapActivity, ">>> User is in ${loc.latitude.toFloat()} N, ${loc.longitude.toFloat()} E")
         val viewPoint = imgCalc.toViewPoint(origPoint) // point inView
+        if(!imgCalc.isPointInBounds(viewPoint) && !snackShown) {
+            snackShown = true
+            SnackShow(this, R.id.viewFrame, this.getString(R.string.out_of_bounds))
+        }
 
         if(iflog) Log.d(clist.ViewMapActivity, ">>> Original point: ${origPoint}")
         if(iflog) Log.d(clist.ViewMapActivity, ">>> In View point: ${viewPoint}")

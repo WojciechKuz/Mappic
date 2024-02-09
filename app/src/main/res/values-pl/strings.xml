@@ -42,6 +42,7 @@
     <string name="dialog_yes">Tak</string>
     <string name="dialog_no">Nie</string>
     <string name="map_deleted">Usunięto.</string>
+    <string name="out_of_bounds">Jesteś poza opszarem</string>
 
     <string-array name="errTypesMessages">
         <item>nieznany błąd</item>

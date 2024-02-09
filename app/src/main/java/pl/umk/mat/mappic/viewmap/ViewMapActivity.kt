@@ -185,7 +185,7 @@ class ViewMapActivity : AppCompatActivity() {
         // instead of runBlocking, passed
         newOnStart() {
             // init finished
-            locationProvider.startLocationUpdates { receiveLocation(it) }
+            locationProvider.startLocationUpdates { receiveLocation(it) } // FIXME exception
             Log.d(clist.ViewMapActivity, ">>> everything is initialized")
         }
 
@@ -266,7 +266,7 @@ class ViewMapActivity : AppCompatActivity() {
         val gluser = ImageSizeCalc.toOpenGLPoint(viewSize, viewPoint)
 
         Log.d(clist.ViewMapActivity, ">>> OpenGL user point: ${gluser.x}, ${gluser.y}, $angle")
-        glView.userMarker(
+        glView.userMarker( // FIXME exception
             gluser, angle.toFloat()
         )
         if(!changedSize) {

@@ -25,10 +25,10 @@ class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>)
 
     init {
         if(px.size < 2) { // Equal or greater is ok, anything over 2 will be ignored.
-            throw IndexOutOfBoundsException("px array size must be 2!")
+            throw IndexOutOfBoundsException("px array size must be 2 !")
         }
         if(geo.size < 2) {
-            throw IndexOutOfBoundsException("geo array size must be 2!")
+            throw IndexOutOfBoundsException("geo array size must be 2 !")
         }
     }
     private val geoDiff = PointF(
@@ -40,45 +40,72 @@ class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>)
         px[1].y - px[0].y
     )
 
+    // VLen can't be used, because it does not contain info about direction (negative or positive)
+    /** Length of vector from geo1 to geo2 */
+    private val geoVLen = sqrt(geoDiff.x.pow(2) + geoDiff.y.pow(2))
+    /** Length of vector from px1 to px2 */
+    private val pxVLen = sqrt(pxDiff.x.toFloat().pow(2) + pxDiff.y.toFloat().pow(2))
+
     constructor(mPoints: List<MPoint>) : this(
         getPxArray(mPoints),
         getGpsArray(mPoints)
     ) {
         if(mPoints.size < 2) {
-            throw IndexOutOfBoundsException("mPoint array size must be 2!")
+            throw IndexOutOfBoundsException("mPoint array size must be 2 !")
         }
     }
 
+    // TODO is it fixed ???
     /**
      * Calculate pixel user position on (original) image, based on geolocation.
      * @param geoUserP user geoposition
      * These are steps performed to calculate:\
      * relGeo1 = geoUserP - geo1    \
-     * geoScale = relGeo1 / geoDiff \
-     * rotGeo = rotate(geoScale, -angle(geo1, geo2))
-     * rotPx = rotate(rotGeo, angle(px1, px2))
-     * relPx1 = rotPx * pxDiff   \
-     * pxUserP = relPx1 + px1
-     * @return pixel user position
+     * rotGeo = rotate(relGeo1, -angle(geo1, geo2))
+     * geoScale = rotGeo / geoDiff \
+     * pxScale = geoScale * pxDiff \
+     * rotPx = rotate(pxScale, angle(px1, px2)) \
+     * relPx1 = rotPx + px1
+     * @return pixel user position relPx1
      */
     fun whereUser(geoUserP: PointF): Point {
+        // T, R, S, S, R, T
         val relative2Geo1 = PointF(
             geoUserP.x - geo[0].x,
             geoUserP.y - geo[0].y
         )
+        //val rotGeo = neg(rotateCoords(geoScale, /*-*/pointAt(geo[0], geo[1]).toFloat())) // neg() or -angle?
+        val rotGeo = /*neg(*/rotateCoords(relative2Geo1, -pointAt(geo[0], geo[1]).toFloat())/*)*/ // neg() or -angle?
         val geoScale = PointF(
-            relative2Geo1.x / geoDiff.x,
-            relative2Geo1.y / geoDiff.y
+            rotGeo.x / geoDiff.x,//geoVLen, // maybe use geoVLen instead of geoDiff?
+            rotGeo.y / geoDiff.y//geoVLen
         )
-        val rotGeo = rotateCoords(geoScale, -pointAt(geo[0], geo[1]).toFloat())
-        val rotPx = rotateCoords(rotGeo, pointAt(px[0].toPointF(), px[1].toPointF()).toFloat())
-        val relative2px1 = PointF(
-            rotPx.x * pxDiff.x.toFloat(),
-            rotPx.y * pxDiff.y.toFloat()
+        val pxScale = PointF(
+            geoScale.x * pxDiff.x.toFloat(),//pxVLen, // maybe use pxVLen instead of pxDiff?
+            geoScale.y * pxDiff.y.toFloat()//pxVLen
+        )
+        val rotPx = rotateCoords(pxScale, pointAt(px[0].toPointF(), px[1].toPointF()).toFloat())
+        val relative2px1 = Point(
+            round(rotPx.x + px[0].x).toInt(),
+            round(rotPx.y + px[0].y).toInt()
+        )
+        return relative2px1
+    }
+
+    fun whereUser2(geoUserP: PointF): Point {
+        val relative2Geo1 = PointF(
+            geoUserP.x - geo[0].x,
+            geoUserP.y - geo[0].y
+        )
+        val angle = pointAt(px[0].toPointF(), px[1].toPointF()).toFloat() - pointAt(geo[0], geo[1]).toFloat()
+        val rotate = /*neg(*/rotateCoords(relative2Geo1, angle)/*)*/
+        val scale = PointF(
+            relative2Geo1.x / geoVLen * pxVLen,//geoDiff.x, // maybe use geoVLen instead of geoDiff?
+            relative2Geo1.y / geoVLen * pxVLen //geoDiff.y
         )
         val pxUserP = Point(
-            round(relative2px1.x + px[0].x).toInt(),
-            round(relative2px1.y + px[0].y).toInt()
+            round(scale.x + px[0].x).toInt(),
+            round(scale.y + px[0].y).toInt()
         )
         return pxUserP
     }
@@ -122,7 +149,7 @@ class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>)
                 PointF(b.xgps.toFloat(), b.ygps.toFloat())
             )
         }
-        // This would be harder in polar update
+
         /**
          * Calculates distance between two points on Earth's surface.
          * For Parameter points -

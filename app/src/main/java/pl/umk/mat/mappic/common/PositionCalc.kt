@@ -31,6 +31,8 @@ class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>)
             throw IndexOutOfBoundsException("geo array size must be 2 !")
         }
     }
+
+    // Hypotenuse (przeciwprostokątna) can't be used instead, because it does not contain info about direction (negative or positive)
     private val geoDiff = PointF(
         geo[1].x - geo[0].x,
         geo[1].y - geo[0].y
@@ -40,7 +42,7 @@ class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>)
         px[1].y - px[0].y
     )
 
-    // VLen can't be used, because it does not contain info about direction (negative or positive)
+
     /** Length of vector from geo1 to geo2 */
     private val geoVLen = sqrt(geoDiff.x.pow(2) + geoDiff.y.pow(2))
     /** Length of vector from px1 to px2 */
@@ -55,7 +57,6 @@ class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>)
         }
     }
 
-    // TODO is it fixed ???
     /**
      * Calculate pixel user position on (original) image, based on geolocation.
      * @param geoUserP user geoposition
@@ -74,15 +75,14 @@ class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>)
             geoUserP.x - geo[0].x,
             geoUserP.y - geo[0].y
         )
-        //val rotGeo = neg(rotateCoords(geoScale, /*-*/pointAt(geo[0], geo[1]).toFloat())) // neg() or -angle?
-        val rotGeo = /*neg(*/rotateCoords(relative2Geo1, -pointAt(geo[0], geo[1]).toFloat())/*)*/ // neg() or -angle?
+        val rotGeo = rotateCoords(relative2Geo1, -pointAt(geo[0], geo[1]).toFloat())
         val geoScale = PointF(
-            rotGeo.x / geoDiff.x,//geoVLen, // maybe use geoVLen instead of geoDiff?
-            rotGeo.y / geoDiff.y//geoVLen
+            rotGeo.x / geoDiff.x,
+            rotGeo.y / geoDiff.y
         )
         val pxScale = PointF(
-            geoScale.x * pxDiff.x.toFloat(),//pxVLen, // maybe use pxVLen instead of pxDiff?
-            geoScale.y * pxDiff.y.toFloat()//pxVLen
+            geoScale.x * pxDiff.x.toFloat(),
+            geoScale.y * pxDiff.y.toFloat()
         )
         val rotPx = rotateCoords(pxScale, pointAt(px[0].toPointF(), px[1].toPointF()).toFloat())
         val relative2px1 = Point(
@@ -92,30 +92,6 @@ class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>)
         return relative2px1
     }
 
-    fun whereUser2(geoUserP: PointF): Point {
-        val relative2Geo1 = PointF(
-            geoUserP.x - geo[0].x,
-            geoUserP.y - geo[0].y
-        )
-        val angle = pointAt(px[0].toPointF(), px[1].toPointF()).toFloat() - pointAt(geo[0], geo[1]).toFloat()
-        val rotate = /*neg(*/rotateCoords(relative2Geo1, angle)/*)*/
-        val scale = PointF(
-            relative2Geo1.x / geoVLen * pxVLen,//geoDiff.x, // maybe use geoVLen instead of geoDiff?
-            relative2Geo1.y / geoVLen * pxVLen //geoDiff.y
-        )
-        val pxUserP = Point(
-            round(scale.x + px[0].x).toInt(),
-            round(scale.y + px[0].y).toInt()
-        )
-        return pxUserP
-    }
-
-    /*
-    fun coordTransform(geoUserP: PointF): Point {
-        val geoAngle = pointAt(geo[0], geo[1])
-        val pxAngle = pointAt(px[0].toPointF(), px[1].toPointF())
-    }
-    */
 
     companion object {
         /** Earth sphere radius in meters. Mean Earth radius 6371.0088 km defined in WGS 84. */
@@ -190,7 +166,7 @@ class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>)
          */
         fun rotateCoords(p: PointF, angle: Float): PointF {
             fun multiplyMatrixRow(row1: Array<Float>, row2: Array<Float>): Float {
-                // exception will be thrown in scenario, where they're not the same size
+                // both row1 and row2 must be same size
                 var sum = 0.0f
                 for(i:Int in row1.indices) { // 0..(size-1) -> 0..<size -> indices
                     sum += row1[i] * row2[i]
@@ -208,13 +184,6 @@ class PositionCalc(private val px: Array<Point>, private val geo: Array<PointF>)
             return PointF(p_out[0], p_out[1])
         }
 
-        /**
-         * Get negative point.
-         * @return -p
-         */
-        fun neg(p: PointF): PointF {
-            return PointF(-p.x, -p.y)
-        }
 
         private fun getPxArray(mPoints: List<MPoint>): Array<Point> {
             return arrayOf(
